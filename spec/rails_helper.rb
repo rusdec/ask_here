@@ -17,6 +17,16 @@ require 'rspec/rails'
 #
 # The following line is provided for convenience purposes. It has the downside
 # of increasing the boot-up time by auto-requiring all files in the support
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :active_record
+    with.library :active_model
+    with.library :action_controller
+  end
+end
+
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
