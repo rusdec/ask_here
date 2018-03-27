@@ -13,7 +13,9 @@ RSpec.describe Question, type: :model do
       should validate_length_of(:body).
         is_at_least(10).is_at_most(1000)
     end
+  end
 
+  context 'relations' do
     it { should have_many(:answers) }
   end
 end
