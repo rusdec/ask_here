@@ -42,7 +42,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'save new answer in database' do
         expect {
           post :create, params: params
-        }.to change(Answer, :count).by(1)
+        }.to change(question.answers, :count).by(1)
       end
 
       it 'redirect to show view' do
