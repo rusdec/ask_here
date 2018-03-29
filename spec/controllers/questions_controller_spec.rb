@@ -41,27 +41,35 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid parameters' do
+      let(:params) do
+        { question: attributes_for(:question) }
+      end
+
       it 'save new question in database' do
         expect {
-          post :create, params: { question: attributes_for(:question) }
+          post :create, params: params
         }.to change(Question, :count).by(1)
       end
 
       it 'redirect to show view' do
-        post :create, params: { question: attributes_for(:question) }
+        post :create, params: params
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
     context 'with invalid parameters' do
+      let(:params) do
+        { question: attributes_for(:invalid_question) }
+      end
+
       it 'don\'t save new question in database' do
         expect {
-          post :create, params: { question: attributes_for(:invalid_question) }
+          post :create, params: params
         }.to_not change(Question, :count)
       end
 
       it 'render new view' do
-        post :create, params: { question: attributes_for(:invalid_question) }
+        post :create, params: params
         expect(response).to render_template(:new)
       end
     end
