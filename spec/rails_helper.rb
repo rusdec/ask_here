@@ -37,6 +37,7 @@ end
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  config.include Devise::TestHelpers, type: :controller
   # All factory_bot methods will NOT need to be prefaced with FactoryBot.
   config.include FactoryBot::Syntax::Methods
 
