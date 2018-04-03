@@ -15,7 +15,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_path(@question)
     else
-      render :new
+      render 'questions/show'
     end
   end
 
@@ -26,6 +26,7 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
+    puts params.require(:answer).permit(:body).inspect
     params.require(:answer).permit(:body)
   end
 end
