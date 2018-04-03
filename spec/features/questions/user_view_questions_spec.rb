@@ -10,7 +10,7 @@ feature 'User view questions', %q{
 
   scenario 'User view questions' do
     visit questions_path
-    save_and_open_page
-    expect(page).to have_content('ValidTitle')
+
+    expect(page).to have_content('ValidQuestionTitle')
   end
 end
