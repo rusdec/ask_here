@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   before_action :set_question, only: %i[index new create]
+  before_action :authenticate_user!, only: %i[create]
 
   def index
     @answers = @question.answers
