@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  let(:user) { create(:user_with_questions, questions_count: 2) }
+  let(:questions) { user.questions }
+
   describe 'GET #index' do
-    let(:user) { create(:user) }
-    let(:questions) { create_list(:question, 2, user: user) }
     before { get :index }
 
     it 'populates an array of all questions' do
@@ -16,8 +17,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:user) { create(:user) }
-    let(:question) { create(:question, user: user) }
+    let(:question) { questions.last }
     before { get :show, params: { id: question } }
 
     it 'assign request question to @question' do
@@ -40,6 +40,7 @@ RSpec.describe QuestionsController, type: :controller do
         sign_in create(:user)
         get :new
       end
+
       it 'assign new Question to @question' do
         expect(assigns(:question)).to be_a_new(Question)
       end
@@ -50,18 +51,17 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with unauthorized user' do
-      before { get :new }
       it 'render sign in view' do
+        get :new
         expect(response).to redirect_to new_user_session_path
       end
     end
   end
 
   describe 'POST #create' do
-    let(:user) { create(:user) }
+    before { sign_in user }
 
     context 'with valid parameters' do
-      before { sign_in user }
       let(:params) do
         { question: attributes_for(:question) }
       end
@@ -74,7 +74,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalid parameters' do
-      before { sign_in user }
       let(:params) do
         { question: attributes_for(:invalid_question) }
       end
@@ -99,9 +98,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:second_user) { create(:user_with_question_and_answers) }
     let(:second_user_question) { second_user.questions.last }
 
-    before do
-      sign_in(first_user)
-    end
+    before { sign_in(first_user) }
 
     context 'author' do
       it 'delete question' do
