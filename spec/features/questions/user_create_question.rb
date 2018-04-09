@@ -8,25 +8,22 @@ feature 'User create question', %q{
 
   given(:question) { attributes_for(:question) }
   given(:user) { create(:user) }
+  given(:params) do
+    { title: question[:title],
+      body: question[:body] }
+  end
 
   scenario 'User create question with valid data' do
     sign_in(user)
-
-    visit new_question_path
-    fill_in 'Title', with: question[:title]
-    fill_in 'Body', with: question[:body]
-    click_on 'Create Question'
+    create_question(params)
 
     expect(page).to have_content('success')
   end
 
   scenario 'User can\'t create question with invalid data' do
     sign_in(user)
-
-    visit new_question_path
-    fill_in 'Title', with: nil
-    fill_in 'Body', with: nil
-    click_on 'Create Question'
+    params[:title] = nil
+    create_question(params)
 
     expect(page).to have_content('Errors:')
   end

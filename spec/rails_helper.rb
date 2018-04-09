@@ -42,6 +42,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
   config.include Signing, type: :feature
   config.include Feature::Answer, type: :feature
+  config.include Feature::Question, type: :feature
 
   # All factory_bot methods will NOT need to be prefaced with FactoryBot.
   config.include FactoryBot::Syntax::Methods
