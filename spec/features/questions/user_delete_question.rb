@@ -18,23 +18,19 @@ feature 'User delete question', %q{
   end
 
   scenario 'Author can delete his question' do
-    visit new_user_session_path
-    fill_in 'Email', with: first_user.email
-    fill_in 'Password', with: first_user.password
-    click_on 'Sign in'
+    sign_in(first_user)
 
     visit question_path(first_user_question)
     click_on 'Delete Question'
+
     expect(page).to have_content('success')
   end
 
   scenario 'User can\'t delete question of any user' do
-    visit new_user_session_path
-    fill_in 'Email', with: first_user.email
-    fill_in 'Password', with: first_user.password
-    click_on 'Sign in'
+    sign_in(first_user)
 
     visit question_path(second_user_question)
+
     expect(page).to have_no_content('Delete')
   end
 end

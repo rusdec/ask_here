@@ -10,10 +10,7 @@ feature 'User create question', %q{
   given(:user) { create(:user) }
 
   scenario 'User create question with valid data' do
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Sign in'
+    sign_in(user)
 
     visit new_question_path
     fill_in 'Title', with: question[:title]
@@ -24,10 +21,7 @@ feature 'User create question', %q{
   end
 
   scenario 'User can\'t create question with invalid data' do
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Sign in'
+    sign_in(user)
 
     visit new_question_path
     fill_in 'Title', with: nil

@@ -15,10 +15,7 @@ feature 'User create answer', %q{
   before { question }
 
   scenario 'User delete his answer' do
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Sign in'
+    sign_in(user)
 
     visit question_path(question)
     first("a[author='#{user.id}'][data-method='delete']").click
@@ -28,10 +25,7 @@ feature 'User create answer', %q{
 
   scenario 'User can\'t delete answer of other user' do
     second_user_answers
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Sign in'
+    sign_in(user)
 
     visit question_path(question)
     expect(page).to have_no_css ("a[author='#{second_user.id}'][data-method='delete']")

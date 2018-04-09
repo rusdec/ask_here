@@ -7,10 +7,7 @@ feature 'Signing out', %q{
 } do
   given(:user) { create(:user) }
   scenario 'Signing out' do
-    visit '/sign_in'
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Sign in'
+    sign_in(user)
 
     click_on 'Sign out'
 

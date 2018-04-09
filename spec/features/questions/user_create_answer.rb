@@ -10,10 +10,7 @@ feature 'User create answer', %q{
   given(:question) { user.questions.last }
 
   scenario 'User create answer with valid data' do
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Sign in'
+    sign_in(user)
 
     visit question_path(question)
     fill_in 'Body', with: 'ValidAnswerBodyText'
@@ -23,10 +20,7 @@ feature 'User create answer', %q{
   end
 
   scenario 'User create answer with invalid data' do
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Sign in'
+    sign_in(user)
 
     visit question_path(question)
     fill_in 'Body', with: nil
