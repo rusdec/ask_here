@@ -7,10 +7,8 @@ feature 'User view question', %q{
 } do
   given(:user) { create(:user_with_question_and_answers, answers_count: 3) }
   given(:question) { user.questions.last }
-  given(:answers) { question.answers }
 
   before do
-    answers
     visit question_path(question)
   end
 

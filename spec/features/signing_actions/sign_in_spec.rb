@@ -10,6 +10,7 @@ feature 'Signing in', %q{
 
   scenario 'Signing in with correct data' do
     sign_in(user)
+
     expect(page).to have_content 'Signed in successfully.'
   end
 

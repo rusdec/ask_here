@@ -5,22 +5,21 @@ feature 'Signing up', %q{
   I want to registered
   So that I can sign in
 } do
-  scenario 'Registration with correct data' do
-    visit new_user_registration_path
-    fill_in 'Email', with: 'example@email.ru'
-    fill_in 'Password', with: 'Qwerty123'
-    fill_in 'Password confirmation', with: 'Qwerty123'
+  given(:params) do
+    { email: 'example@email.ru',
+      password: 'Qwerty123',
+      password_confirmation: 'Qwerty123' }
+  end
 
-    click_on 'Sign up'
+  scenario 'Registration with correct data' do
+    sign_up(params)
+
     expect(page).to have_content 'Welcome! You have signed up successfully.'
   end
   scenario 'Registration with incorrect data' do
-    visit new_user_registration_path
-    fill_in 'Email', with: 'example@email'
-    fill_in 'Password', with: ''
-    fill_in 'Password confirmation', with: 'Q'
+    params[:email] = nil
+    sign_up(params)
 
-    click_on 'Sign up'
     expect(page).to have_content 'errors prohibited this user from being saved'
   end
 end
