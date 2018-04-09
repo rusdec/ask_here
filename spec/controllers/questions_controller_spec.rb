@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let(:user) { create(:user) }
+    let(:questions) { create_list(:question, 2, user: user) }
     before { get :index }
 
     it 'populates an array of all questions' do
@@ -15,7 +16,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:question) { create(:question) }
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
     before { get :show, params: { id: question } }
 
     it 'assign request question to @question' do
@@ -33,19 +35,33 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { get :new }
-    
-    it 'assign new Question to @question' do
-      expect(assigns(:question)).to be_a_new(Question)
+    context 'with authorized user' do
+      before do
+        sign_in create(:user)
+        get :new
+      end
+      it 'assign new Question to @question' do
+        expect(assigns(:question)).to be_a_new(Question)
+      end
+
+      it 'render new view' do
+        expect(response).to render_template(:new)
+      end
     end
 
-    it 'render new view' do
-      expect(response).to render_template(:new)
+    context 'with unauthorized user' do
+      before { get :new }
+      it 'render sign in view' do
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
   describe 'POST #create' do
+    let(:user) { create(:user) }
+
     context 'with valid parameters' do
+      before { sign_in user }
       let(:params) do
         { question: attributes_for(:question) }
       end
@@ -55,14 +71,10 @@ RSpec.describe QuestionsController, type: :controller do
           post :create, params: params
         }.to change(Question, :count).by(1)
       end
-
-      it 'redirect to show view' do
-        post :create, params: params
-        expect(response).to redirect_to question_path(assigns(:question))
-      end
     end
 
     context 'with invalid parameters' do
+      before { sign_in user }
       let(:params) do
         { question: attributes_for(:invalid_question) }
       end
@@ -76,6 +88,49 @@ RSpec.describe QuestionsController, type: :controller do
       it 'render new view' do
         post :create, params: params
         expect(response).to render_template(:new)
+      end
+    end
+  end
+
+  describe 'DELETE #delete' do
+    let(:first_user) { create(:user_with_question_and_answers, answers_count: 2) }
+    let(:first_user_question) { first_user.questions.last }
+
+    let(:second_user) { create(:user_with_question_and_answers) }
+    let(:second_user_question) { second_user.questions.last }
+
+    before do
+      sign_in(first_user)
+    end
+
+    context 'author' do
+      it 'delete question' do
+        expect {
+          delete :destroy, params: { id: first_user_question }
+        }.to change(first_user.questions, :count).by(-1)
+      end
+
+      it 'delete answers of deleted question' do
+        expect {
+          delete :destroy, params: { id: first_user_question }
+        }.to change(first_user_question.answers, :count).by(-2)
+      end
+
+      it 'redirect to questions' do
+        delete :destroy, params: { id: first_user_question }
+        expect(response).to redirect_to(questions_path)
+      end
+    end
+
+    context 'not author' do
+      it 'can\'t delete question' do
+        expect {
+          delete :destroy, params: { id: second_user_question }
+        }.to_not change(second_user.questions, :count)
+      end
+      it 'render question show view' do
+        delete :destroy, params: { id: second_user_question }
+        expect(response).to render_template(:show)
       end
     end
   end

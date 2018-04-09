@@ -1,14 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
+  let(:user) { create(:user_with_question_and_answers) }
+  let(:question) { user.questions.last }
 
   describe 'GET #index' do
-    let(:answers) { create_list(:answer, 2, question: question) }
-    before { get :index, params: { question_id: question } }
+    before do
+      user
+      get :index, params: { question_id: question }
+    end
 
     it 'populates an array of all answer for certain question' do
-      expect(assigns(:answers)).to eq(answers)
+      expect(assigns(:answers)).to eq(question.answers)
     end
 
     it 'render index view' do
@@ -16,23 +19,12 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'GET #new' do
-    before { get :new, params: { question_id: question } }
-
-    it 'assign new Answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'question in assigned @answer must exist' do
-      expect(assigns(:answer).question_id).to eq(question.id)
-    end
-
-    it 'render new view' do
-      expect(response).to render_template(:new)
-    end
-  end
-
   describe 'POST #create' do
+    before do
+      user
+      sign_in(user)
+    end
+
     context 'with valid parameters' do
       let(:params) do
         { question_id: question,
@@ -66,6 +58,42 @@ RSpec.describe AnswersController, type: :controller do
       it 'render question show view' do
         post :create, params: params
         expect(response).to render_template('questions/show')
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before do
+      user
+      sign_in(user)
+    end
+
+    let(:question) { user.questions.last }
+    let(:answer) { question.answers.last }
+
+    context 'author' do
+      it 'delete answer' do
+        expect { 
+          delete :destroy, params: { id: answer }
+        }.to change(question.answers, :count).by(-1)
+      end
+
+      it 'render question show view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(question)
+      end
+    end
+
+    context 'not author' do
+      it 'can\'t delete answer' do
+        expect {
+          delete :destroy, params: { id: answer }
+        }.to change(question.answers, :count)
+      end
+
+      it 'redirect to question show view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(question)
       end
     end
   end

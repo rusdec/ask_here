@@ -6,7 +6,7 @@ feature 'User view questions', %q{
   so that I can detail view interesting for me
 } do
 
-  before { create_list(:question, 3) }
+  before { create(:user_with_questions, questions_count: 3) }
 
   scenario 'User view questions' do
     visit questions_path

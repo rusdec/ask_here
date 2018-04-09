@@ -6,11 +6,11 @@ feature 'User create answer', %q{
   so that I can help answer the question
 } do
 
-  given(:question) { create(:question) }
-  given(:user) { create(:user) }
+  given(:user) { create(:user_with_questions) }
+  given(:question) { user.questions.last }
 
   scenario 'User create answer with valid data' do
-    visit sign_in_path
+    visit new_user_session_path
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
     click_on 'Sign in'
@@ -23,7 +23,7 @@ feature 'User create answer', %q{
   end
 
   scenario 'User create answer with invalid data' do
-    visit sign_in_path
+    visit new_user_session_path
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
     click_on 'Sign in'
@@ -35,11 +35,11 @@ feature 'User create answer', %q{
     expect(page).to have_content 'Errors:'
   end
 
-  scenario 'Non auth user don\'t create answer with invalid data' do
+  scenario 'Non authorized user don\'t create answer' do
     visit question_path(question)
     fill_in 'Body', with: 'ValidAnswerBodyText'
     click_on 'Create Answer'
 
-    expect(page).to have_content('Log in')
+    expect(page).to have_content('You need to sign in or sign up before continuing.')
   end
 end

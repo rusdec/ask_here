@@ -4,10 +4,21 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  has_many :questions, foreign_key: :author_id, dependent: :destroy
+  has_many :answers, foreign_key: :author_id, dependent: :destroy
+
   validates :password, length: { minimum: 5,
                                  maximum: 20 }
 
   validate :validate_email_format
+
+  def question_author?(question)
+    questions.find_by(id: question.id)
+  end
+
+  def answer_author?(answer)
+    answers.find_by(id: answer.id)
+  end
 
   private
 

@@ -5,10 +5,12 @@ feature 'User view question', %q{
   I can view any question
   so that I can view this question and all his answers
 } do
-  given(:question) { create(:question) }
+  given(:user) { create(:user_with_question_and_answers, answers_count: 3) }
+  given(:question) { user.questions.last }
+  given(:answers) { question.answers }
 
   before do
-    create_list(:answer, 3, question: question)
+    answers
     visit question_path(question)
   end
 

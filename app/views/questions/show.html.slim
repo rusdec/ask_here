@@ -1,7 +1,9 @@
 h3 = @question.title
 p = @question.body
+= delete_question_element(@question)
+
 table
-  = render @question.answers
+  = render @question.created_answers
 
 = form_for [@question, @answer] do |f|
     = render 'shared/errors', resource: @answer
