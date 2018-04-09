@@ -3,12 +3,10 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user_with_question_and_answers) }
   let(:question) { user.questions.last }
+  let(:answer) { question.answers.last }
 
   describe 'GET #index' do
-    before do
-      user
-      get :index, params: { question_id: question }
-    end
+    before { get :index, params: { question_id: question } }
 
     it 'populates an array of all answer for certain question' do
       expect(assigns(:answers)).to eq(question.answers)
@@ -20,10 +18,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
-    before do
-      user
-      sign_in(user)
-    end
+    before { sign_in(user) }
 
     context 'with valid parameters' do
       let(:params) do
@@ -63,13 +58,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before do
-      user
-      sign_in(user)
-    end
-
-    let(:question) { user.questions.last }
-    let(:answer) { question.answers.last }
+    before { sign_in(user) }
 
     context 'author' do
       it 'delete answer' do

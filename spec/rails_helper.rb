@@ -40,7 +40,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::TestHelpers, type: [:controller, :model]
   config.include Warden::Test::Helpers
-  config.include Signing, type: :feature
+  config.include Feature::Signing, type: :feature
   config.include Feature::Answer, type: :feature
   config.include Feature::Question, type: :feature
 
