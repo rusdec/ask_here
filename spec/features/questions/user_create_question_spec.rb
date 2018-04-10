@@ -16,8 +16,10 @@ feature 'User create question', %q{
   scenario 'User create question with valid data' do
     sign_in(user)
     create_question(params)
+    question = user.questions.order(:id).last
 
-    expect(page).to have_content('success')
+    expect(page).to have_content(question.title)
+    expect(page).to have_content(question.body)
   end
 
   scenario 'User can\'t create question with invalid data' do
@@ -25,7 +27,7 @@ feature 'User create question', %q{
     params[:title] = nil
     create_question(params)
 
-    expect(page).to have_content('Errors:')
+    expect(page).to have_content('Title can\'t be blank')
   end
 
   scenario 'Unauthorized user can\'t create question' do

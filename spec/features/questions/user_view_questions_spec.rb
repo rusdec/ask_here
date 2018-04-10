@@ -6,11 +6,15 @@ feature 'User view questions', %q{
   so that I can detail view interesting for me
 } do
 
-  before { create(:user_with_questions, questions_count: 3) }
+  given!(:questions) { create(:user_with_questions, questions_count: 3).questions }
 
   scenario 'User view questions' do
     visit questions_path
 
-    expect(page).to have_content('ValidQuestionTitle')
+    page.all('.question').each do |question|
+      expect(question).to have_content('ValidQuestionTitle')
+    end
+
+    expect(page.all('.question').count).to eq(questions.count)
   end
 end

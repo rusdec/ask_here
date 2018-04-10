@@ -20,6 +20,6 @@ feature 'Signing up', %q{
     params[:email] = nil
     sign_up(params)
 
-    expect(page).to have_content 'errors prohibited this user from being saved'
+    expect(page).to have_content 'Email can\'t be blank'
   end
 end

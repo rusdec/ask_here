@@ -1,6 +1,6 @@
 h3 = @question.title
 p = @question.body
-= delete_question_element(@question)
+= delete_question_link(@question)
 
 table
   = render @question.created_answers

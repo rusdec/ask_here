@@ -21,9 +21,15 @@ feature 'User delete question', %q{
     sign_in(first_user)
 
     visit question_path(first_user_question)
+    
+    expect(page).to have_content(first_user_question.title)
+    expect(page).to have_content(first_user_question.body)
+
     click_on 'Delete Question'
 
-    expect(page).to have_content('success')
+    expect(page).to have_content('Question delete success')
+    expect(page).to have_no_content(first_user_question.title)
+    expect(page).to have_no_content(first_user_question.body)
   end
 
   scenario 'User can\'t delete question of any user' do

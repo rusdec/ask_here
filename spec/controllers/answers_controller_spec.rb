@@ -5,18 +5,6 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { user.questions.last }
   let(:answer) { question.answers.last }
 
-  describe 'GET #index' do
-    before { get :index, params: { question_id: question } }
-
-    it 'populates an array of all answer for certain question' do
-      expect(assigns(:answers)).to eq(question.answers)
-    end
-
-    it 'render index view' do
-      expect(response).to render_template(:index)
-    end
-  end
-
   describe 'POST #create' do
     before { sign_in(user) }
 
@@ -32,9 +20,15 @@ RSpec.describe AnswersController, type: :controller do
         }.to change(question.answers, :count).by(1)
       end
 
+      it 'new answer belong to his author' do
+        expect {
+          post :create, params: params
+        }.to change(user.answers, :count).by(1)
+      end
+
       it 'redirect to show view' do
         post :create, params: params
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect(response).to redirect_to assigns(:question)
       end
     end
 
@@ -58,9 +52,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { sign_in(user) }
-
     context 'author' do
+      before { sign_in(user) }
       it 'delete answer' do
         expect { 
           delete :destroy, params: { id: answer }
@@ -69,7 +62,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render question show view' do
         delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question_path(question)
+        expect(response).to redirect_to question
       end
     end
 
@@ -77,12 +70,12 @@ RSpec.describe AnswersController, type: :controller do
       it 'can\'t delete answer' do
         expect {
           delete :destroy, params: { id: answer }
-        }.to change(question.answers, :count)
+        }.to_not change(question.answers, :count)
       end
 
       it 'redirect to question show view' do
         delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question_path(question)
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end

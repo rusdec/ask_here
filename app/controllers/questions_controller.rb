@@ -18,16 +18,16 @@ class QuestionsController < ApplicationController
     @question = current_user.questions.new(question_params)
 
     if @question.save
-      redirect_to question_path(@question), { alert: 'Question create success' }
+      redirect_to @question, alert: 'Question create success'
     else
       render :new
     end
   end
 
   def destroy
-    if current_user.question_author?(@question)
+    if current_user.author_of?(@question)
       @question.destroy
-      redirect_to questions_path, { alert: 'Question delete success' }
+      redirect_to questions_path, alert: 'Question delete success'
     else
       render :show
     end

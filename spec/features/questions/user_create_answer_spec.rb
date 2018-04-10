@@ -25,7 +25,7 @@ feature 'User create answer', %q{
     params[:body] = nil
     create_answer(params)
 
-    expect(page).to have_content 'Errors:'
+    expect(page).to have_content 'Body can\'t be blank'
   end
 
   scenario 'Non authorized user don\'t create answer' do

@@ -69,7 +69,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'save new question in database' do
         expect {
           post :create, params: params
-        }.to change(Question, :count).by(1)
+        }.to change(user.questions, :count).by(1)
       end
     end
 
@@ -107,15 +107,9 @@ RSpec.describe QuestionsController, type: :controller do
         }.to change(first_user.questions, :count).by(-1)
       end
 
-      it 'delete answers of deleted question' do
-        expect {
-          delete :destroy, params: { id: first_user_question }
-        }.to change(first_user_question.answers, :count).by(-2)
-      end
-
       it 'redirect to questions' do
         delete :destroy, params: { id: first_user_question }
-        expect(response).to redirect_to(questions_path)
+        expect(response).to redirect_to questions_path
       end
     end
 

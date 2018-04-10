@@ -16,7 +16,11 @@ feature 'User view question', %q{
     expect(page).to have_content 'ValidQuestionBodyText'
   end
 
-  scenario 'User view answers' do
-    expect(page).to have_content 'ValidAnswerBodyText'
+  scenario 'User view all questions answers' do
+    page.all('.answer').each do |answer|
+      expect(answer).to have_content 'ValidAnswerBodyText'
+    end
+
+    expect(page.all('.answer').count).to eq(question.answers.count)
   end
 end

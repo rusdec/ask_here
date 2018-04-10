@@ -3,8 +3,7 @@ require 'rails_helper'
 RSpec.describe Question, type: :model do
   context 'relations' do
     it { should have_many(:answers).dependent(:destroy) }
-    it { should belong_to(:user).with_foreign_key(:author_id) }
-    it { should belong_to(:user).class_name('User') }
+    it { should belong_to(:user) }
   end
 
   context 'validations' do
@@ -21,12 +20,14 @@ RSpec.describe Question, type: :model do
     end
   end
 
-  context 'methods' do
-    let(:user) { create(:user_with_question_and_answers, answers_count: 2) }
+  context 'open interface' do
+    let(:answers_count) { 2 }
+    let(:user) { create(:user_with_question_and_answers, answers_count: answers_count) }
+    let(:question) { user.questions.last }
 
     it 'created answers count should be equal 2' do
-      user.questions.last.answers.new
-      expect(user.questions.last.created_answers.count).to eq(2)
+      question.answers.new
+      expect(question.created_answers.count).to eq(answers_count)
     end
   end
 end
