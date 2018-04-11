@@ -7,7 +7,7 @@ feature 'Signing out', %q{
 } do
   given(:user) { create(:user) }
 
-  scenario 'Sign out display when user authorized' do
+  scenario 'Sign out display when user authenticated' do
     visit root_path
     expect(page).to have_no_content('Sign out')
 
