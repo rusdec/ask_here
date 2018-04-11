@@ -66,7 +66,22 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
+    context 'not authenticated user' do
+      it 'can\'t delete answer' do
+        expect {
+          delete :destroy, params: { id: answer }
+        }.to_not change(question.answers, :count)
+      end
+
+      it 'redirect to sign in view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
     context 'not author' do
+      before { sign_in(create(:user)) }
+
       it 'can\'t delete answer' do
         expect {
           delete :destroy, params: { id: answer }
@@ -75,7 +90,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirect to question show view' do
         delete :destroy, params: { id: answer }
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to question
       end
     end
   end

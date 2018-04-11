@@ -35,7 +35,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    context 'with authorized user' do
+    context 'with authenticated user' do
       before do
         sign_in create(:user)
         get :new
@@ -50,7 +50,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'with unauthorized user' do
+    context 'with not authenticated user' do
       it 'render sign in view' do
         get :new
         expect(response).to redirect_to new_user_session_path
@@ -98,9 +98,9 @@ RSpec.describe QuestionsController, type: :controller do
     let(:second_user) { create(:user_with_question_and_answers) }
     let(:second_user_question) { second_user.questions.last }
 
-    before { sign_in(first_user) }
-
     context 'author' do
+      before { sign_in(first_user) }
+
       it 'delete question' do
         expect {
           delete :destroy, params: { id: first_user_question }
@@ -113,12 +113,28 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'not author' do
+    context 'not authenticated user' do
       it 'can\'t delete question' do
         expect {
           delete :destroy, params: { id: second_user_question }
         }.to_not change(second_user.questions, :count)
       end
+
+      it 'redirect to sign in view' do
+        delete :destroy, params: { id: second_user_question }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'not author' do
+      before { sign_in(first_user) }
+
+      it 'can\'t delete question' do
+        expect {
+          delete :destroy, params: { id: second_user_question }
+        }.to_not change(second_user.questions, :count)
+      end
+
       it 'render question show view' do
         delete :destroy, params: { id: second_user_question }
         expect(response).to render_template(:show)
