@@ -4,7 +4,7 @@ module Feature
       visit '/sign_in'
       fill_in 'Email', with: user.email
       fill_in 'Password', with: user.password
-      click_on 'Sign in'
+      click_button 'Sign in'
     end
   end
 end

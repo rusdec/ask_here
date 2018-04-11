@@ -8,6 +8,14 @@ feature 'Signing in', %q{
 
   given(:user) { create(:user) }
 
+  scenario 'Sign in display when user not authorized' do
+    visit root_path
+    expect(page).to have_content('Sign in')
+
+    sign_in(user)
+    expect(page).to have_no_content('Sign in')
+  end
+
   scenario 'Signing in with correct data' do
     sign_in(user)
 
