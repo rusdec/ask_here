@@ -27,7 +27,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'user should be an author of given question' do
-      expect(user.author_of?(question)).to eq true
+      expect(user).to be_author_of(question)
     end
 
     it 'user should not be an author of given question' do
