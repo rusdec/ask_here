@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  let(:user) { create(:user_with_questions, questions_count: 2) }
+  let(:questions) { user.questions }
+
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
     before { get :index }
 
     it 'populates an array of all questions' do
@@ -15,7 +17,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:question) { create(:question) }
+    let(:question) { questions.last }
     before { get :show, params: { id: question } }
 
     it 'assign request question to @question' do
@@ -25,21 +27,40 @@ RSpec.describe QuestionsController, type: :controller do
     it 'render show view' do
       expect(response).to render_template(:show)
     end
+
+    it 'assign new answer to @answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+      expect(assigns(:answer).question_id).to eq question.id
+    end
   end
 
   describe 'GET #new' do
-    before { get :new }
-    
-    it 'assign new Question to @question' do
-      expect(assigns(:question)).to be_a_new(Question)
+    context 'with authenticated user' do
+      before do
+        sign_in create(:user)
+        get :new
+      end
+
+      it 'assign new Question to @question' do
+        expect(assigns(:question)).to be_a_new(Question)
+      end
+
+      it 'render new view' do
+        expect(response).to render_template(:new)
+      end
     end
 
-    it 'render new view' do
-      expect(response).to render_template(:new)
+    context 'with not authenticated user' do
+      it 'render sign in view' do
+        get :new
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
   describe 'POST #create' do
+    before { sign_in user }
+
     context 'with valid parameters' do
       let(:params) do
         { question: attributes_for(:question) }
@@ -48,12 +69,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'save new question in database' do
         expect {
           post :create, params: params
-        }.to change(Question, :count).by(1)
-      end
-
-      it 'redirect to show view' do
-        post :create, params: params
-        expect(response).to redirect_to question_path(assigns(:question))
+        }.to change(user.questions, :count).by(1)
       end
     end
 
@@ -71,6 +87,57 @@ RSpec.describe QuestionsController, type: :controller do
       it 'render new view' do
         post :create, params: params
         expect(response).to render_template(:new)
+      end
+    end
+  end
+
+  describe 'DELETE #delete' do
+    let(:first_user) { create(:user_with_question_and_answers, answers_count: 2) }
+    let(:first_user_question) { first_user.questions.last }
+
+    let(:second_user) { create(:user_with_question_and_answers) }
+    let(:second_user_question) { second_user.questions.last }
+
+    context 'author' do
+      before { sign_in(first_user) }
+
+      it 'delete question' do
+        expect {
+          delete :destroy, params: { id: first_user_question }
+        }.to change(first_user.questions, :count).by(-1)
+      end
+
+      it 'redirect to questions' do
+        delete :destroy, params: { id: first_user_question }
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context 'not authenticated user' do
+      it 'can\'t delete question' do
+        expect {
+          delete :destroy, params: { id: second_user_question }
+        }.to_not change(second_user.questions, :count)
+      end
+
+      it 'redirect to sign in view' do
+        delete :destroy, params: { id: second_user_question }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'not author' do
+      before { sign_in(first_user) }
+
+      it 'can\'t delete question' do
+        expect {
+          delete :destroy, params: { id: second_user_question }
+        }.to_not change(second_user.questions, :count)
+      end
+
+      it 'render question show view' do
+        delete :destroy, params: { id: second_user_question }
+        expect(response).to render_template(:show)
       end
     end
   end

@@ -1,0 +1,6 @@
+- if resource.present? && resource.errors.present?
+  .alert
+    h4.alert-heading Errors:
+    ul
+      - resource.errors.full_messages.each do |message|
+        li=message

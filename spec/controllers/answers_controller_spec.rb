@@ -1,38 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
-
-  describe 'GET #index' do
-    let(:answers) { create_list(:answer, 2, question: question) }
-    before { get :index, params: { question_id: question } }
-
-    it 'populates an array of all answer for certain question' do
-      expect(assigns(:answers)).to eq(answers)
-    end
-
-    it 'render index view' do
-      expect(response).to render_template(:index)
-    end
-  end
-
-  describe 'GET #new' do
-    before { get :new, params: { question_id: question } }
-
-    it 'assign new Answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'question in assigned @answer must exist' do
-      expect(assigns(:answer).question_id).to eq(question.id)
-    end
-
-    it 'render new view' do
-      expect(response).to render_template(:new)
-    end
-  end
+  let(:user) { create(:user_with_question_and_answers) }
+  let(:question) { user.questions.last }
+  let(:answer) { question.answers.last }
 
   describe 'POST #create' do
+    before { sign_in(user) }
+
     context 'with valid parameters' do
       let(:params) do
         { question_id: question,
@@ -45,9 +20,15 @@ RSpec.describe AnswersController, type: :controller do
         }.to change(question.answers, :count).by(1)
       end
 
+      it 'new answer belong to his author' do
+        expect {
+          post :create, params: params
+        }.to change(user.answers, :count).by(1)
+      end
+
       it 'redirect to show view' do
         post :create, params: params
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect(response).to redirect_to assigns(:question)
       end
     end
 
@@ -63,9 +44,53 @@ RSpec.describe AnswersController, type: :controller do
         }.to_not change(Answer, :count)
       end
 
-      it 'render new view' do
+      it 'render question show view' do
         post :create, params: params
-        expect(response).to render_template(:new)
+        expect(response).to render_template('questions/show')
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    context 'author' do
+      before { sign_in(user) }
+      it 'delete answer' do
+        expect { 
+          delete :destroy, params: { id: answer }
+        }.to change(question.answers, :count).by(-1)
+      end
+
+      it 'render question show view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question
+      end
+    end
+
+    context 'not authenticated user' do
+      it 'can\'t delete answer' do
+        expect {
+          delete :destroy, params: { id: answer }
+        }.to_not change(question.answers, :count)
+      end
+
+      it 'redirect to sign in view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'not author' do
+      before { sign_in(create(:user)) }
+
+      it 'can\'t delete answer' do
+        expect {
+          delete :destroy, params: { id: answer }
+        }.to_not change(question.answers, :count)
+      end
+
+      it 'redirect to question show view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question
       end
     end
   end

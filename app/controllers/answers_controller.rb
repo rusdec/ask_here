@@ -1,22 +1,28 @@
 class AnswersController < ApplicationController
-  before_action :set_question, only: %i[index new create]
-
-  def index
-    @answers = @question.answers
-  end
-
-  def new
-    @answer = @question.answers.new
-  end
+  before_action :authenticate_user!, only: %i[create destroy]
+  before_action :set_question, only: %i[create]
+  before_action :set_answer, only: %i[destroy]
 
   def create
-    @answer = @question.answers.new(answer_params)
-    
+    @answer = current_user.answers.new(answer_params)
+    @answer.question = @question
+
     if @answer.save
-      redirect_to question_path(@question)
+      redirect_to @question
     else
-      render :new
+      render 'questions/show'
     end
+  end
+
+  def destroy
+    flash_message = if current_user.author_of?(@answer)
+                      @answer.destroy
+                      'Answer delete success' 
+                    else
+                      'Answer delete error'
+                    end
+    
+    redirect_to @answer.question, alert: flash_message
   end
 
   private
@@ -27,5 +33,9 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body)
+  end
+
+  def set_answer
+    @answer = Answer.find(params[:id])
   end
 end
