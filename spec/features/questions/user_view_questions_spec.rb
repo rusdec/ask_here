@@ -10,9 +10,8 @@ feature 'User view questions', %q{
 
   scenario 'User view questions' do
     visit questions_path
-
-    page.all('.question').each do |question|
-      expect(question).to have_content('ValidQuestionTitle')
+    questions.each do |question|
+      expect(page).to have_content(question.title)
     end
 
     expect(page.all('.question').count).to eq(questions.count)

@@ -13,14 +13,13 @@ feature 'User view question', %q{
   end
 
   scenario 'User view question body' do
-    expect(page).to have_content 'ValidQuestionBodyText'
+    expect(page).to have_content question.body
   end
 
   scenario 'User view all questions answers' do
-    page.all('.answer').each do |answer|
-      expect(answer).to have_content 'ValidAnswerBodyText'
+    question.answers.each do |answer|
+      expect(page).to have_content answer.body
     end
-
     expect(page.all('.answer').count).to eq(question.answers.count)
   end
 end

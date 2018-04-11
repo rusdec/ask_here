@@ -8,8 +8,9 @@ feature 'User create answer', %q{
 
   given(:user) { create(:user_with_questions) }
   given(:question) { user.questions.last }
+  given(:answer_body) { 'RandomValidAnswerBodyText' }
   given(:params) do
-    { body: 'ValidAnswerBodyText',
+    { body: answer_body,
       question: question }
   end
 
@@ -17,7 +18,7 @@ feature 'User create answer', %q{
     sign_in(user)
     create_answer(params)
 
-    expect(page).to have_content 'ValidAnswerBodyText'
+    expect(page).to have_content answer_body
   end
 
   scenario 'User create answer with invalid data' do

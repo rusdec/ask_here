@@ -1,7 +1,12 @@
 FactoryBot.define do
   factory :question do
-    title "ValidQuestionTitle"
-    body "ValidQuestionBodyText"
+    sequence :title do |n|
+      "ValidQuestionTitle#{n}"
+    end
+
+    sequence :body do |n|
+      "ValidQuestionBodyText#{n}"
+    end
 
     factory :question_with_answers do
       transient { answers_count 2 }
