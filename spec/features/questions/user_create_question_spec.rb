@@ -30,7 +30,7 @@ feature 'User create question', %q{
     expect(page).to have_content('Title can\'t be blank')
   end
 
-  scenario 'Unauthorized user can\'t create question' do
+  scenario 'Not authenticated user can\'t create question' do
     visit new_question_path
 
     expect(page).to have_content('Log in')

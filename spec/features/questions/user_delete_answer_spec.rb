@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'User create answer', %q{
+feature 'User delete answer', %q{
   As author of answer
   only I can delete my answers
   so that other users can't delete my answer
@@ -35,7 +35,7 @@ feature 'User create answer', %q{
     end
   end
 
-  scenario 'Non authorized user can\'t delete answer' do
+  scenario 'Non authenticated user can\'t delete answer' do
     visit question_path(question)
 
     expect(page).to have_no_content('Delete')

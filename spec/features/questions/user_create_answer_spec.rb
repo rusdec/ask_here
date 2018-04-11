@@ -28,7 +28,7 @@ feature 'User create answer', %q{
     expect(page).to have_content 'Body can\'t be blank'
   end
 
-  scenario 'Non authorized user don\'t create answer' do
+  scenario 'Not authenticated user don\'t create answer' do
     create_answer(params)
 
     expect(page).to have_content('You need to sign in or sign up before continuing.')
