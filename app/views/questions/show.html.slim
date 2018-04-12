@@ -2,11 +2,12 @@ h3 = @question.title
 p = @question.body
 = delete_question_link(@question)
 
-table
+table.answers
   = render @question.created_answers
 
-= form_for [@question, @answer] do |f|
-    = render 'shared/errors', resource: @answer
-    = f.label :body
-    = f.text_area :body
-    = f.submit
+- if current_user
+  = form_for [@question, @answer], remote: true do |f|
+      = render 'shared/errors', resource: @answer
+      = f.label :body
+      = f.text_area :body
+      = f.submit
