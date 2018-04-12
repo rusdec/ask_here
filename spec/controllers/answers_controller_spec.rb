@@ -40,13 +40,13 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'don\'t save new answer in database' do
         expect {
-          post :create, params: params
+          post :create, params: params, format: :js
         }.to_not change(question.answers, :count)
       end
 
       it 'render question show view' do
-        post :create, params: params
-        expect(response).to render_template('questions/show')
+        post :create, params: params, format: :js
+        expect(response).to render_template 'create'
       end
     end
   end
