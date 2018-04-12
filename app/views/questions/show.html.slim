@@ -7,7 +7,7 @@ table.answers
 
 - if current_user
   = form_for [@question, @answer], remote: true do |f|
-      = render 'shared/errors', resource: @answer
+      div#errors
       = f.label :body
       = f.text_area :body
       = f.submit
