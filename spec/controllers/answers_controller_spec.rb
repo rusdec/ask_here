@@ -16,19 +16,19 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'save new answer in database' do
         expect {
-          post :create, params: params
+          post :create, params: params, format: :js
         }.to change(question.answers, :count).by(1)
       end
 
       it 'new answer belong to his author' do
         expect {
-          post :create, params: params
+          post :create, params: params, format: :js
         }.to change(user.answers, :count).by(1)
       end
 
-      it 'redirect to show view' do
-        post :create, params: params
-        expect(response).to redirect_to assigns(:question)
+      it 'render create template' do
+        post :create, params: params, format: :js
+        expect(response).to render_template 'create'
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'don\'t save new answer in database' do
         expect {
           post :create, params: params
-        }.to_not change(Answer, :count)
+        }.to_not change(question.answers, :count)
       end
 
       it 'render question show view' do
