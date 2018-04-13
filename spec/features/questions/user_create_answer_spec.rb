@@ -14,14 +14,14 @@ feature 'User create answer', %q{
       question: question }
   end
 
-  scenario 'User create answer with valid data' do
+  scenario 'Authenticated user create answer with valid data', js: true do
     sign_in(user)
     create_answer(params)
 
     expect(page).to have_content answer_body
   end
 
-  scenario 'User create answer with invalid data' do
+  scenario 'Authenticated user can\'t create answer with invalid data', js: true do
     sign_in(user)
     params[:body] = nil
     create_answer(params)
@@ -29,9 +29,9 @@ feature 'User create answer', %q{
     expect(page).to have_content 'Body can\'t be blank'
   end
 
-  scenario 'Not authenticated user don\'t create answer' do
-    create_answer(params)
-
-    expect(page).to have_content('You need to sign in or sign up before continuing.')
+  scenario 'Not authenticated user can\'t create answer', js: true do
+    visit question
+    expect(page).to have_no_content('Create Answer')
+    expect(page).to have_no_selector('#answer_body')
   end
 end
