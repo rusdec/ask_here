@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user_with_questions, questions_count: 2) }
   let(:questions) { user.questions }
+  let(:question) { questions.last }
 
   describe 'GET #index' do
     before { get :index }
@@ -17,7 +18,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:question) { questions.last }
     before { get :show, params: { id: question } }
 
     it 'assign request question to @question' do
@@ -35,7 +35,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    context 'with authenticated user' do
+    context 'when authenticated user' do
       before do
         sign_in create(:user)
         get :new
@@ -50,7 +50,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'with not authenticated user' do
+    context 'when unauthenticated user' do
       it 'render sign in view' do
         get :new
         expect(response).to redirect_to new_user_session_path
@@ -98,7 +98,7 @@ RSpec.describe QuestionsController, type: :controller do
     let(:second_user) { create(:user_with_question_and_answers) }
     let(:second_user_question) { second_user.questions.last }
 
-    context 'author' do
+    context 'when authenticated user is author' do
       before { sign_in(first_user) }
 
       it 'delete question' do
@@ -113,7 +113,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'not authenticated user' do
+    context 'when unauthenticated user' do
       it 'can\'t delete question' do
         expect {
           delete :destroy, params: { id: second_user_question }
@@ -126,7 +126,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'not author' do
+    context 'when authenticated is not author' do
       before { sign_in(first_user) }
 
       it 'can\'t delete question' do
@@ -138,6 +138,80 @@ RSpec.describe QuestionsController, type: :controller do
       it 'render question show view' do
         delete :destroy, params: { id: second_user_question }
         expect(response).to render_template(:show)
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    let(:new_title) { 'NewQuestionValidTitle' }
+    let(:new_body)  { 'NewQuestionValidBody' }
+    let(:params) do
+      { id: question, question: { title: new_title, body: new_body } }
+    end
+
+    context 'when authenticated user is author' do
+      before { sign_in(user) }
+
+      it 'can update question with valid parameters' do
+        patch :update, params: params, format: :js
+
+        question.reload
+
+        expect(question.title).to eq(new_title)
+        expect(question.body).to eq(new_body)
+      end
+
+      it 'render question show view' do
+        patch :update, params: params, format: :js
+        
+        expect(response).to render_template(:show)
+      end
+
+      it 'can\'t update question with invalid parameters' do
+        old_question = question
+        params[:question][:title] = nil
+        params[:question][:body] = nil
+
+        patch :update, params: params, format: :js
+
+        question.reload
+
+        expect(question.title).to eq(old_question.title)
+        expect(question.body).to eq(old_question.body)
+      end
+
+    end
+
+    context 'when authenticated user is not author' do
+      let!(:old_question) { question }
+
+      before do
+        sign_in(create(:user))
+        patch :update, params: params, format: :js
+      end
+
+      it 'can\'t update question' do
+        question.reload
+
+        expect(question.title).to eq(old_question.title)
+        expect(question.body).to eq(old_question.body)
+      end
+
+      it 'render question show view' do
+        expect(response).to render_template(:show)
+      end
+    end
+
+    context 'when unauthenticated user' do
+      let!(:old_question) { question }
+
+      it 'can\'t update question' do
+        patch :update, params: params, format: :js
+
+        question.reload
+
+        expect(question.title).to eq(old_question.title)
+        expect(question.body).to eq(old_question.body)
       end
     end
   end

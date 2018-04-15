@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show destroy]
+  before_action :set_question, only: %i[show destroy update]
 
   def index
     @questions = Question.all
@@ -31,6 +31,14 @@ class QuestionsController < ApplicationController
     else
       render :show
     end
+  end
+
+  def update
+    if current_user.author_of?(@question) && @question.update(question_params)
+      flash[:alert] = 'Question update success'
+    end
+
+    render :show
   end
 
   private
