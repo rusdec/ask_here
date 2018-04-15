@@ -1,0 +1,8 @@
+<% if @result %>
+  $('#question_errors').html('')
+  $('.question .title').text($('#question_title').val())
+  $('.question .body').text($('#question_body').val())
+  toggleVisibleQuestion()
+<% else %>
+  $('<%= j render 'shared/errors', resource: @question %>').appendTo('#question_errors')
+<% end %>

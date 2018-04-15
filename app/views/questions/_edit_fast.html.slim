@@ -1,0 +1,11 @@
+= form_for @question, remote: true, html: { class: 'form-edit-question hidden' } do |f|
+  #question_errors
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_area :body
+  = link_to 'Cancel', '#', class: 'link-cancel-edit-question'
+  = f.submit 'Save'
+
