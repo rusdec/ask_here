@@ -2,15 +2,16 @@
   h3.title = @question.title
   p.body = @question.body
 
-= render 'edit_fast'
-= question_remote_links(@question)
+- if current_user&.author_of?(@question)
+  = render 'edit_fast'
+  = question_remote_links(@question)
 
 table.answers
   = render @question.created_answers
 
 - if current_user
-  = form_for [@question, @question.answers.new], remote: true do |f|
-      div#errors
+  = form_for [@question, @answer], remote: true do |f|
+      #answer_errors
       = f.label :body
       = f.text_area :body
       = f.submit
