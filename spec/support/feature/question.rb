@@ -28,5 +28,11 @@ module Feature
         click_on 'Cancel'
       end
     end
+
+    def click_delete_link
+      within '.question-remote-links' do
+        click_on 'Delete'
+      end
+    end
   end
 end

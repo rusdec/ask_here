@@ -14,7 +14,7 @@ feature 'User delete question', %q{
 
   scenario 'Unauthorized user can\'t delete question' do
     visit new_user_session_path
-    expect(page).to have_no_content('Delete')
+    expect(page).to have_no_content('link-delete-question')
   end
 
   scenario 'Author can delete his question' do
@@ -25,7 +25,7 @@ feature 'User delete question', %q{
     expect(page).to have_content(first_user_question.title)
     expect(page).to have_content(first_user_question.body)
 
-    click_on 'Delete Question'
+    click_delete_link
 
     expect(page).to have_content('Question delete success')
     expect(page).to have_no_content(first_user_question.title)
@@ -37,6 +37,6 @@ feature 'User delete question', %q{
 
     visit question_path(second_user_question)
 
-    expect(page).to have_no_content('Delete')
+    expect(page).to have_no_selector('.link-delete-question')
   end
 end

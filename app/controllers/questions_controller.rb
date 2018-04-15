@@ -34,11 +34,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(@question) && @question.update(question_params)
+    @result = current_user.author_of?(@question) && @question.update(question_params)
+
+    if @result
       flash[:alert] = 'Question update success'
     end
-
-    render :show
   end
 
   private
