@@ -161,10 +161,10 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq(new_body)
       end
 
-      it 'render question show view' do
+      it 'render question update' do
         patch :update, params: params, format: :js
         
-        expect(response).to render_template(:show)
+        expect(response).to render_template(:update)
       end
 
       it 'can\'t update question with invalid parameters' do
@@ -197,8 +197,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq(old_question.body)
       end
 
-      it 'render question show view' do
-        expect(response).to render_template(:show)
+      it 'render question update' do
+        expect(response).to render_template(:update)
       end
     end
 
