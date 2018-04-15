@@ -4,6 +4,6 @@
   }
   $('<%= j render @answer %>').appendTo('table.answers tbody')
 <% else %>
-  $('<%= render 'shared/errors', resource: @answer %>').appendTo('#errors')
+  $('<%= render 'shared/errors', resource: @answer %>').appendTo('#answer_errors')
 <% end %>
 
