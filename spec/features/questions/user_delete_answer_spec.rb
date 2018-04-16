@@ -13,7 +13,7 @@ feature 'User delete answer', %q{
 
   given(:second_user) { create(:user) }
 
-  scenario 'Authenticated user can delete his answer' do
+  scenario 'Authenticated user can delete his answer', js: true do
     sign_in(user)
     visit question_path(question)
 

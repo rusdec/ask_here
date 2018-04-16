@@ -52,30 +52,30 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    let(:params) do
+      { id: answer }
+    end
+
     context 'author' do
       before { sign_in(user) }
+
       it 'delete answer' do
         expect { 
-          delete :destroy, params: { id: answer }
+          delete :destroy, params: params, format: :js
         }.to change(question.answers, :count).by(-1)
       end
 
-      it 'render question show view' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question
+      it 'render question destroy view' do
+        delete :destroy, params: params, format: :js
+        expect(response).to render_template(:destroy)
       end
     end
 
     context 'not authenticated user' do
       it 'can\'t delete answer' do
         expect {
-          delete :destroy, params: { id: answer }
+          delete :destroy, params: params, format: :js
         }.to_not change(question.answers, :count)
-      end
-
-      it 'redirect to sign in view' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to new_user_session_path
       end
     end
 
@@ -84,13 +84,8 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'can\'t delete answer' do
         expect {
-          delete :destroy, params: { id: answer }
+          delete :destroy, params: params, format: :js
         }.to_not change(question.answers, :count)
-      end
-
-      it 'redirect to question show view' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question
       end
     end
   end

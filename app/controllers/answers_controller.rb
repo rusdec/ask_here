@@ -10,14 +10,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    flash_message = if current_user.author_of?(@answer)
-                      @answer.destroy
-                      'Answer delete success' 
-                    else
-                      'Answer delete error'
-                    end
-    
-    redirect_to @answer.question, alert: flash_message
+    @answer.destroy if current_user.author_of?(@answer)
   end
 
   def update
