@@ -103,26 +103,21 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'delete question' do
         expect {
-          delete :destroy, params: { id: first_user_question }
+          delete :destroy, params: { id: first_user_question }, format: :js
         }.to change(first_user.questions, :count).by(-1)
       end
 
-      it 'redirect to questions' do
-        delete :destroy, params: { id: first_user_question }
-        expect(response).to redirect_to questions_path
+      it 'render destroy view' do
+        delete :destroy, params: { id: first_user_question }, format: :js
+        expect(response).to render_template(:destroy)
       end
     end
 
     context 'when unauthenticated user' do
       it 'can\'t delete question' do
         expect {
-          delete :destroy, params: { id: second_user_question }
+          delete :destroy, params: { id: second_user_question }, format: :js
         }.to_not change(second_user.questions, :count)
-      end
-
-      it 'redirect to sign in view' do
-        delete :destroy, params: { id: second_user_question }
-        expect(response).to redirect_to new_user_session_path
       end
     end
 
@@ -131,13 +126,13 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'can\'t delete question' do
         expect {
-          delete :destroy, params: { id: second_user_question }
+          delete :destroy, params: { id: second_user_question }, format: :js
         }.to_not change(second_user.questions, :count)
       end
 
-      it 'render question show view' do
-        delete :destroy, params: { id: second_user_question }
-        expect(response).to render_template(:show)
+      it 'render destroy view' do
+        delete :destroy, params: { id: second_user_question }, format: :js
+        expect(response).to render_template(:destroy)
       end
     end
   end

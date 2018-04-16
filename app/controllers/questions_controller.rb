@@ -25,12 +25,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path, alert: 'Question delete success'
-    else
-      render :show
-    end
+    @result = @question.destroy if current_user.author_of?(@question)
   end
 
   def update
