@@ -36,40 +36,6 @@ feature 'User update question', %q{
       expect(page).to have_no_selector('.link-edit-question')
       expect(page).to have_no_selector('.form-edit-question')
     end
-
-    describe 'click Edit' do
-      before do
-        visit question_path(question)
-      end
-
-      scenario 'see fast edit question form' do
-        expect(page).to have_selector('.form-edit-question', visible: false)
-        click_edit_link
-        expect(page).to have_selector('.form-edit-question', visible: true)
-      end
-
-      scenario 'no see unediting question data' do
-        expect(page).to have_selector('.question', visible: true)
-        click_edit_link
-        expect(page).to have_selector('.form-edit-question', visible: false)
-      end
-    end
-
-    describe 'click Cancel on fast edit question form' do
-      before do
-        visit question_path(question)
-        click_edit_link
-        click_cancel_link
-      end
-
-      scenario 'see unediting question data' do
-        expect(page).to have_selector('.question', visible: true)
-      end
-
-      scenario 'no see fast edit question form' do
-        expect(page).to have_selector('.form-edit-question', visible: false)
-      end
-    end
   end
 
   describe 'Unauthenticated user' do

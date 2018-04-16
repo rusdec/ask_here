@@ -2,8 +2,11 @@ module Feature
   module Answer
     def create_answer(params)
       visit question_path(params[:question])
-      fill_in 'Body', with: params[:body]
-      click_on 'Create Answer'
+
+      within '#new_answer' do
+        fill_in 'Body', with: params[:body]
+        click_on 'Create Answer'
+      end
     end
 
     def answer_container(answer)
@@ -52,6 +55,10 @@ module Feature
 
     def answer_edit_link(answer)
       "#{answer_container(answer)} .link-edit-answer"
+    end
+
+    def answer_delete_link(answer)
+      "#{answer_container(answer)} .link-delete-answer"
     end
   end
 end

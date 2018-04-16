@@ -12,7 +12,7 @@
 div
   - if current_user
     = form_for [@question, @answer], remote: true do |f|
-      #answer_errors
+      #create_answer_errors
       = f.label :body
       = f.text_area :body
       = f.submit
