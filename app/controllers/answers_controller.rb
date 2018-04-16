@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[create destroy]
+  before_action :authenticate_user!, only: %i[create destroy update]
   before_action :set_question, only: %i[create]
-  before_action :set_answer, only: %i[destroy]
+  before_action :set_answer, only: %i[destroy update]
 
   def create
     @answer = current_user.answers.new(answer_params)
@@ -18,6 +18,10 @@ class AnswersController < ApplicationController
                     end
     
     redirect_to @answer.question, alert: flash_message
+  end
+
+  def update
+    @answer.update(answer_params) if current_user.author_of?(@answer)
   end
 
   private

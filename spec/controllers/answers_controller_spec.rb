@@ -94,4 +94,74 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    let(:user) { create(:user_with_question_and_answers) }
+    let(:question) { user.questions.last }
+    let(:answer) { question.answers.last }
+    let(:new_body) { 'NewValidAnswerBody' }
+    let(:params) do
+      { id: answer, answer: { body: new_body } }
+    end
+    let(:another_user) { create(:user) }
+    
+    context 'when authenticated user is author' do
+
+      before { sign_in(user) }
+
+      it 'can update answer with valid data' do
+        patch :update, params: params, format: :js
+
+        answer.reload
+
+        expect(answer.body).to eq(new_body)
+      end
+
+      it 'can\'t update answer with invalid data' do
+        old_answer = answer
+        params[:body] = nil
+        patch :update, params: params, format: :js
+        
+        answer.reload
+
+        expect(answer.body).to eq(old_answer.body)
+      end
+
+      it 'render update view' do
+        patch :update, params: params, format: :js
+
+        expect(response).to render_template(:update)
+      end
+    end
+
+    context 'when authenticated user isn\'t author' do
+      before { sign_in(another_user) }
+
+      it 'can\'t update answer' do
+        old_answer = answer
+        patch :update, params: params, format: :js
+
+        answer.reload
+
+        expect(answer.body).to eq(old_answer.body)
+      end
+
+      it 'render update view' do
+        patch :update, params: params, format: :js
+
+        expect(response).to render_template(:update)
+      end
+    end
+
+    context 'when unauthenticated user' do
+      it 'can\'t update answer' do
+        old_answer = answer
+        patch :update, params: params, format: :js
+
+        answer.reload
+
+        expect(answer.body).to eq(old_answer.body)
+      end
+    end
+  end
 end
