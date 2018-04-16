@@ -5,7 +5,8 @@ module AnswersHelper
       concat(link_to 'Delete',
              answer_path(answer),
              method: :delete,
-             class: 'link-delete-answer')
+             class: 'link-delete-answer',
+             remote: true)
     end
   end
 end

@@ -21,7 +21,6 @@ feature 'User delete answer', %q{
 
     click_delete_answer_link(answer)
 
-    expect(page).to have_content 'Answer delete success'
     expect(page).to have_no_content answer_body
   end
 
