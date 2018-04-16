@@ -5,7 +5,8 @@ module QuestionsHelper
       concat(link_to 'Delete',
              question_path(question),
              method: :delete,
-             class: 'link-delete-question')
+             class: 'link-delete-question',
+             remote: true)
     end
   end
 end
