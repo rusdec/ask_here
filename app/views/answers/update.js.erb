@@ -1,0 +1,6 @@
+<% if @result %>
+  findAnswerData('<%= j @answer.id.to_s %>').textContent = '<%= j @answer.body %>'
+  toggleVisibleAnswer('<%= j @answer.id.to_s %>')
+<% else %>
+  document.querySelector('#edit_answer_errors').insertAdjacentHTML('afterbegin', '<%= render 'shared/errors', resource: @answer %>')
+<% end %>

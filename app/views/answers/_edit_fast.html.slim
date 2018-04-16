@@ -1,0 +1,8 @@
+= form_for answer, remote: true, html: { class: 'form-edit-answer hidden' } do |f|
+  #edit_answer_errors
+  p
+    = f.label :body
+    = f.text_area :body
+
+  = link_to 'Cancel', '#', class: 'link-cancel-edit-answer'
+  = f.submit 'Save'

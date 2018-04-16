@@ -106,12 +106,10 @@ RSpec.describe AnswersController, type: :controller do
     let(:another_user) { create(:user) }
     
     context 'when authenticated user is author' do
-
       before { sign_in(user) }
 
       it 'can update answer with valid data' do
         patch :update, params: params, format: :js
-
         answer.reload
 
         expect(answer.body).to eq(new_body)
@@ -121,7 +119,6 @@ RSpec.describe AnswersController, type: :controller do
         old_answer = answer
         params[:body] = nil
         patch :update, params: params, format: :js
-        
         answer.reload
 
         expect(answer.body).to eq(old_answer.body)
@@ -140,7 +137,6 @@ RSpec.describe AnswersController, type: :controller do
       it 'can\'t update answer' do
         old_answer = answer
         patch :update, params: params, format: :js
-
         answer.reload
 
         expect(answer.body).to eq(old_answer.body)
