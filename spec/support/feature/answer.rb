@@ -67,12 +67,12 @@ module Feature
       "#{answer_container(answer)} .link-delete-answer"
     end
 
-    def best_answer(answer = nil)
-      "#{answer_container(answer) if answer} .best_answer"
+    def best_answer(answer)
+      "#best_answer[data-id='#{answer.id}']"
     end
 
     def set_as_best_answer_link(answer = nil)
-      "#{answer_container(answer) if answer} .link-set-as_best-answer"
+      "#{answer_container(answer) if answer} .link-set-as-best-answer"
     end
   end
 end

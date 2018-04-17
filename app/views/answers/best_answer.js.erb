@@ -1,6 +1,4 @@
 <% if @answer.best? %>
-  removeBestAnswerSelectors()
-  findAnswerData('<%= j @answer.id.to_s %>').insertAdjacentHTML('afterbegin', '<%= j render 'answers/best_answer' %>')
-  placeBestAnswerOnTop()
+  choseBestAnswer('<%= j @answer.id.to_s %>')
 <% else %>
 <% end %>

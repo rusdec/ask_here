@@ -1,7 +1,5 @@
-.answer data-id=answer.id
+.answer data-id=answer.id id=(answer.best? ? 'best_answer' : '')
   p.body
-    - if answer.best?
-        = render 'answers/best_answer', answer: answer
     = answer.body
 
   - if current_user&.author_of?(answer)

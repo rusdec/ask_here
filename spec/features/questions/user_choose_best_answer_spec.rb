@@ -41,6 +41,7 @@ feature 'User choose best answer', %q{
 
     sign_in(user)
     visit question_path(question)
+
     click_set_as_best_answer_link(answer)
 
     expect(page).to have_selector(best_answer(answer))
