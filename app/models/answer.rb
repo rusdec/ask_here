@@ -12,7 +12,7 @@ class Answer < ApplicationRecord
   end
 
   def best!
-    question.uncheck_best_answers
+    question.best_answers.each(&:not_best!)
     self.best = true
     save!
   end

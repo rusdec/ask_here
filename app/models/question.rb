@@ -17,8 +17,4 @@ class Question < ApplicationRecord
   def created_answers
     answers.where.not(id: nil)
   end
-
-  def uncheck_best_answers
-    best_answers.each(&:not_best!)
-  end
 end

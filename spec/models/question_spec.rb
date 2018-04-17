@@ -32,12 +32,4 @@ RSpec.describe Question, type: :model do
 
     expect(question.best_answers.count).to eq(best_answers_count)
   end
-
-  it 'unckeck best answers' do
-    question = create(:user_with_question_and_best_answer).questions.last
-
-    expect {
-      question.uncheck_best_answers
-    }.to change(question.best_answers, :count).by(-1)
-  end
 end
