@@ -1,5 +1,9 @@
 .answer data-id=answer.id
-  p.body = answer.body
+  p.body
+    - if answer.best?
+        = render 'answers/best_answer'
+    = answer.body
+
   - if current_user&.author_of?(answer)
       = answer_remote_links(answer)
       = render 'answers/edit_fast', answer: answer

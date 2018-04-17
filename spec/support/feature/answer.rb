@@ -41,6 +41,12 @@ module Feature
       end
     end
 
+    def click_set_as_best_answer_link(answer)
+      within answer_container(answer) do
+        click_on 'Best answer'
+      end
+    end
+
     def answer_body(answer)
       "#{answer_container(answer)} p.body"
     end
@@ -59,6 +65,14 @@ module Feature
 
     def answer_delete_link(answer)
       "#{answer_container(answer)} .link-delete-answer"
+    end
+
+    def best_answer(answer)
+      "#{answer_container(answer)} .best_answer"
+    end
+
+    def set_as_best_answer_link(answer = nil)
+      "#{answer_container(answer) if answer} .link-set-as_best-answer"
     end
   end
 end

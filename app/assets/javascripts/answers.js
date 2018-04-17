@@ -12,6 +12,18 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 })
 
+function findAnswer(id) {
+  return document.querySelector(`.answer[data-id='${id}']`)
+}
+
+function findBestAnswers() {
+  return document.querySelectorAll('.best_answer')
+}
+
+function removeBestAnswerSelectors() {
+  findBestAnswers().forEach((e) => e.remove())
+}
+
 function findEditAnswerForm(id) {
   return document.querySelector(`.answer[data-id='${id}'] .form-edit-answer`)
 }
