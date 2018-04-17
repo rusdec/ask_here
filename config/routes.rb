@@ -11,7 +11,9 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :answers, shallow: true,
-                        only: %i[create update destroy]
+                        only: %i[create update destroy] do
+      patch :best_answer, to: 'answers#best_answer'
+    end
   end
 
   # For details on the DSL available within this file,
