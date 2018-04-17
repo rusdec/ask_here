@@ -9,8 +9,6 @@ RSpec.describe QuestionsController, type: :controller do
     before { get :index }
 
     it 'populates an array of all questions' do
-      puts questions.inspect
-      puts assigns(:questions).inspect
       expect(assigns(:questions)).to eq questions
     end
 
