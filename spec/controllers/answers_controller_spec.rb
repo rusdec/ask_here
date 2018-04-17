@@ -160,7 +160,7 @@ RSpec.describe AnswersController, type: :controller do
 
     let(:another_answer) { create(:answer, question: question, user: user) }
     let(:params) do
-      { answer_id: answer }
+      { id: answer }
     end
 
     context 'when authenticated user is author of question' do
@@ -177,7 +177,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'can set another best answer' do
         patch :best_answer, params: params, format: :js 
-        patch :best_answer, params: { answer_id: another_answer }, format: :js
+        patch :best_answer, params: { id: another_answer }, format: :js
 
         answer.reload
         another_answer.reload
