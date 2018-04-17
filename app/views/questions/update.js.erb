@@ -1,8 +1,8 @@
 <% if @result %>
-  $('#question_errors').html('')
-  $('.question .title').text($('#question_title').val())
-  $('.question .body').text($('#question_body').val())
+  updateQuestionErrors()
+  updateQuestionTitle(document.querySelector('#question_title').value)
+  updateQuestionBody(document.querySelector('#question_body').value)
   toggleVisibleQuestion()
 <% else %>
-  $('<%= j render 'shared/errors', resource: @question %>').appendTo('#question_errors')
+  updateQuestionErrors('<%= j render 'shared/errors', resource: @question %>')
 <% end %>
