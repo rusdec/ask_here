@@ -18,9 +18,7 @@ class AnswersController < ApplicationController
   end
 
   def best_answer
-    if current_user.author_of?(@answer.question)
-      @answer.best!
-    end
+    @answer.best! if current_user.author_of?(@answer.question)
   end
 
   private

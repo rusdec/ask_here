@@ -185,6 +185,12 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer).to_not be_best
         expect(another_answer).to be_best
       end
+
+      it 'render best_answer view' do
+        patch :best_answer, params: params, format: :js 
+
+        expect(response).to render_template(:best_answer)
+      end
     end
 
     context 'when authenticated user isn\'t author of question' do
