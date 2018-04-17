@@ -50,6 +50,27 @@ feature 'User choose best answer', %q{
     expect(page).to have_no_selector(best_answer(answer))
     expect(page).to have_selector(best_answer(another_answer))
   end
+
+  scenario 'User see best answer on top' do
+    best_answer = create(:best_answer, user: user, question: question)
+    visit question_path(question)
+    top_answer = page.first('.answer .body')
+
+    expect(top_answer.text).to match(/#{best_answer.body}/)
+  end
+
+  scenario 'Best answer replace on top when choosen', js: true do
+    sign_in(user)
+    visit question_path(question)
+    top_answer = page.first('.answer .body')
+
+    expect(top_answer.text).to_not match(/#{answer.body}/)
+
+    click_set_as_best_answer_link(answer)
+    top_answer = page.first('.answer .body')
+
+    expect(top_answer.text).to match(/#{answer.body}/)
+  end
 end
 
 

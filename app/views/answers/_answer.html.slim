@@ -1,7 +1,7 @@
 .answer data-id=answer.id
   p.body
     - if answer.best?
-        = render 'answers/best_answer'
+        = render 'answers/best_answer', answer: answer
     = answer.body
 
   - if current_user&.author_of?(answer)

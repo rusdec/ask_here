@@ -12,12 +12,25 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 })
 
+function findAnswersContainer() {
+  return document.querySelector('.answers')
+}
+
 function findAnswer(id) {
   return document.querySelector(`.answer[data-id='${id}']`)
 }
 
 function findBestAnswers() {
   return document.querySelectorAll('.best_answer')
+}
+
+function findBestAnswer() {
+  let id = document.querySelector('.best_answer').dataset.id
+  return findAnswer(id)
+}
+
+function placeBestAnswerOnTop() {
+  findAnswersContainer().insertAdjacentElement('afterbegin', findBestAnswer())
 }
 
 function removeBestAnswerSelectors() {
@@ -37,19 +50,13 @@ function findAnswerRemoteLinks(id) {
 }
 
 function toggleVisibleAnswer(id) {
-  let editAnswerForm = findEditAnswerForm(id) 
-  let answerRemoteLinks = findAnswerRemoteLinks(id)
-  let answer = findAnswerData(id)
-
-  if (answerRemoteLinks) {
-    toggleVisible(answerRemoteLinks)
-  }
-
-  if (editAnswerForm) {
-    toggleVisible(editAnswerForm)
-  }
-
-  if (answer) {
-    toggleVisible(answer)
-  }
+  [
+    findEditAnswerForm(id),
+    findAnswerRemoteLinks(id),
+    findAnswerData(id)
+  ].forEach((element) => {
+    if (element) {
+      toggleVisible(element)
+    }
+  })
 }
