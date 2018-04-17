@@ -10,7 +10,15 @@ class Question < ApplicationRecord
                       length: { minimum: 10,
                                 maximum: 30 } }
 
+  def best_answers
+    answers.where(best: true)
+  end
+
   def created_answers
     answers.where.not(id: nil)
+  end
+
+  def uncheck_best_answers
+    best_answers.each(&:not_best!)
   end
 end

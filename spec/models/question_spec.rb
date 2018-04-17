@@ -21,8 +21,23 @@ RSpec.describe Question, type: :model do
     answers_count = 2
     user = create(:user_with_question_and_answers, answers_count: answers_count)
     question = user.questions.last
-
     question.answers.new
+
     expect(question.created_answers.count).to eq(answers_count)
+  end
+
+  it 'select only best answers' do
+    question = create(:user_with_question_and_best_answer).questions.last
+    best_answers_count = question.answers.where(best: true).count
+
+    expect(question.best_answers.count).to eq(best_answers_count)
+  end
+
+  it 'unckeck best answers' do
+    question = create(:user_with_question_and_best_answer).questions.last
+
+    expect {
+      question.uncheck_best_answers
+    }.to change(question.best_answers, :count).by(-1)
   end
 end
