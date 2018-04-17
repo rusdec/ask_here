@@ -155,4 +155,60 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #best_answer' do
+
+    let(:another_answer) { create(:answer, question: question, user: user) }
+    let(:params) do
+      { answer_id: answer }
+    end
+
+    context 'when authenticated user is author of question' do
+      before { sign_in(user) }
+
+      it 'can set best answer' do
+        expect(answer).to_not be_best
+
+        patch :best_answer, params: params, format: :js
+        answer.reload
+
+        expect(answer).to be_best
+      end
+
+      it 'can set another best answer' do
+        patch :best_answer, params: params, format: :js 
+        patch :best_answer, params: { answer_id: another_answer }, format: :js
+
+        answer.reload
+        another_answer.reload
+        
+        expect(answer).to_not be_best
+        expect(another_answer).to be_best
+      end
+    end
+
+    context 'when authenticated user isn\'t author of question' do
+      it 'can\'t set best answer' do
+        sign_in(create(:user))
+
+        expect(answer).to_not be_best
+        patch :best_answer, params: params, format: :js
+
+        answer.reload
+
+        expect(answer).to_not be_best
+      end
+    end
+
+    context 'when unauthenticated user' do
+      it 'can\'t set best answer' do
+        expect(answer).to_not be_best
+        patch :best_answer, params: params, format: :js
+
+        answer.reload
+
+        expect(answer).to_not be_best
+      end
+    end
+  end
 end
