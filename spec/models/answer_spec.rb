@@ -30,5 +30,11 @@ RSpec.describe Answer, type: :model do
         answer.best!
       }.to_not change(question.best_answers, :count)
     end
+
+    it 'first' do
+      best_answer = question.best_answers.last
+
+      expect(question.answers.first).to eq(best_answer)
+    end
   end
 end

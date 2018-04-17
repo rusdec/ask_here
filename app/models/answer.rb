@@ -2,6 +2,8 @@ class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :user
 
+  default_scope { order(best: :DESC).order(:id) }
+
   validates :body, { presence: true,
                      length: { minimum: 10,
                                maximum: 1000 } }
