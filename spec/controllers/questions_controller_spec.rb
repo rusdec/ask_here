@@ -1,14 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:user) { create(:user_with_questions, questions_count: 2) }
-  let(:questions) { user.questions }
+  let(:user) { create(:user) }
+  let(:questions) { create_list(:question, 2, user: user) }
   let(:question) { questions.last }
 
   describe 'GET #index' do
     before { get :index }
 
     it 'populates an array of all questions' do
+      puts questions.inspect
+      puts assigns(:questions).inspect
       expect(assigns(:questions)).to eq questions
     end
 
