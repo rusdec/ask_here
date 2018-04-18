@@ -33,12 +33,10 @@ function findAnswerRemoteLinks(id) {
 }
 
 function findAnswerSetAsBestAnswerLink(id) {
-  console.log(document.querySelector(`.answer[data-id='${id}'] .link-set-as-best-answer`))
   return document.querySelector(`.answer[data-id='${id}'] .link-set-as-best-answer`)
 }
 
 function findAnswerUnsetBestAnswerLink(id) {
-  console.log(document.querySelector(`.answer[data-id='${id}'] .link-unset-best-answer`))
   return document.querySelector(`.answer[data-id='${id}'] .link-unset-best-answer`)
 }
 
