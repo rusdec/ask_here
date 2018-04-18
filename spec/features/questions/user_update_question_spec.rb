@@ -19,8 +19,8 @@ feature 'User update question', %q{
 
       update_question(question: question, title: new_title, body: new_body)
 
-      expect(page).to have_selector('.question .title', text: new_title)
-      expect(page).to have_selector('.question .body', text: new_body)
+      expect(page).to have_content(new_title)
+      expect(page).to have_content(new_body)
     end
 
     scenario 'can\'t update question with invalid data', js: true do
@@ -33,7 +33,7 @@ feature 'User update question', %q{
     scenario 'can\'t edit question of another user' do
       visit question_path(another_user.questions.last)
 
-      expect(page).to have_no_selector('.link-edit-question')
+      expect(page).to have_no_content('Edit')
       expect(page).to have_no_selector('.form-edit-question')
     end
   end
@@ -42,9 +42,8 @@ feature 'User update question', %q{
     scenario 'can\'t edit question' do
       visit question_path(question)
 
-      expect(page).to have_no_selector('.link-edit-question')
+      expect(page).to have_no_content('Edit')
       expect(page).to have_no_selector('.form-edit-question')
     end
   end
-
 end

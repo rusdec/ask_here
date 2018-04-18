@@ -17,7 +17,7 @@ feature 'User delete question', %q{
       expect(page).to have_content(question.title)
       expect(page).to have_content(question.body)
 
-      click_question_delete_link
+      click_on 'Delete'
 
       expect(page).to have_no_content(question.title)
       expect(page).to have_no_content(question.body)
@@ -27,13 +27,13 @@ feature 'User delete question', %q{
       sign_in(create(:user))
       visit question_path(question)
 
-      expect(page).to have_no_selector(question_delete_link)
+      expect(page).to have_no_content('Delete')
     end
   end
 
   scenario 'Unauthenticated user can\'t delete question', js: true do
     visit question_path(question)
 
-    expect(page).to have_no_selector(question_delete_link)
+    expect(page).to have_no_content('Delete')
   end
 end
