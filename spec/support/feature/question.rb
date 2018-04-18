@@ -9,7 +9,7 @@ module Feature
 
     def update_question(params)
       visit question_path(params[:question])
-      click_on 'Edit'
+      click_question_edit_link
       within '.form-edit-question' do
         fill_in 'Title', with: params[:title]
         fill_in 'Body', with: params[:body]
@@ -17,22 +17,20 @@ module Feature
       end
     end
 
-    def click_edit_link
+    def click_question_edit_link
       within '.question-remote-links' do
         click_on 'Edit'
       end
     end
 
-    def click_cancel_link
-      within '.form-edit-question' do
-        click_on 'Cancel'
-      end
-    end
-
-    def click_delete_link
+    def click_question_delete_link
       within '.question-remote-links' do
         click_on 'Delete'
       end
+    end
+
+    def question_delete_link
+      ".link-delete-question"
     end
   end
 end

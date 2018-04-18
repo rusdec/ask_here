@@ -8,26 +8,27 @@ feature 'User create question', %q{
 
   given(:question) { attributes_for(:question) }
   given(:user) { create(:user) }
-  given(:params) do
-    { title: question[:title],
-      body: question[:body] }
-  end
 
-  scenario 'User create question with valid data' do
-    sign_in(user)
-    create_question(params)
-    question = user.questions.order(:id).last
+  describe 'Authenticated user' do
+    before { sign_in(user) }
+    let(:params) do
+      { title: question[:title], body: question[:body] }
+    end
 
-    expect(page).to have_content(question.title)
-    expect(page).to have_content(question.body)
-  end
+    scenario 'can create question with valid data' do
+      create_question(params)
+      question = user.questions.order(:id).last
 
-  scenario 'User can\'t create question with invalid data' do
-    sign_in(user)
-    params[:title] = nil
-    create_question(params)
+      expect(page).to have_content(question.title)
+      expect(page).to have_content(question.body)
+    end
 
-    expect(page).to have_content('Title can\'t be blank')
+    scenario 'can\'t create question with invalid data' do
+      params[:title] = nil
+      create_question(params)
+
+      expect(page).to have_content('Title can\'t be blank')
+    end
   end
 
   scenario 'Not authenticated user can\'t create question' do
