@@ -11,31 +11,33 @@ feature 'User delete answer', %q{
   given(:answer) { user.answers.last }
   given(:answer_body) { answer.body }
 
-  given(:second_user) { create(:user) }
+  describe 'Authenticated user' do
+    describe 'when author of answer' do
+      scenario 'can delete answer', js: true do
+        sign_in(user)
+        visit question_path(question)
 
-  scenario 'Authenticated user can delete his answer', js: true do
-    sign_in(user)
-    visit question_path(question)
+        expect(page).to have_content(answer_body)
 
-    expect(page).to have_content(answer_body)
+        click_delete_answer_link(answer)
 
-    click_delete_answer_link(answer)
+        expect(page).to have_no_content(answer_body)
+      end
+    end
 
-    expect(page).to have_no_content answer_body
-  end
-
-  scenario 'Authenticated user no see delete link for not him answer' do
-    sign_in(second_user)
-    visit question_path(question)
-    
-    expect(page).to have_no_selector(answer_delete_link(answer))
+    describe 'when not author of answer' do
+      scenario 'no see delete link for answer' do
+        sign_in(create(:user))
+        visit question_path(question)
+        
+        expect(page).to have_no_content('Delete')
+      end
+    end
   end
 
   scenario 'Unauthenticated user no see delete answer links' do
     visit question_path(question)
     
-    question.answers.each do |answer|
-      expect(page).to have_no_selector(answer_delete_link(answer))
-    end
+    expect(page).to have_no_content('Delete')
   end
 end

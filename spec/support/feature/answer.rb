@@ -29,12 +29,6 @@ module Feature
       end
     end
 
-    def click_cancel_edit_answer_link(answer)
-      within answer_container(answer) do
-        click_on 'Cancel'
-      end
-    end
-
     def click_delete_answer_link(answer)
       within answer_container(answer) do
         click_on 'Delete'
@@ -47,32 +41,18 @@ module Feature
       end
     end
 
-    def answer_body(answer)
-      "#{answer_container(answer)} p.body"
+    def click_set_as_not_best_answer_link(answer)
+      within answer_container(answer) do
+        click_on 'Not a Best'
+      end
+    end
+
+    def best_answer_id
+      '#best_answer'
     end
 
     def answer_edit_form(answer)
       "#{answer_container(answer)} .form-edit-answer"
-    end
-
-    def answer_edit_hidden_form(answer)
-      "#{answer_edit_form(answer)}.hidden"
-    end
-
-    def answer_edit_link(answer)
-      "#{answer_container(answer)} .link-edit-answer"
-    end
-
-    def answer_delete_link(answer)
-      "#{answer_container(answer)} .link-delete-answer"
-    end
-
-    def best_answer(answer)
-      "#best_answer[data-id='#{answer.id}']"
-    end
-
-    def set_as_best_answer_link(answer = nil)
-      "#{answer_container(answer) if answer} .link-set-as-best-answer"
     end
   end
 end

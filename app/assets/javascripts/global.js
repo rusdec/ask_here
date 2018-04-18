@@ -1,3 +1,5 @@
 function toggleVisible(element) {
-  element.classList.toggle('hidden')
+  if (element) {
+    element.classList.toggle('hidden')
+  }
 }

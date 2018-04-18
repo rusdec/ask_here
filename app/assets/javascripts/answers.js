@@ -32,6 +32,16 @@ function findAnswerRemoteLinks(id) {
   return document.querySelector(`.answer[data-id='${id}'] .answer-remote-links`)
 }
 
+function findAnswerSetAsBestAnswerLink(id) {
+  console.log(document.querySelector(`.answer[data-id='${id}'] .link-set-as-best-answer`))
+  return document.querySelector(`.answer[data-id='${id}'] .link-set-as-best-answer`)
+}
+
+function findAnswerUnsetBestAnswerLink(id) {
+  console.log(document.querySelector(`.answer[data-id='${id}'] .link-unset-best-answer`))
+  return document.querySelector(`.answer[data-id='${id}'] .link-unset-best-answer`)
+}
+
 function toggleVisibleAnswer(id) {
   let elements = [
     findEditAnswerForm(id),
@@ -70,6 +80,7 @@ function placeBestAnswerOnTop() {
 function newBestAnswer(id) {
   let answer = findAnswer(id)
   if (answer) {
+    togglebVisibleBestButtonAnswer(answer.dataset.id)
     findAnswer(id).id = 'best_answer'
   }
 }
@@ -77,6 +88,12 @@ function newBestAnswer(id) {
 function removeBestAnswer() {
   let answer = findBestAnswer()
   if (answer) {
+    togglebVisibleBestButtonAnswer(answer.dataset.id)
     answer.id = ''
   }
+}
+
+function togglebVisibleBestButtonAnswer(id) {
+  toggleVisible(findAnswerSetAsBestAnswerLink(id))
+  toggleVisible(findAnswerUnsetBestAnswerLink(id))
 }

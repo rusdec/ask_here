@@ -14,18 +14,20 @@ feature 'User choose best answer', %q{
     describe 'when author of question' do
       before do
         sign_in(user)
-        visit question_path(question)
       end
 
       scenario 'can choose best answer for his question', js: true do
-        expect(page).to have_no_selector(best_answer(answer))
+        visit question_path(question)
+
+        expect(page).to have_no_selector(best_answer_id)
 
         click_set_as_best_answer_link(answer)
 
-        expect(page).to have_selector(best_answer(answer))
+        expect(page).to have_selector(best_answer_id)
       end
 
       scenario 'see chosen best answer replace on top', js: true do
+        visit question_path(question)
         top_answer = page.first('.answer .body')
 
         expect(top_answer.text).to_not match(/#{answer.body}/)
@@ -35,6 +37,28 @@ feature 'User choose best answer', %q{
 
         expect(top_answer.text).to match(/#{answer.body}/)
       end
+
+      scenario 'can see only one best answer', js: true do
+        best_answer = create(:best_answer, user: user, question: question)
+        visit question_path(question)
+
+        expect(page).to have_content('Not a Best', count: 1)
+
+        click_set_as_best_answer_link(answer)
+
+        expect(page).to have_content('Not a Best', count: 1)
+      end
+
+      scenario 'can cancel best answer', js: true do
+        best_answer = create(:best_answer, user: user, question: question)
+        visit question_path(question)
+
+        expect(page).to have_content('Not a Best', count: 1)
+
+        click_set_as_not_best_answer_link(best_answer)
+
+        expect(page).to have_no_content('Not a Best')
+      end
     end
 
     describe 'when not author of question' do
@@ -42,7 +66,7 @@ feature 'User choose best answer', %q{
         sign_in(create(:user))
         visit question_path(question)
 
-        expect(page).to have_no_selector(set_as_best_answer_link)
+        expect(page).to have_no_content('Best answer')
       end
     end
   end
@@ -50,26 +74,10 @@ feature 'User choose best answer', %q{
   scenario 'Unauthenticated user can\'t choose best answer' do
     visit question_path(question)
 
-    expect(page).to have_no_selector(set_as_best_answer_link)
+    expect(page).to have_no_content('Best answer')
   end
 
   describe 'Any user' do
-    scenario 'can see only one best marker', js: true do
-      another_answer = question.answers.first
-
-      sign_in(user)
-      visit question_path(question)
-
-      click_set_as_best_answer_link(answer)
-
-      expect(page).to have_selector(best_answer(answer))
-
-      click_set_as_best_answer_link(another_answer)
-
-      expect(page).to have_no_selector(best_answer(answer))
-      expect(page).to have_selector(best_answer(another_answer))
-    end
-
     scenario 'can see best answer on top' do
       best_answer = create(:best_answer, user: user, question: question)
       visit question_path(question)
