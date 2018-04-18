@@ -217,4 +217,54 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #not_best_answer' do
+    let!(:best_answer) { create(:best_answer, user: user, question: question) }
+    let(:params) do
+      { id: best_answer }
+    end
+
+    context 'when authenticated user is author of question' do
+      before { sign_in(user) }
+
+      it 'can unset best answer' do
+        expect(best_answer).to be_best
+
+        patch :not_best_answer, params: params, format: :js
+        best_answer.reload
+
+        expect(best_answer).to_not be_best
+      end
+
+      it 'render not_best_answer view' do
+        patch :not_best_answer, params: params, format: :js 
+
+        expect(response).to render_template(:not_best_answer)
+      end
+    end
+
+    context 'when authenticated user isn\'t author of question' do
+      it 'can\'t unset best answer' do
+        sign_in(create(:user))
+
+        expect(best_answer).to be_best
+        patch :not_best_answer, params: params, format: :js
+
+        best_answer.reload
+
+        expect(best_answer).to be_best
+      end
+    end
+
+    context 'when unauthenticated user' do
+      it 'can\'t unset best answer' do
+        expect(best_answer).to be_best
+        patch :not_best_answer, params: params, format: :js
+
+        answer.reload
+
+        expect(best_answer).to be_best
+      end
+    end
+  end
 end
