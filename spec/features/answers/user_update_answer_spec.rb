@@ -34,7 +34,6 @@ feature 'User update question', %q{
         visit question_path(question)
 
         expect(page).to have_no_content('Edit')
-        expect(page).to have_no_selector(answer_edit_form(answer))
       end
     end
   end
@@ -44,7 +43,6 @@ feature 'User update question', %q{
       visit question_path(question)
 
       expect(page).to have_no_content('Edit')
-      expect(page).to have_no_selector(answer_edit_form(answer))
     end
   end
 end
