@@ -51,8 +51,5 @@ function toggleVisibleQuestion() {
     document.querySelector('.question')
   ]
 
-  elements.forEach((element) => {
-    if (element)
-      toggleVisible(element)
-  })
+  elements.forEach((element) => toggleVisible(element))
 }

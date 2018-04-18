@@ -47,11 +47,7 @@ function toggleVisibleAnswer(id) {
     findAnswerData(id)
   ]
   
-  elements.forEach((element) => {
-    if (element) {
-      toggleVisible(element)
-    }
-  })
+  elements.forEach((element) => toggleVisible(element))
 }
 
 /*
