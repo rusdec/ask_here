@@ -47,5 +47,4 @@ feature 'User update question', %q{
       expect(page).to have_no_selector(answer_edit_form(answer))
     end
   end
-
 end

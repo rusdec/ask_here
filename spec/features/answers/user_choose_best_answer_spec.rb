@@ -12,21 +12,9 @@ feature 'User choose best answer', %q{
 
   describe 'Authenticated user' do
     describe 'when author of question' do
-      before do
-        sign_in(user)
-      end
+      before { sign_in(user) }
 
-      scenario 'can choose best answer for his question', js: true do
-        visit question_path(question)
-
-        expect(page).to have_no_selector(best_answer_id)
-
-        click_set_as_best_answer_link(answer)
-
-        expect(page).to have_selector(best_answer_id)
-      end
-
-      scenario 'see chosen best answer replace on top', js: true do
+      scenario 'can choose best answer', js: true do
         visit question_path(question)
         top_answer = page.first('.answer .body')
 
@@ -38,8 +26,8 @@ feature 'User choose best answer', %q{
         expect(top_answer.text).to match(/#{answer.body}/)
       end
 
-      scenario 'can see only one best answer', js: true do
-        best_answer = create(:best_answer, user: user, question: question)
+      scenario 'can choose other best answer', js: true do
+        create(:best_answer, user: user, question: question)
         visit question_path(question)
 
         expect(page).to have_content('Not a Best', count: 1)
@@ -86,7 +74,4 @@ feature 'User choose best answer', %q{
       expect(top_answer.text).to match(/#{best_answer.body}/)
     end
   end
-
 end
-
-

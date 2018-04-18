@@ -29,7 +29,7 @@ feature 'User delete answer', %q{
       scenario 'no see delete link for answer' do
         sign_in(create(:user))
         visit question_path(question)
-        
+
         expect(page).to have_no_content('Delete')
       end
     end
@@ -37,7 +37,7 @@ feature 'User delete answer', %q{
 
   scenario 'Unauthenticated user no see delete answer links' do
     visit question_path(question)
-    
+
     expect(page).to have_no_content('Delete')
   end
 end

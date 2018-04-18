@@ -13,7 +13,7 @@ feature 'User delete question', %q{
     scenario 'can delete his question', js: true do
       sign_in(user)
       visit question_path(question)
-      
+
       expect(page).to have_content(question.title)
       expect(page).to have_content(question.body)
 

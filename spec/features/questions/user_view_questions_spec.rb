@@ -6,7 +6,9 @@ feature 'User view questions', %q{
   so that I can detail view interesting for me
 } do
 
-  given!(:questions) { create(:user_with_questions, questions_count: 3).questions }
+  given!(:questions) do
+    create(:user_with_questions, questions_count: 3).questions
+  end
 
   scenario 'User view questions' do
     visit questions_path

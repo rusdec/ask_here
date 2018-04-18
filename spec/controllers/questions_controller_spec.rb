@@ -174,7 +174,6 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.title).to eq(old_question.title)
         expect(question.body).to eq(old_question.body)
       end
-
     end
 
     context 'when authenticated user is not author' do

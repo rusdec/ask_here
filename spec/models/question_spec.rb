@@ -16,7 +16,6 @@ RSpec.describe Question, type: :model do
       is_at_least(10).is_at_most(1000)
   end
 
-
   it 'created answers count should be equal 2' do
     answers_count = 2
     user = create(:user_with_question_and_answers, answers_count: answers_count)
