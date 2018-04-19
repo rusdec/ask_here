@@ -12,8 +12,8 @@ Rails.application.routes.draw do
   resources :questions do
     resources :answers, shallow: true,
                         only: %i[create update destroy] do
-      patch :best_answer, to: 'answers#best_answer', on: :member 
-      patch :not_best_answer, to: 'answers#not_best_answer', on: :member 
+      patch :best_answer, on: :member 
+      patch :not_best_answer, on: :member 
     end
   end
 
