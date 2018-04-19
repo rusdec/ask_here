@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../features_helper'
 
 feature 'User view question', %q{
   As user
@@ -20,6 +20,7 @@ feature 'User view question', %q{
     question.answers.each do |answer|
       expect(page).to have_content answer.body
     end
+
     expect(page.all('.answer').count).to eq(question.answers.count)
   end
 end

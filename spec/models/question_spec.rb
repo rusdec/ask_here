@@ -16,13 +16,19 @@ RSpec.describe Question, type: :model do
       is_at_least(10).is_at_most(1000)
   end
 
-
   it 'created answers count should be equal 2' do
     answers_count = 2
     user = create(:user_with_question_and_answers, answers_count: answers_count)
     question = user.questions.last
-
     question.answers.new
+
     expect(question.created_answers.count).to eq(answers_count)
+  end
+
+  it 'select only best answers' do
+    question = create(:user_with_question_and_best_answer).questions.last
+    best_answers_count = question.answers.where(best: true).count
+
+    expect(question.best_answers.count).to eq(best_answers_count)
   end
 end

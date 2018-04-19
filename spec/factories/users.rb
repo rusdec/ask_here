@@ -24,5 +24,13 @@ FactoryBot.define do
         create_list(:answer, evaluator.answers_count, user: user, question: question)
       end
     end
+
+    factory :user_with_question_and_best_answer do
+      after(:create) do |user, evaluator|
+        question = create(:question, user: user)
+        create(:answer, user: user, question: question)
+        create(:best_answer, user: user, question: question)
+      end
+    end
   end
 end

@@ -10,7 +10,11 @@ class Question < ApplicationRecord
                       length: { minimum: 10,
                                 maximum: 30 } }
 
+  def best_answers
+    answers.best_answers
+  end
+
   def created_answers
-    answers.where.not(id: nil)
+    answers.created_answers
   end
 end

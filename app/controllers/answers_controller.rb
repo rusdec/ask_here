@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[create destroy]
+  before_action :authenticate_user!
   before_action :set_question, only: %i[create]
-  before_action :set_answer, only: %i[destroy]
+  before_action :set_answer, except: %i[create]
 
   def create
     @answer = current_user.answers.new(answer_params)
@@ -10,14 +10,19 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    flash_message = if current_user.author_of?(@answer)
-                      @answer.destroy
-                      'Answer delete success' 
-                    else
-                      'Answer delete error'
-                    end
-    
-    redirect_to @answer.question, alert: flash_message
+    @answer.destroy if current_user.author_of?(@answer)
+  end
+
+  def update
+    @result = @answer.update(answer_params) if current_user.author_of?(@answer)
+  end
+
+  def best_answer
+    @answer.best! if current_user.author_of?(@answer.question)
+  end
+
+  def not_best_answer
+    @answer.not_best! if current_user.author_of?(@answer.question)
   end
 
   private

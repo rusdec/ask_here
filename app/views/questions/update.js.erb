@@ -1,0 +1,8 @@
+<% if @result %>
+  updateQuestionErrors()
+  updateQuestionTitle(document.querySelector('#question_title').value)
+  updateQuestionBody(document.querySelector('#question_body').value)
+  toggleVisibleQuestion()
+<% else %>
+  updateQuestionErrors('<%= j render 'shared/errors', resource: @question %>')
+<% end %>

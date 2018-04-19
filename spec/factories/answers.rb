@@ -3,6 +3,16 @@ FactoryBot.define do
     sequence :body do |n|
       "ValidAnswerBodyText#{n}"
     end
+    
+    best false
+  end
+
+  factory :best_answer, class: Answer do
+    sequence :body do |n|
+      "ValidAnswerBodyText#{n}"
+    end
+    
+    best true
   end
 
   factory :invalid_answer, class: Answer do

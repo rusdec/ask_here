@@ -1,13 +1,18 @@
-h3 = @question.title
-p = @question.body
-= delete_question_link(@question)
+.question
+  h3.title = @question.title
+  p.body = @question.body
 
-table.answers
+- if current_user&.author_of?(@question)
+  = render 'edit_fast'
+  = question_remote_links(@question)
+
+.answers
   = render @question.created_answers
 
-- if current_user
-  = form_for [@question, @answer], remote: true do |f|
-      div#errors
+div
+  - if current_user
+    = form_for [@question, @answer], remote: true do |f|
+      #create_answer_errors
       = f.label :body
       = f.text_area :body
       = f.submit
