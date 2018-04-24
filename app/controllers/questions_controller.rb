@@ -12,6 +12,7 @@ class QuestionsController < ApplicationController
 
   def new
     @question = current_user.questions.new
+    @question.attachements.build
   end
 
   def create
@@ -39,7 +40,7 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, attachements_attributes: [:file])
   end
 
   def set_question

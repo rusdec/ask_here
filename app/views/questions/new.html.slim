@@ -1,7 +1,13 @@
 = form_for @question do |f|
   = render 'shared/errors', resource: @question
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_field :body
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_field :body
+  .question_attachements
+    = f.fields_for :attachements do |a|
+      = render 'attachement_fields', f: a
+
   = f.submit

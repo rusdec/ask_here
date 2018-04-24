@@ -6,6 +6,11 @@
   = render 'edit_fast'
   = question_remote_links(@question)
 
+  ul.question_attachements
+    - @question.attachements.each do |attachement|
+      li = link_to attachement.file.file.filename, attachement.file.url
+  
+
 .answers
   = render @question.created_answers
 
