@@ -6,39 +6,20 @@ feature 'User can attach files to question', %q{
   so that I can clarify the my problem
 } do
 
-  given(:user) { create(:user) }
-  given(:question) { create(:question, user: user) }
   given(:question_attributes) { attributes_for(:question) }
-
-  describe 'Authenticated user' do
-    context 'when author' do
-      before { sign_in(user) }
-
-      scenario 'can attach one or more files' do
-        visit question_path(question)
-
-        create_question_with_files(question_attributes)
-
-        expect(page).to have_content('restart.txt')
-      end
-    end
-
-    context 'when not author' do
-      before { sign_in(create(:user)) }
-
-      scenario 'no see attach form' do
-        visit question_path(question)
-
-        expect(page).to have_no_content('Attach File')
-      end
-    end
+  given(:files) do
+    { 'restart.txt' => "#{Rails.root}/tmp/restart.txt",
+      'LICENSE' => "#{Rails.root}/LICENSE" }
   end
 
-  describe 'Unauthenticated user' do
-    scenario 'no see attach form' do
-      visit question_path(question)
+  before { sign_in(create(:user)) }
 
-      expect(page).to have_no_content('Attach File')
+  scenario 'Authenticated user can attach one or more files', js: true do
+    question_attributes[:files] = files
+    create_question_with_files(question_attributes)
+
+    files.each do |file_name, _|
+      expect(page).to have_content(file_name)
     end
   end
 end

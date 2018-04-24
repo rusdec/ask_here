@@ -5,7 +5,12 @@ module Feature
       visit new_question_path
       fill_in 'Title', with: params[:title]
       fill_in 'Body', with: params[:body]
-      attach_file 'File', "#{Rails.root}/tmp/restart.txt"
+      params[:files].each do |_, file|
+        within all('.question_attachement').last do
+          attach_file 'File', file
+        end
+        click_on 'More file'
+      end
       click_on 'Create Question'
     end
 
