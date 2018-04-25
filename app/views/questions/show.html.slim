@@ -8,7 +8,9 @@
 
   ul.question_attachements
     - @question.attachements.each do |attachement|
-      li = link_to attachement.file.file.filename, attachement.file.url
+      li
+        - if attachement.file.file
+          = link_to attachement.file.file.filename, attachement.file.url
   
 
 .answers
