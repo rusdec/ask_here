@@ -13,7 +13,7 @@ class Answer < ApplicationRecord
                      length: { minimum: 10,
                                maximum: 1000 } }
 
-  accepts_nested_attributes_for :attachements, allow_destroy: true
+  accepts_nested_attributes_for :attachements, allow_destroy: true,
                                                reject_if: :rejected_attachement?
   def not_best!
     update(best: false)
