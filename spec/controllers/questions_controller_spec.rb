@@ -32,6 +32,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answer)).to be_a_new(Answer)
       expect(assigns(:answer).question_id).to eq question.id
     end
+
+    it 'assign Attachement to @answer' do
+      expect(assigns(:answer).attachements.first).to be_a_new(Attachement)
+    end
   end
 
   describe 'GET #new' do
