@@ -9,4 +9,8 @@ module QuestionsHelper
              remote: true)
     end
   end
+
+  def to_file_name(form_element)
+    form_element.object.file.file.filename
+  end
 end

@@ -1,4 +1,4 @@
-= form_for @question, remote: true, html: { class: 'form-edit-question hidden' } do |f|
+= form_for resource, remote: true, html: { class: 'form-edit-question hidden' } do |f|
 
   #question_errors
 
@@ -8,6 +8,11 @@
   p
     = f.label :body
     = f.text_area :body
+ 
+  .editable_question_attachements 
+    = f.fields_for :attachements do |a|
+      = render 'editable_question_attachement', f: a
+      
 
   = link_to 'Cancel', '#', class: 'link-cancel-edit-question'
   = f.submit 'Save'

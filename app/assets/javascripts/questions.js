@@ -1,20 +1,24 @@
 document.addEventListener('DOMContentLoaded',() => {
-  let linkEditQuestion = document.querySelector('.question-remote-links .link-edit-question')
-  let linkCancelEditQuestion = document.querySelector('.form-edit-question .link-cancel-edit-question')
+  listenClickLinkEditQuestion()
+  listenClickLinkCancelEditQuestion()
+})
 
+function listenClickLinkEditQuestion() {
+  let linkEditQuestion = document.querySelector('.link-edit-question')
   if (linkEditQuestion) {
     linkEditQuestion.addEventListener('click', () => { toggleVisibleQuestion() })
   }
+}
 
+function listenClickLinkCancelEditQuestion() {
+  let linkCancelEditQuestion = document.querySelector('.link-cancel-edit-question')
   if (linkCancelEditQuestion) {
     linkCancelEditQuestion.addEventListener('click', () => { toggleVisibleQuestion() })
   }
-})
-
+}
 
 function updateQuestionErrors(errors = null) {
   let questionErrors = document.querySelector('#question_errors')
-
   if (questionErrors) {
     questionErrors.childNodes.forEach((node) => node.remove())
     if (errors) {
@@ -37,6 +41,20 @@ function updateQuestionTitle(title) {
   }
 }
 
+function updateQuestionEditForm(form) {
+  let formEditQuestion = document.querySelector('.form-edit-question')
+  if (formEditQuestion) {
+    formEditQuestion.outerHTML = form
+  }
+}
+
+function updateQuestionAttachements(attachements) {
+  let questionAttachements = document.querySelector('.question_attachements')
+  if (questionAttachements) {
+    questionAttachements.outerHTML = attachements
+  }
+}
+
 function findQuestionTitle() {
   return document.querySelector('.question .title')
 }
@@ -50,6 +68,8 @@ function toggleVisibleQuestion() {
     document.querySelector('.form-edit-question'),
     document.querySelector('.question')
   ]
-
   elements.forEach((element) => toggleVisible(element))
+}
+
+function findLinkCancelEditQuestion() {
 }

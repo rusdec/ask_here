@@ -3,15 +3,10 @@
   p.body = @question.body
 
 - if current_user&.author_of?(@question)
-  = render 'edit_fast'
+  = render 'edit_fast', resource: @question
   = question_remote_links(@question)
 
-  ul.question_attachements
-    - @question.attachements.each do |attachement|
-      li
-        - if attachement.file.file
-          = link_to attachement.file.file.filename, attachement.file.url
-  
+= render 'question_attachements', resource: @question.attachements
 
 .answers
   = render @question.created_answers
