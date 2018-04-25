@@ -12,6 +12,9 @@
   .editable_question_attachements 
     = f.fields_for :attachements do |a|
       = render 'editable_question_attachement', f: a
+    
+    p
+      = link_to_add_association 'More files', f, :attachements
       
 
   = link_to 'Cancel', '#', class: 'link-cancel-edit-question'

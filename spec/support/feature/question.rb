@@ -5,13 +5,26 @@ module Feature
       visit new_question_path
       fill_in 'Title', with: params[:title]
       fill_in 'Body', with: params[:body]
-      params[:files].each do |_, file|
+      attach_files(params[:files])
+      click_on 'Create Question'
+    end
+
+    def attach_files(files)
+      files.each do |_, file|
         within all('.question_attachement').last do
           attach_file 'File', file
         end
         click_on 'More file'
       end
-      click_on 'Create Question'
+    end
+
+    def attach_files_when_edit(files)
+      files.each do |_, file|
+        click_on 'More file'
+        within all('.question_attachement').last do
+          attach_file 'File', file
+        end
+      end
     end
 
     def create_question(params)
