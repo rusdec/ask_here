@@ -7,25 +7,24 @@ feature 'User can attach files to question', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question_attributes) { attributes_for(:question) }
-  given(:files) do
-    [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
-     { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
-  end
 
   context 'Authenticated user' do
+    before { sign_in(user) }
+
+    given(:files) do
+      [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
+       { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
+    end
 
     context 'when create new question' do
-      before do
-        sign_in(user)
-        visit new_question_path
-      end
+      before { visit new_question_path }
+
+      given(:question_attributes) { attributes_for(:question) }
 
       scenario 'can attach one or more files', js: true do
-        fill_in 'Title', with: question_attributes[:title]
-        fill_in 'Body', with: question_attributes[:body]
-        attach_files({ context: '.attachements', files: files })
-        click_on 'Create Question'
+        create_question(question_attributes) do
+          attach_files({ context: '.attachements', files: files })
+        end
 
         files.each do |file|
           expect(page).to have_content(file[:name])
@@ -34,10 +33,7 @@ feature 'User can attach files to question', %q{
     end
 
     context 'when author of question' do
-      before do
-        sign_in(user)
-        visit question_path(create(:question, user: user))
-      end
+      before { visit question_path(create(:question, user: user)) }
 
       context 'and edit created question' do
         scenario 'can attach one or more files', js: true do
@@ -53,10 +49,7 @@ feature 'User can attach files to question', %q{
     end
 
     context 'when not author of question' do
-      before do
-        sign_in(create(:user))
-        visit question_path(create(:question, user: user))
-      end
+      before { visit question_path(create(:question, user: create(:user))) }
 
       scenario 'no see add file option' do
         within '.question' do

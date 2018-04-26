@@ -7,38 +7,36 @@ feature 'User can attach files to answer', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:question) do
+  given(:question) do
     create(:question_with_answers, user: user, answers_count: 1)
   end
 
-  given(:files) do
-    [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
-     { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
-  end
 
   context 'Authenticated user' do
-    context 'when author of answer' do
-      before do
-        sign_in(user)
-        visit question_path(question)
-      end
+    given(:files) do
+      [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
+       { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
+    end
+    before do
+      sign_in(user)
+      visit question_path(question)
+    end
 
-      context 'and create new answer' do
-        given(:answer_attributes) { attributes_for(:answer) }
+    context 'when create new answer' do
+      given(:answer_attributes) { attributes_for(:answer) }
 
-        scenario 'can attach one or more files', js: true do
-          within '#new_answer' do
-            fill_in 'Body', with: answer_attributes[:body]
-            attach_files({ context: '.new_answer_attachements', files: files})
-            click_on 'Create Answer'
-          end
+      scenario 'can attach one or more files', js: true do
+        create_answer(answer_attributes) do
+          attach_files({ context: '.new_answer_attachements', files: files})
+        end
 
-          files.each do |file|
-            expect(page).to have_content(file[:name])
-          end
+        files.each do |file|
+          expect(page).to have_content(file[:name])
         end
       end
+    end
 
+    context 'when author of answer' do
       context 'and edit created answer' do
         scenario 'can attach one or more files', js: true do
           within '.answers' do
@@ -56,8 +54,7 @@ feature 'User can attach files to answer', %q{
 
     context 'when not author of answer' do
       before do
-        sign_in(create(:user))
-        visit question_path(question)
+        visit question_path(create(:question_with_answers, user: create(:user)))
       end
 
       scenario 'no see add file option' do
