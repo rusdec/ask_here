@@ -25,7 +25,7 @@ feature 'User can delete attached file from question', %q{
           fill_in 'Body', with: question_attributes[:body]
           attach_file 'File', file[:path]
 
-          click_on 'Delete file'
+          click_on 'Remove file'
           click_on 'Create Question'
 
           expect(page).to have_no_content(file[:name])
