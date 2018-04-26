@@ -42,8 +42,7 @@ feature 'User can attach files to question', %q{
       context 'and edit created question' do
         scenario 'can attach one or more files', js: true do
           click_on 'Edit'
-          attach_files_when_edit({ context: '.question_editable_attachements',
-                                   files: files })
+          attach_files({ context: '.question_editable_attachements', files: files })
           click_on 'Save'
           
           files.each do |file|

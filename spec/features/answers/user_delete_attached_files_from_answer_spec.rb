@@ -48,8 +48,7 @@ feature 'User can delete attached files from answer', %q{
           within '.answers' do
             #attach files
             click_on 'Edit'
-            attach_files_when_edit({ context: '.answer_editable_attachements',
-                                     files: files })
+            attach_files({ context: '.answer_editable_attachements', files: files })
             click_on 'Save'
 
             #remove attached files

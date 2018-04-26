@@ -43,8 +43,7 @@ feature 'User can attach files to answer', %q{
         scenario 'can attach one or more files', js: true do
           within '.answers' do
             click_on 'Edit'
-            attach_files_when_edit({ context: '.answer_editable_attachements',
-                                     files: files })
+            attach_files({ context: '.answer_editable_attachements', files: files })
             click_on 'Save'
           end
 
