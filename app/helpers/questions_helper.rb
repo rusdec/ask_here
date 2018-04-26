@@ -10,7 +10,7 @@ module QuestionsHelper
     end
   end
 
-  def to_file_name(form_element)
+  def extract_identifier(form_element)
     form_element.object.file.identifier
   end
 end
