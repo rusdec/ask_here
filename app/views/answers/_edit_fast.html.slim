@@ -5,7 +5,7 @@
     = f.text_area :body
   .answer_editable_attachements
     = f.fields_for :attachements do |a|
-      = render 'answers/editable_attachements', f: a
+      = render 'shared/editable_attachement_fields', f: a
     p
       = link_to_add_association 'More file', f, :attachements,
           partial: 'shared/attachement_fields'

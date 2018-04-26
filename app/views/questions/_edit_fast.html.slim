@@ -11,7 +11,7 @@
  
   .question_editable_attachements 
     = f.fields_for :attachements do |a|
-      = render 'editable_attachement', f: a
+      = render 'shared/editable_attachement_fields', f: a
     
     p
       = link_to_add_association 'More files', f, :attachements,
