@@ -7,10 +7,8 @@
 
   .new_answer_attachements
     = f.fields_for :attachements do |a|
-      = render 'answers/attachement_fields', f: a
+      = render 'shared/attachement_fields', f: a
     p
-      = link_to_add_association 'More file',
-                                f,
-                                :attachements,
-                                partial: 'answers/attachement_fields'
+      = link_to_add_association 'More file', f, :attachements,
+          partial: 'shared/attachement_fields'
   = f.submit

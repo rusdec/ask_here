@@ -65,7 +65,6 @@ feature 'User can delete attached files from answer', %q{
             click_on 'Save'
           end
 
-          sleep 3
           files.each do |file_name, _|
             expect(page).to have_no_content(file_name)
           end

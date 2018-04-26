@@ -9,8 +9,9 @@
 
   .question_attachements
     = f.fields_for :attachements do |a|
-      = render 'attachement_fields', f: a
+      = render 'shared/attachement_fields', f: a
     p
-      = link_to_add_association 'More file', f, :attachements
+      = link_to_add_association 'More file', f, :attachements,
+          partial: 'shared/attachement_fields'
 
   = f.submit
