@@ -11,6 +11,6 @@ module QuestionsHelper
   end
 
   def to_file_name(form_element)
-    form_element.object.file.file.filename
+    form_element.object.file.identifier
   end
 end
