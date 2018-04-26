@@ -1,3 +1,5 @@
 ul.attachements
   - resource.attachements.each do |attachement|
-    li = attachement.file.file.filename
+    li.attachement
+      - if attachement.file.file 
+        = link_to attachement.file.file.filename, attachement.file.url
