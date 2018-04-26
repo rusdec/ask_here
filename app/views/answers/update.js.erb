@@ -1,6 +1,9 @@
 <% if @result %>
   findAnswerData('<%= j @answer.id.to_s %>').textContent = '<%= j @answer.body %>'
   toggleVisibleAnswer('<%= j @answer.id.to_s %>')
+
+  updateAnswerAttachements('<%= @answer.id %>', '<%= j render 'answers/answer_attachements', resource: @answer %>')
+  updateEditAnswerForm('<%= @answer.id %>', '<%= j render 'answers/edit_fast', resource: @answer %>')
 <% else %>
   document.querySelector('#edit_answer_errors').insertAdjacentHTML('afterbegin', '<%= render 'shared/errors', resource: @answer %>')
 <% end %>

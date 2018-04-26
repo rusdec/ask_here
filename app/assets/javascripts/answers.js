@@ -1,16 +1,41 @@
-document.addEventListener('DOMContentLoaded',() => {
-  let linkEditAnswer = document.querySelector('.answer-remote-links .link-edit-answer')
-  let answerId = linkEditAnswer.parentElement.dataset.answerId
-  let linkCancelEditAnswer = document.querySelector('.form-edit-answer .link-cancel-edit-answer')
-
-  if (linkEditAnswer) {
-    linkEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(answerId) })
-  }
-
-  if (linkCancelEditAnswer) {
-    linkCancelEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(answerId) })
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  listenClickLinkEditAnswers()
+  listenClickLinkCancelEditAnswers()
 })
+
+function listenClickLinkEditAnswers() {
+  let linksEditAnswer = document.querySelectorAll('.link-edit-answer')
+  if (linksEditAnswer) {
+    linksEditAnswer.forEach((linkEditAnswer) => {
+      let answerId = linkEditAnswer.parentElement.dataset.answerId
+      linkEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(answerId) })
+    })
+  }
+}
+
+function listenClickLinkEditAnswer(id) {
+  let linkEditAnswer = findAnswerRemoteLinks(id).querySelector('.link-edit-answer')
+  if (linkEditAnswer) {
+    linkEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(id) })
+  }
+}
+
+function listenClickLinkCancelEditAnswer(id) {
+  let linkCancelEditAnswer = findEditAnswerForm(id).querySelector('.link-cancel-edit-answer')
+  if (linkCancelEditAnswer) {
+    linkCancelEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(id) })
+  }
+}
+
+function listenClickLinkCancelEditAnswers() {
+  let linksCancelEditAnswer = document.querySelectorAll('.link-cancel-edit-answer')
+  if (linksCancelEditAnswer) {
+    linksCancelEditAnswer.forEach((linkCancelEditAnswer) => {
+      let answerId = linkCancelEditAnswer.dataset.answerId
+      linkCancelEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(answerId) })
+    })
+  }
+}
 
 function findAnswer(id) {
   return document.querySelector(`.answer[data-id='${id}']`)
@@ -20,31 +45,50 @@ function findAnswersContainer() {
   return document.querySelector('.answers')
 }
 
+function findAnswerAttachements(id) {
+  return findAnswer(id).querySelector('.attachements')
+}
+
 function findEditAnswerForm(id) {
-  return document.querySelector(`.answer[data-id='${id}'] .form-edit-answer`)
+  return findAnswer(id).querySelector('.form-edit-answer')
 }
 
 function findAnswerData(id) {
-  return document.querySelector(`.answer[data-id='${id}'] p.body`)
+  return findAnswer(id).querySelector('p.body')
 }
 
 function findAnswerRemoteLinks(id) {
-  return document.querySelector(`.answer[data-id='${id}'] .answer-remote-links`)
+  return findAnswer(id).querySelector('.answer-remote-links')
 }
 
 function findAnswerSetAsBestAnswerLink(id) {
-  return document.querySelector(`.answer[data-id='${id}'] .link-set-as-best-answer`)
+  return findAnswerRemoteLinks(id).querySelector('.link-set-as-best-answer')
 }
 
 function findAnswerUnsetBestAnswerLink(id) {
-  return document.querySelector(`.answer[data-id='${id}'] .link-unset-best-answer`)
+  return findAnswerRemoteLinks(id).querySelector('.link-unset-best-answer')
+}
+
+function updateEditAnswerForm(id, form) {
+  let editAnswerForm = findEditAnswerForm(id)
+  if (editAnswerForm) {
+    editAnswerForm.outerHTML = form
+  }
+}
+
+function updateAnswerAttachements(id, attachements) {
+  let answerAttachements = findAnswerAttachements(id)
+  if (answerAttachements) {
+    answerAttachements.outerHTML = attachements
+  }
 }
 
 function toggleVisibleAnswer(id) {
   let elements = [
     findEditAnswerForm(id),
     findAnswerRemoteLinks(id),
-    findAnswerData(id)
+    findAnswerData(id),
+    findAnswerAttachements(id)
   ]
   
   elements.forEach((element) => toggleVisible(element))

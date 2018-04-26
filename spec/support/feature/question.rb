@@ -20,7 +20,9 @@ module Feature
 
     def attach_files_when_edit(files)
       files.each do |_, file|
-        click_on 'More file'
+        within '.editable_question_attachements' do
+          click_on 'More file'
+        end
         within all('.question_attachement').last do
           attach_file 'File', file
         end

@@ -23,6 +23,28 @@ module Feature
       end
     end
 
+    def attach_files_to_answer_when_edit(files)
+      within '.editable_answer_attachements' do
+        files.each do |_, file|
+          click_on 'More file'
+          within all('.answer_attachement').last do
+            attach_file 'File', file
+          end
+        end
+      end
+    end
+
+    def attach_files_to_answer(files)
+      within '.new_answer_attachements' do
+        files.each do |_, file|
+          within all('.answer_attachement').last do
+            attach_file 'File', file
+          end
+          click_on 'More file'
+        end
+      end
+    end
+
     def click_edit_answer_link(answer)
       within answer_container(answer) do
         click_on 'Edit'

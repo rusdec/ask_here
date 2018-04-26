@@ -1,0 +1,16 @@
+= form_for [resource.question, resource], remote: true do |f|
+
+  #create_answer_errors
+
+  = f.label :body
+  = f.text_area :body
+
+  .new_answer_attachements
+    = f.fields_for :attachements do |a|
+      = render 'answers/attachement_fields', f: a
+    p
+      = link_to_add_association 'More file',
+                                f,
+                                :attachements,
+                                partial: 'answers/attachement_fields'
+  = f.submit

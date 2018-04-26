@@ -12,7 +12,7 @@ FactoryBot.define do
       transient { answers_count 2 }
 
       after(:create) do |question, evaluator|
-        create_list(:answer, evaluator.answers_count, question: question)
+        create_list(:answer, evaluator.answers_count, question: question, user: question.user)
       end
     end
   end

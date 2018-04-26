@@ -1,8 +1,13 @@
-= form_for answer, remote: true, html: { class: 'form-edit-answer hidden' } do |f|
+= form_for resource, remote: true, html: { class: 'form-edit-answer hidden' } do |f|
   #edit_answer_errors
   p
     = f.label :body
     = f.text_area :body
+  .editable_answer_attachements
+    = f.fields_for :attachements do |a|
+      = render 'answers/editable_attachements_fields', f: a
+    p
+      = link_to_add_association 'More file', f, :attachements, partial: 'answers/attachement_fields'
 
-  = link_to 'Cancel', '#', class: 'link-cancel-edit-answer'
+  = link_to 'Cancel', '#', class: 'link-cancel-edit-answer', data: { answer_id: resource.id }
   = f.submit 'Save'

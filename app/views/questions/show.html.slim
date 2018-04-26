@@ -8,13 +8,10 @@
 
 = render 'question_attachements', resource: @question.attachements
 
+h3= 'Answers'
 .answers
   = render @question.created_answers
 
-div
-  - if current_user
-    = form_for [@question, @answer], remote: true do |f|
-      #create_answer_errors
-      = f.label :body
-      = f.text_area :body
-      = f.submit
+- if current_user
+  h3= 'New answer'
+  = render 'answers/form', resource: @answer
