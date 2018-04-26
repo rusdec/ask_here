@@ -46,7 +46,7 @@ function findAnswersContainer() {
 }
 
 function findAnswerAttachements(id) {
-  return findAnswer(id).querySelector('.attachements')
+  return findAnswer(id).querySelector('.answer_attachements')
 }
 
 function findEditAnswerForm(id) {

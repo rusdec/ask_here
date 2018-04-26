@@ -3,12 +3,13 @@
   p
     = f.label :body
     = f.text_area :body
-  .editable_answer_attachements
+  .answer_editable_attachements
     = f.fields_for :attachements do |a|
-      = render 'answers/editable_attachements_fields', f: a
+      = render 'answers/editable_attachements', f: a
     p
       = link_to_add_association 'More file', f, :attachements,
           partial: 'shared/attachement_fields'
 
-  = link_to 'Cancel', '#', class: 'link-cancel-edit-answer', data: { answer_id: resource.id }
+  = link_to 'Cancel', '#', class: 'link-cancel-edit-answer',
+                           data: { answer_id: resource.id }
   = f.submit 'Save'

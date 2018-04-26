@@ -9,8 +9,8 @@ feature 'User can attach files to question', %q{
   given(:user) { create(:user) }
   given(:question_attributes) { attributes_for(:question) }
   given(:files) do
-    { 'restart.txt' => "#{Rails.root}/tmp/restart.txt",
-      'LICENSE' => "#{Rails.root}/LICENSE" }
+    [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
+     { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
   end
 
   context 'Authenticated user' do
@@ -20,11 +20,13 @@ feature 'User can attach files to question', %q{
       before { visit new_question_path }
 
       scenario 'can attach one or more files', js: true do
-        question_attributes[:files] = files
-        create_question_with_files(question_attributes)
+        fill_in 'Title', with: question_attributes[:title]
+        fill_in 'Body', with: question_attributes[:body]
+        attach_files({ context: '.attachements', files: files })
+        click_on 'Create Question'
 
-        files.each do |file_name, _|
-          expect(page).to have_content(file_name)
+        files.each do |file|
+          expect(page).to have_content(file[:name])
         end
       end
     end
@@ -35,11 +37,12 @@ feature 'User can attach files to question', %q{
       context 'and edit created question' do
         scenario 'can attach one or more files', js: true do
           click_on 'Edit'
-          attach_files_when_edit(files)
+          attach_files_when_edit({ context: '.question_editable_attachements',
+                                   files: files })
           click_on 'Save'
           
-          files.each do |file_name, _|
-            expect(page).to have_content(file_name)
+          files.each do |file|
+            expect(page).to have_content(file[:name])
           end
         end
       end

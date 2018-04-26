@@ -1,5 +1,5 @@
-. class=attachement_class(f)
+.attachement
   = f.label :file
   = f.file_field :file
   = link_to_remove_association 'Remove file', f,
-      { wrapper_class: attachement_class(f) }
+      { wrapper_class: 'attachement' }

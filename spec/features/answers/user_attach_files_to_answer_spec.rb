@@ -12,8 +12,8 @@ feature 'User can attach files to answer', %q{
   end
 
   given(:files) do
-    { 'restart.txt' => "#{Rails.root}/tmp/restart.txt",
-      'LICENSE' => "#{Rails.root}/LICENSE" }
+    [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
+     { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
   end
 
   context 'Authenticated user' do
@@ -27,11 +27,12 @@ feature 'User can attach files to answer', %q{
         scenario 'can attach one or more files', js: true do
           within '#new_answer' do
             fill_in 'Body', with: answer_attributes[:body]
-            attach_files_to_answer(files)
+            attach_files({ context: '.new_answer_attachements', files: files})
             click_on 'Create Answer'
           end
-          files.each do |file_name, _|
-            expect(page).to have_content(file_name)
+
+          files.each do |file|
+            expect(page).to have_content(file[:name])
           end
         end
       end
@@ -40,12 +41,13 @@ feature 'User can attach files to answer', %q{
         scenario 'can attach one or more files', js: true do
           within '.answers' do
             click_on 'Edit'
-            attach_files_to_answer_when_edit(files)
+            attach_files_when_edit({ context: '.answer_editable_attachements',
+                                     files: files })
             click_on 'Save'
           end
 
-          files.each do |file_name, _|
-            expect(page).to have_content(file_name)
+          files.each do |file|
+            expect(page).to have_content(file[:name])
           end
         end
       end
