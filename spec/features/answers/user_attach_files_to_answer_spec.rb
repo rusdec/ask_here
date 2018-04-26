@@ -17,13 +17,15 @@ feature 'User can attach files to answer', %q{
   end
 
   context 'Authenticated user' do
-    before { sign_in(user) }
-
     context 'when author of answer' do
-      given(:answer_attributes) { attributes_for(:answer) }
-      before { visit question_path(question) }
+      before do
+        sign_in(user)
+        visit question_path(question)
+      end
 
       context 'and create new answer' do
+        given(:answer_attributes) { attributes_for(:answer) }
+
         scenario 'can attach one or more files', js: true do
           within '#new_answer' do
             fill_in 'Body', with: answer_attributes[:body]
@@ -51,7 +53,27 @@ feature 'User can attach files to answer', %q{
           end
         end
       end
+    end
 
+    context 'when not author of answer' do
+      before do
+        sign_in(create(:user))
+        visit question_path(question)
+      end
+
+      scenario 'no see add file option' do
+        within '.answers' do
+          expect(page).to have_no_content('Add file')
+        end
+      end
+    end
+  end
+
+  context 'Unauthenticated user' do
+    before { visit question_path(question) }
+
+    scenario 'no see add file option' do
+      expect(page).to have_no_content('Add file')
     end
   end
 end

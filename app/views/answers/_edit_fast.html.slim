@@ -7,7 +7,7 @@
     = f.fields_for :attachements do |a|
       = render 'shared/editable_attachement_fields', f: a
     p
-      = link_to_add_association 'More file', f, :attachements,
+      = link_to_add_association 'Add file', f, :attachements,
           partial: 'shared/attachement_fields'
 
   = link_to 'Cancel', '#', class: 'link-cancel-edit-answer',

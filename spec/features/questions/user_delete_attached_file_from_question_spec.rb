@@ -52,5 +52,25 @@ feature 'User can delete attached file from question', %q{
       end
 
     end
+
+    context 'when not author of question' do
+      given(:question) { create(:question, user: user) }
+
+      scenario 'no see remove attach option' do
+        sign_in(create(:user))
+        visit question_path(question)
+
+        expect(page).to have_no_content('Remove file')
+      end
+    end
+  end
+
+  context 'Anauthenticated user' do
+    given(:question) { create(:question, user: user) }
+    scenario 'no see remove attach option' do
+      visit question_path(question)
+
+      expect(page).to have_no_content('Remove file')
+    end
   end
 end

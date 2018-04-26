@@ -8,12 +8,10 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.new
-    @answer.attachements.build
   end
 
   def new
     @question = current_user.questions.new
-    @question.attachements.build
   end
 
   def create

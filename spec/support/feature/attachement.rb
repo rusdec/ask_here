@@ -22,9 +22,9 @@ module Feature
 
     def attach_files(params)
       within params[:context] do
-        params[:files].each_with_index do |file, index|
+        params[:files].each do |file|
+          click_on 'Add file'
           attach_it(file[:path])
-          click_on 'More file' if (index + 1) < params[:files].count
         end
       end
     end
@@ -32,7 +32,7 @@ module Feature
     def attach_files_when_edit(params)
       within params[:context] do
         params[:files].each do |file|
-          click_on 'More file'
+          click_on 'Add file'
           attach_it(file[:path])
         end
       end

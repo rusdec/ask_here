@@ -14,10 +14,12 @@ feature 'User can attach files to question', %q{
   end
 
   context 'Authenticated user' do
-    before { sign_in(user) }
 
     context 'when create new question' do
-      before { visit new_question_path }
+      before do
+        sign_in(user)
+        visit new_question_path
+      end
 
       scenario 'can attach one or more files', js: true do
         fill_in 'Title', with: question_attributes[:title]
@@ -32,7 +34,10 @@ feature 'User can attach files to question', %q{
     end
 
     context 'when author of question' do
-      before { visit question_path(create(:question, user: user)) }
+      before do
+        sign_in(user)
+        visit question_path(create(:question, user: user))
+      end
 
       context 'and edit created question' do
         scenario 'can attach one or more files', js: true do
@@ -46,6 +51,27 @@ feature 'User can attach files to question', %q{
           end
         end
       end
+    end
+
+    context 'when not author of question' do
+      before do
+        sign_in(create(:user))
+        visit question_path(create(:question, user: user))
+      end
+
+      scenario 'no see add file option' do
+        within '.question' do
+          expect(page).to have_no_content('Add file')
+        end
+      end
+    end
+  end
+
+  context 'Unauthenticated user' do
+    before { visit question_path(create(:question, user: user)) }
+
+    scenario 'no see add file option' do
+      expect(page).to have_no_content('Add file')
     end
 
   end
