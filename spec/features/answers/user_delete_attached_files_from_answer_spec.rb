@@ -8,8 +8,8 @@ feature 'User can delete attached files from answer', %q{
 
   given!(:user) { create(:user) }
   given(:files) do
-    { 'restart.txt' => "#{Rails.root}/tmp/restart.txt",
-      'LICENSE' => "#{Rails.root}/LICENSE" }
+    [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
+     { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
   end
   given(:answer_attributes) { attributes_for(:answer) }
   given!(:question) { create(:question, user: user) }
@@ -23,19 +23,14 @@ feature 'User can delete attached files from answer', %q{
 
         within '#new_answer' do
           fill_in 'Body', with: answer_attributes[:body]
-          attach_files_to_answer(files)
+          attach_files({ context: '.new_answer_attachements', files: files })
           
-          (files.count + 1).times do
-            within all('.answer_attachement').last do
-              click_on 'Remove file'
-            end
-          end
-
+          remove_attached_files('.new_answer_attachements')
           click_on 'Create Answer'
         end
         
-        files.each do |file_name, _|
-          expect(page).to have_no_content(file_name)
+        files.each do |file|
+          expect(page).to have_no_content(file[:name])
         end
       end
     end
@@ -51,22 +46,18 @@ feature 'User can delete attached files from answer', %q{
           within '.answers' do
             #attach files
             click_on 'Edit'
-            attach_files_to_answer_when_edit(files)
+            attach_files_when_edit({ context: '.answer_editable_attachements',
+                                     files: files })
             click_on 'Save'
 
             #remove attached files
             click_on 'Edit'
-            all('.editable_answer_attachement').each do |answer|
-              within answer do
-                check 'Remove file'
-              end
-            end
-
+            remove_attached_files_when_edit('.answer_editable_attachements')
             click_on 'Save'
           end
 
-          files.each do |file_name, _|
-            expect(page).to have_no_content(file_name)
+          files.each do |file|
+            expect(page).to have_no_content(file[:name])
           end
         end
       end

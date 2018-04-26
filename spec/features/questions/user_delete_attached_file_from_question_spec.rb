@@ -7,47 +7,47 @@ feature 'User can delete attached file from question', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:files) do
+    [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
+     { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
+  end
 
   context 'Authenticated user' do
     context 'when author of question' do
 
       context 'and create new question' do
         given(:question_attributes) { attributes_for(:question) }
-        given(:file) do
-          { name: 'restart.txt',
-            path: "#{Rails.root}/tmp/restart.txt" }
-        end
         scenario 'can delete attached file', js: true do
           sign_in(user)
           visit new_question_path
 
           fill_in 'Title', with: question_attributes[:title]
           fill_in 'Body', with: question_attributes[:body]
-          attach_file 'File', file[:path]
+          attach_files({ context: '.attachements', files: files })
 
-          click_on 'Remove file'
+          remove_attached_files('.attachements')
           click_on 'Create Question'
 
-          expect(page).to have_no_content(file[:name])
+          files.each do |file|
+            expect(page).to have_no_content(file[:name])
+          end
         end
       end
 
       context 'and edit created question' do
         given!(:question) { create(:question, user: user) }
-        given!(:attachement) { create(:attachement, attachable: question) }
-        given!(:file_name) { attachement.file.identifier }
 
         scenario 'can delete attached file', js: true do
           sign_in(user)
           visit question_path(question)
 
-          expect(page).to have_content(file_name)
+          click_on 'Edit'
+          remove_attached_files_when_edit('.question_editable_attachements')
+          click_on 'Save'
 
-          click_on "Edit"
-          check "Remove file"
-          click_on "Save"
-
-          expect(page).to have_no_content(file_name)
+          files.each do |file|
+            expect(page).to have_no_content(file[:name])
+          end
         end
       end
 
