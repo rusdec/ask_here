@@ -35,7 +35,7 @@ feature 'User can delete attached file from question', %q{
       context 'and edit created question' do
         given!(:question) { create(:question, user: user) }
         given!(:attachement) { create(:attachement, attachable: question) }
-        given!(:file_name) { attachement.file.file.filename }
+        given!(:file_name) { attachement.file.identifier }
 
         scenario 'can delete attached file', js: true do
           sign_in(user)

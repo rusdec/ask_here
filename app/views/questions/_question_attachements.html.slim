@@ -1,5 +1,4 @@
 ul.question_attachements
   - resource.each do |attachement|
     li.question_attachement
-      - if attachement.file.file
-        = link_to attachement.file.file.filename, attachement.file.url
+      = link_to attachement.file.identifier, attachement.file.url
