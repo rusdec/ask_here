@@ -38,18 +38,4 @@ RSpec.describe Question, type: :model do
 
     expect(question.best_answers.count).to eq(best_answers_count)
   end
-
-  it 'create attachement with invalid attributes' do
-    question = create(:question,
-                      user: create(:user),
-                      attachements_attributes: [attributes_for(:attachement)])
-    expect(question.attachements.count).to eq(1)
-  end
-
-  it 'reject attachement with invalid attributes' do
-    question = create(:question,
-                      user: create(:user),
-                      attachements_attributes: [attributes_for(:invalid_attachement)])
-    expect(question.attachements.count).to eq(0)
-  end
 end

@@ -14,7 +14,7 @@ class Question < ApplicationRecord
                                 maximum: 30 } }
 
   accepts_nested_attributes_for :attachements, allow_destroy: true,
-                                               reject_if: :rejected_attachement?
+                                               reject_if: :all_blank
 
   def best_answers
     answers.best_answers
@@ -22,11 +22,5 @@ class Question < ApplicationRecord
 
   def created_answers
     answers.created_answers
-  end
-
-  private
-
-  def rejected_attachement?(attachement)
-    attachement[:file].blank?
   end
 end
