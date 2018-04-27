@@ -1,10 +1,11 @@
 .answer data-id=answer.id id=(answer.best? ? 'best_answer' : '')
 
-  - if current_user&.author_of?(answer)
-    = answer_remote_links(answer)
-    = render 'answers/edit_fast', resource: answer
+  .data
+    - if current_user&.author_of?(answer)
+      = answer_remote_links(answer)
+    p.body
+      = answer.body
+    = render 'answers/answer_attachements', resource: answer
 
-  p.body
-    = answer.body
-  
-  = render 'answers/answer_attachements', resource: answer
+  - if current_user&.author_of?(answer)
+    = render 'answers/edit_fast', resource: answer

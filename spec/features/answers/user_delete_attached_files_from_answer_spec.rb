@@ -40,7 +40,7 @@ feature 'User can delete attached files from answer', %q{
 
     context 'when author of answer' do
       context 'and edit created answer' do
-        scenario 'can attach one or more files', js: true do
+        scenario 'can delete one or more files', js: true do
           within '.answers' do
             #attach files
             click_on 'Edit'

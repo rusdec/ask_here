@@ -1,5 +1,5 @@
 <% if @result %>
-  findAnswerData('<%= @answer.id %>').textContent = '<%= j @answer.body %>'
+  updateAnswerBody('<%= @answer.id %>', '<%= j @answer.body %>')
   toggleVisibleAnswer('<%= @answer.id %>')
 
   updateAnswerAttachements('<%= @answer.id %>', '<%= j render 'answer_attachements', resource: @answer %>')

@@ -14,7 +14,7 @@ function listenClickLinkEditAnswers() {
 }
 
 function listenClickLinkEditAnswer(id) {
-  let linkEditAnswer = findAnswerRemoteLinks(id).querySelector('.link-edit-answer')
+  let linkEditAnswer = findAnswer(id).querySelector('.link-edit-answer')
   if (linkEditAnswer) {
     linkEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(id) })
   }
@@ -41,32 +41,8 @@ function findAnswer(id) {
   return document.querySelector(`.answer[data-id='${id}']`)
 }
 
-function findAnswersContainer() {
-  return document.querySelector('.answers')
-}
-
-function findAnswerAttachements(id) {
-  return findAnswer(id).querySelector('.answer_attachements')
-}
-
 function findEditAnswerForm(id) {
   return findAnswer(id).querySelector('.form-edit-answer')
-}
-
-function findAnswerData(id) {
-  return findAnswer(id).querySelector('p.body')
-}
-
-function findAnswerRemoteLinks(id) {
-  return findAnswer(id).querySelector('.answer-remote-links')
-}
-
-function findAnswerSetAsBestAnswerLink(id) {
-  return findAnswerRemoteLinks(id).querySelector('.link-set-as-best-answer')
-}
-
-function findAnswerUnsetBestAnswerLink(id) {
-  return findAnswerRemoteLinks(id).querySelector('.link-unset-best-answer')
 }
 
 function updateEditAnswerForm(id, form) {
@@ -76,22 +52,25 @@ function updateEditAnswerForm(id, form) {
   }
 }
 
+function updateAnswerBody(id, body) {
+  let answerBody = findAnswer(id).querySelector('.body')
+  if (answerBody) {
+    answerBody.textContent = body
+  }
+}
+
 function updateAnswerAttachements(id, attachements) {
-  let answerAttachements = findAnswerAttachements(id)
+  let answerAttachements = findAnswer(id).querySelector('.answer_attachements')
   if (answerAttachements) {
     answerAttachements.outerHTML = attachements
   }
 }
 
 function toggleVisibleAnswer(id) {
-  let elements = [
+  toggleVisibleElements([
     findEditAnswerForm(id),
-    findAnswerRemoteLinks(id),
-    findAnswerData(id),
-    findAnswerAttachements(id)
-  ]
-  
-  elements.forEach((element) => toggleVisible(element))
+    findAnswer(id).querySelector('.data')
+  ])
 }
 
 /*
@@ -99,9 +78,13 @@ function toggleVisibleAnswer(id) {
  */
 
 function choseBestAnswer(id) {
-  removeBestAnswer()
-  newBestAnswer(id)
+  unsetBestUnswer()
+  updateBestAnswerMarker(findAnswer(id), 'best_answer')
   placeBestAnswerOnTop()
+}
+
+function unsetBestUnswer() {
+  updateBestAnswerMarker(findBestAnswer())
 }
 
 function findBestAnswer() {
@@ -109,29 +92,22 @@ function findBestAnswer() {
 }
 
 function placeBestAnswerOnTop() {
-  let answers = findAnswersContainer()
+  let answers = document.querySelector('.answers')
   if (answers) {
     answers.insertAdjacentElement('afterbegin', findBestAnswer())
   }
 }
 
-function newBestAnswer(id) {
-  let answer = findAnswer(id)
+function updateBestAnswerMarker(answer, marker = '') {
   if (answer) {
-    togglebVisibleBestButtonAnswer(answer.dataset.id)
-    findAnswer(id).id = 'best_answer'
+    toggleVisibleBestButtonAnswer(answer.dataset.id)
+    answer.id = marker
   }
 }
 
-function removeBestAnswer() {
-  let answer = findBestAnswer()
-  if (answer) {
-    togglebVisibleBestButtonAnswer(answer.dataset.id)
-    answer.id = ''
-  }
-}
-
-function togglebVisibleBestButtonAnswer(id) {
-  toggleVisible(findAnswerSetAsBestAnswerLink(id))
-  toggleVisible(findAnswerUnsetBestAnswerLink(id))
+function toggleVisibleBestButtonAnswer(id) {
+  toggleVisibleElements([
+    findAnswer(id).querySelector('.link-set-as-best-answer'),
+    findAnswer(id).querySelector('.link-unset-best-answer')
+  ])
 }
