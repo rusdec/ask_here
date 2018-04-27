@@ -1,4 +1,5 @@
-= form_for resource, remote: true, html: { class: 'form-edit-answer hidden' } do |f|
+= form_for resource, remote: true, html: { class: 'form-edit-answer hidden',
+                                           data: { answer_id: resource.id } } do |f|
   #edit_answer_errors
   p
     = f.label :body
@@ -10,6 +11,5 @@
       = link_to_add_association 'Add file', f, :attachements,
           partial: 'shared/attachement_fields'
 
-  = link_to 'Cancel', '#', class: 'link-cancel-edit-answer',
-                           data: { answer_id: resource.id }
+  = link_to 'Cancel', '#', class: 'link-cancel-edit-answer'
   = f.submit 'Save'
