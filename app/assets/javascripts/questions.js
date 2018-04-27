@@ -66,7 +66,7 @@ function findQuestionBody() {
 function toggleVisibleQuestion() {
   let elements = [
     document.querySelector('.form-edit-question'),
-    document.querySelector('.question')
+    document.querySelector('.question .data')
   ]
   elements.forEach((element) => toggleVisible(element))
 }
