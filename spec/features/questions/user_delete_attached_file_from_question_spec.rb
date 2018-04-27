@@ -21,12 +21,10 @@ feature 'User can delete attached file from question', %q{
           sign_in(user)
           visit new_question_path
 
-          fill_in 'Title', with: question_attributes[:title]
-          fill_in 'Body', with: question_attributes[:body]
-          attach_files({ context: '.attachements', files: files })
-
-          remove_attached_files('.attachements')
-          click_on 'Create Question'
+          create_question(question_attributes) do
+            attach_files({ context: '.attachements', files: files })
+            remove_attached_files('.attachements')
+          end
 
           files.each do |file|
             expect(page).to have_no_content(file[:name])
