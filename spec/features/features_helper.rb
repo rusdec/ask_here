@@ -6,6 +6,7 @@ RSpec.configure do |config|
   config.include Feature::Signing, type: :feature
   config.include Feature::Answer, type: :feature
   config.include Feature::Question, type: :feature
+  config.include Feature::Attachement, type: :feature
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

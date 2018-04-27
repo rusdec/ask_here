@@ -28,3 +28,7 @@
 config/database.yml
 
 *.swp
+
+/public/uploads
+/public/uploads/*
+Gemfile.lock

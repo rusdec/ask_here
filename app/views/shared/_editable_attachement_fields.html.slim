@@ -1,0 +1,6 @@
+.editable_attachement
+  .file
+    span = extract_identifier(f)
+  .edit_actions
+    = f.label :_destroy, 'Remove file'
+    = f.check_box :_destroy

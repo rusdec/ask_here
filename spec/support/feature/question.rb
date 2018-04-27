@@ -4,6 +4,7 @@ module Feature
       visit new_question_path
       fill_in 'Title', with: params[:title]
       fill_in 'Body', with: params[:body]
+      yield if block_given? 
       click_on 'Create Question'
     end
 

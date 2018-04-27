@@ -1,5 +1,8 @@
 class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
+  has_many :attachements, as: :attachable,
+                          inverse_of: :attachable,
+                          dependent: :destroy
   belongs_to :user
 
   validates :body, { presence: true,
@@ -9,6 +12,9 @@ class Question < ApplicationRecord
   validates :title, { presence: true,
                       length: { minimum: 10,
                                 maximum: 30 } }
+
+  accepts_nested_attributes_for :attachements, allow_destroy: true,
+                                               reject_if: :all_blank
 
   def best_answers
     answers.best_answers

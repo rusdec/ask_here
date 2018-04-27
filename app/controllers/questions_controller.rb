@@ -39,7 +39,9 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title,
+                                     :body,
+                                     attachements_attributes: [:id, :file, :_destroy])
   end
 
   def set_question

@@ -8,32 +8,32 @@ feature 'User create answer', %q{
 
   given(:user) { create(:user_with_questions) }
   given(:question) { user.questions.last }
-  given(:answer_body) { 'RandomValidAnswerBodyText' }
-  given(:params) do
-    { body: answer_body,
-      question: question }
-  end
 
-  describe 'Authenticated user' do
-    before { sign_in(user) }
+  context 'Authenticated user' do
+    before do
+      sign_in(user)
+      visit question_path(question)
+    end
 
     scenario 'can create answer with valid data', js: true do
-      create_answer(params)
+      answer_attributes = attributes_for(:answer)
+      create_answer(answer_attributes)
 
-      expect(page).to have_content answer_body
+      expect(page).to have_content(answer_attributes[:body])
     end
 
     scenario 'can\'t create answer with invalid data', js: true do
-      params[:body] = nil
-      create_answer(params)
+      create_answer(attributes_for(:invalid_answer))
 
       expect(page).to have_content 'Body can\'t be blank'
     end
   end
 
-  scenario 'Unauthenticated user can\'t create answer', js: true do
-    visit question
+  context 'Unauthenticated user' do
+    before { visit question_path(question) }
 
-    expect(page).to have_no_content('Create Answer')
+    scenario 'can\'t create answer' do
+      expect(page).to have_no_content('Create Answer')
+    end
   end
 end

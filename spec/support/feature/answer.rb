@@ -1,10 +1,9 @@
 module Feature
   module Answer
     def create_answer(params)
-      visit question_path(params[:question])
-
       within '#new_answer' do
         fill_in 'Body', with: params[:body]
+        yield if block_given?
         click_on 'Create Answer'
       end
     end
@@ -14,8 +13,6 @@ module Feature
     end
 
     def update_answer(params)
-      visit question_path(params[:question])
-
       within answer_container(params[:answer]) do
         click_on 'Edit'
         fill_in 'Body', with: params[:body]

@@ -3,3 +3,7 @@ function toggleVisible(element) {
     element.classList.toggle('hidden')
   }
 }
+
+function toggleVisibleElements(elements) {
+  elements.forEach((element) => toggleVisible(element))
+}

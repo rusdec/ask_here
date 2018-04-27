@@ -3,6 +3,11 @@
   updateQuestionTitle(document.querySelector('#question_title').value)
   updateQuestionBody(document.querySelector('#question_body').value)
   toggleVisibleQuestion()
+
+  updateQuestionEditForm('<%= j render 'edit_fast', resource: @question %>')
+  updateQuestionAttachements('<%= j render 'question_attachements', resource: @question.attachements %>')
+
+  listenClickLinkCancelEditQuestion()
 <% else %>
   updateQuestionErrors('<%= j render 'shared/errors', resource: @question %>')
 <% end %>

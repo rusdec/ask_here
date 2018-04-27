@@ -2,6 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   it { should belong_to(:question) }
+  it { should have_many(:attachements).dependent(:destroy) }
+  it do
+    should accept_nested_attributes_for(:attachements).
+      allow_destroy(true)
+  end
   it { should belong_to(:user) }
 
   it { should validate_presence_of(:body) }

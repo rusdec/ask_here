@@ -99,7 +99,7 @@ RSpec.describe AnswersController, type: :controller do
       { id: answer, answer: { body: new_body } }
     end
     let(:another_user) { create(:user) }
-    
+
     context 'when authenticated user is author' do
       before { sign_in(user) }
 
