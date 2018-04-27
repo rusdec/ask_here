@@ -3,38 +3,35 @@ document.addEventListener('DOMContentLoaded', () => {
   listenClickLinkCancelEditAnswers()
 })
 
-function listenClickLinkEditAnswers() {
-  let linksEditAnswer = document.querySelectorAll('.link-edit-answer')
-  if (linksEditAnswer) {
-    linksEditAnswer.forEach((linkEditAnswer) => {
-      let answerId = linkEditAnswer.parentElement.dataset.answerId
-      linkEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(answerId) })
-    })
-  }
+function listenClickAnswerLinksForToggling(linkSelector) {
+  let links = document.querySelectorAll(linkSelector)
+  links.forEach((link) => {
+    let answerId = link.parentElement.dataset.answerId
+    link.addEventListener('click', () => { toggleVisibleAnswer(answerId) })
+  })
 }
 
-function listenClickLinkEditAnswer(id) {
-  let linkEditAnswer = findAnswer(id).querySelector('.link-edit-answer')
-  if (linkEditAnswer) {
-    linkEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(id) })
-  }
-}
-
-function listenClickLinkCancelEditAnswer(id) {
-  let linkCancelEditAnswer = findEditAnswerForm(id).querySelector('.link-cancel-edit-answer')
-  if (linkCancelEditAnswer) {
-    linkCancelEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(id) })
+function listenClickAnswerLinkForToggling(id, linkSelector) {
+  let link = findAnswer(id).querySelector(selector)
+  if (link) {
+    link.addEventListener('click', () => { toggleVisibleAnswer(id) })
   }
 }
 
 function listenClickLinkCancelEditAnswers() {
-  let linksCancelEditAnswer = document.querySelectorAll('.link-cancel-edit-answer')
-  if (linksCancelEditAnswer) {
-    linksCancelEditAnswer.forEach((linkCancelEditAnswer) => {
-      let answerId = linkCancelEditAnswer.dataset.answerId
-      linkCancelEditAnswer.addEventListener('click', () => { toggleVisibleAnswer(answerId) })
-    })
-  }
+  listenClickAnswerLinksForToggling('.link-cancel-edit-answer')
+}
+
+function listenClickLinkEditAnswers() {
+  listenClickAnswerLinksForToggling('.link-edit-answer')
+}
+
+function listenClickLinkEditAnswer(id) {
+  listenClickAnswerLinkForToggling(id, '.link-edit-answer')
+}
+
+function listenClickLinkCancelEditAnswer(id) {
+  listenClickAnswerLinkForToggling(id, '.link-cancel-edit-answer')
 }
 
 function findAnswer(id) {
