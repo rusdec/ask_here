@@ -42,25 +42,23 @@ function findEditAnswerForm(id) {
   return findAnswer(id).querySelector('.form-edit-answer')
 }
 
-function updateEditAnswerForm(id, form) {
-  let editAnswerForm = findEditAnswerForm(id)
-  if (editAnswerForm) {
-    editAnswerForm.outerHTML = form
+function newOuterHtmlOfAnswerChild(params) {
+  let element = findAnswer(params.id).querySelector(params.childSelector)
+  if (element) {
+    element.outerHTML = params.html
   }
 }
 
-function updateAnswerBody(id, body) {
-  let answerBody = findAnswer(id).querySelector('.body')
-  if (answerBody) {
-    answerBody.textContent = body
-  }
+function updateEditAnswerForm(id, html) {
+  newOuterHtmlOfAnswerChild({id:id, childSelector:'.form-edit-answer', html:html})
 }
 
-function updateAnswerAttachements(id, attachements) {
-  let answerAttachements = findAnswer(id).querySelector('.answer_attachements')
-  if (answerAttachements) {
-    answerAttachements.outerHTML = attachements
-  }
+function updateAnswerBody(id, html) {
+  newOuterHtmlOfAnswerChild({id:id, childSelector:'.body', html:html})
+}
+
+function updateAnswerAttachements(id, html) {
+  newOuterHtmlOfAnswerChild({id:id, childSelector:'.answer_attachements', html:html})
 }
 
 function toggleVisibleAnswer(id) {
