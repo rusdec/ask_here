@@ -6,7 +6,7 @@ class Answer < ApplicationRecord
 
   default_scope { order(best: :DESC).order(:id) }
   scope :best_answers, -> { where(best: true) }
-  scope :created_answers, -> { where.not(id: nil) }
+  scope :persisted_answers, -> { where.not(id: nil) }
 
   validates :body, { presence: true,
                      length: { minimum: 10,

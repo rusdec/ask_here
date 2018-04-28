@@ -17,7 +17,7 @@ class Question < ApplicationRecord
     answers.best_answers
   end
 
-  def created_answers
-    answers.created_answers
+  def persisted_answers
+    answers.persisted_answers
   end
 end

@@ -29,7 +29,7 @@ RSpec.describe Question, type: :model do
     question = user.questions.last
     question.answers.new
 
-    expect(question.created_answers.count).to eq(answers_count)
+    expect(question.persisted_answers.count).to eq(answers_count)
   end
 
   it 'select only best answers' do
