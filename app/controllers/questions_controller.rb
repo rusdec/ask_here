@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show destroy update]
+  before_action :set_question, except: %i[new create index]
 
   def index
     @questions = Question.all
@@ -36,12 +36,20 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def like
+    if current_user&.not_author_of?(@question)
+      @vote = @question.votes.build(value: true, user: current_user)
+      @vote.save!
+    end
+  end
+
   private
 
   def question_params
     params.require(:question).permit(:title,
                                      :body,
-                                     attachements_attributes: [:id, :file, :_destroy])
+                                     attachements_attributes: [:id, :file, :_destroy],
+                                     votes_attributes: [:id, :name, :_destroy])
   end
 
   def set_question

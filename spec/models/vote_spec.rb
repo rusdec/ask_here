@@ -4,7 +4,7 @@ RSpec.describe Vote, type: :model do
   it { should belong_to(:votable) }
   it { should belong_to(:user) }
 
-  describe 'uniqueness' do
+  describe '#uniqueness' do
     subject { build :vote }
 
     it { should validate_uniqueness_of(:votable_id).

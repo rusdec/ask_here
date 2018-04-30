@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       patch :best_answer, on: :member 
       patch :not_best_answer, on: :member 
     end
+
+    post :like, on: :member
   end
 
   # For details on the DSL available within this file,

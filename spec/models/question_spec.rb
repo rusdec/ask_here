@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:attachements).dependent(:destroy) }
+  it { should have_many(:votes).dependent(:destroy) }
 
   it do
     should accept_nested_attributes_for(:attachements).

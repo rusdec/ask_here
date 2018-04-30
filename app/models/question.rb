@@ -2,6 +2,8 @@ class Question < ApplicationRecord
   include Attachable
 
   has_many :answers, dependent: :destroy
+  has_many :votes, as: :votable,
+                   dependent: :destroy
 
   belongs_to :user
 
@@ -19,5 +21,8 @@ class Question < ApplicationRecord
 
   def persisted_answers
     answers.persisted_answers
+  end
+
+  def vote
   end
 end
