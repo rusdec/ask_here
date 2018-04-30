@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20180430113552) do
     t.boolean "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id", "votable_id", "votable_type"], name: "index_votes_on_user_id_and_votable_id_and_votable_type", unique: true
+    t.index ["votable_id", "user_id", "votable_type"], name: "index_votes_on_votable_id_and_user_id_and_votable_type", unique: true
   end
 
   add_foreign_key "answers", "users"
