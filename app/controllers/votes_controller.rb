@@ -11,7 +11,7 @@ class VotesController < ApplicationController
   end
 
   def update
-    @vote.update(vote_params)
+    @vote.update(vote_params) if current_user&.author_of?(@vote)
   end
 
   def destroy

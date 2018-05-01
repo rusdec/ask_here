@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   end
 
   concern :votable do
-    resources :votes, only: %i[create update destroy]
+    resources :votes, only: %i[create update destroy], shallow: true
   end
 
   resources :questions do
