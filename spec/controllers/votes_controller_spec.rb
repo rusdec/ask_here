@@ -97,19 +97,42 @@ RSpec.describe VotesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { sign_in(user) }
+    let!(:vote) { create(:question_vote,
+                         user: user,
+                         votable: question,
+                         value: false) }
+    let(:params) do
+      { id: vote }
+    end
 
     context 'Authenticated user' do
       context 'when author of vote' do
+        before { sign_in(user) }
+
+        it 'can delete vote' do
+          expect {
+            delete :destroy, params: params
+          }.to change(user.votes, :count).by(-1)
+        end
       end
 
       context 'when not author of vote' do
-        let(:not_author) { create(:user) }
-        before { sign_in(not_author) }
+        before { sign_in(create(:user)) }
+
+        it 'can\'t delete vote' do
+          expect {
+            delete :destroy, params: params
+          }.to_not change(user.votes, :count)
+        end
       end
     end
 
     context 'Unauthenticated user' do
+      it 'can\'t delete vote' do
+        expect {
+          delete :destroy, params: params
+        }.to_not change(user.votes, :count)
+      end
     end
   end
 end

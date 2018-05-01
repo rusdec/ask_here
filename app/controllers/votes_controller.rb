@@ -15,7 +15,7 @@ class VotesController < ApplicationController
   end
 
   def destroy
-    @vote.destroy
+    @vote.destroy if current_user&.author_of?(@vote)
   end
 
   private
