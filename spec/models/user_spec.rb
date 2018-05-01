@@ -13,6 +13,8 @@ RSpec.describe User, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:votes).dependent(:destroy) }
 
+  it { should delegate_method(:vote_for).to(:votes) }
+
   let(:user) { create(:user_with_questions) }
   let(:question) { user.questions.last }
 

@@ -11,6 +11,8 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 5,
                                  maximum: 20 }
 
+  delegate :vote_for, to: :votes
+
   def author_of?(entity)
     id == entity.user_id
   end
