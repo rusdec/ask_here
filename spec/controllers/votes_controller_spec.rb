@@ -111,7 +111,7 @@ RSpec.describe VotesController, type: :controller do
 
         it 'can delete vote' do
           expect {
-            delete :destroy, params: params
+            delete :destroy, params: params, format: :js
           }.to change(user.votes, :count).by(-1)
         end
       end
@@ -121,7 +121,7 @@ RSpec.describe VotesController, type: :controller do
 
         it 'can\'t delete vote' do
           expect {
-            delete :destroy, params: params
+            delete :destroy, params: params, format: :js
           }.to_not change(user.votes, :count)
         end
       end
@@ -130,7 +130,7 @@ RSpec.describe VotesController, type: :controller do
     context 'Unauthenticated user' do
       it 'can\'t delete vote' do
         expect {
-          delete :destroy, params: params
+          delete :destroy, params: params, format: :js
         }.to_not change(user.votes, :count)
       end
     end
