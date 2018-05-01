@@ -9,6 +9,10 @@ Rails.application.routes.draw do
     delete :sign_out, to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
+  concern :votable do
+    resources :votes, only: %i[create update destroy]
+  end
+
   resources :questions do
     resources :answers, shallow: true,
                         only: %i[create update destroy] do
@@ -16,7 +20,7 @@ Rails.application.routes.draw do
       patch :not_best_answer, on: :member 
     end
 
-    post :like, on: :member
+    concerns :votable
   end
 
   # For details on the DSL available within this file,
