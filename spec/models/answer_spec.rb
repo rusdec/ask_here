@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
   it { should belong_to(:question) }
   it { should have_many(:attachements).dependent(:destroy) }
+  it { should have_many(:votes).dependent(:destroy) }
+
   it do
     should accept_nested_attributes_for(:attachements).
       allow_destroy(true)
@@ -15,6 +17,9 @@ RSpec.describe Answer, type: :model do
     should validate_length_of(:body).
       is_at_least(10).is_at_most(1000)
   end
+
+  it { should delegate_method(:likes).to(:votes) }
+  it { should delegate_method(:dislikes).to(:votes) }
 
   describe 'best answer' do
     let(:question) { create(:user_with_question_and_best_answer).questions.last }
