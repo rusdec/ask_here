@@ -20,13 +20,16 @@ feature 'User vote for a question', %q{
       before { visit question_path(question) }
 
       scenario 'no see vote options for a question', js: true do
-        expect(page).to have_no_button(value: 'Like')
-        expect(page).to have_no_button(value: 'Dislike')
+        within '.question' do
+          expect(page).to have_no_button(value: 'Like')
+          expect(page).to have_no_button(value: 'Dislike')
+        end
       end
 
       scenario 'can see vote rating of question', js: true do
-        expect(page).to have_content('+1')
-        sleep 5
+        within '.question' do
+          expect(page).to have_content('+1')
+        end
       end
     end
 
@@ -37,41 +40,51 @@ feature 'User vote for a question', %q{
       context 'and vote for a question' do
 
         scenario 'see vote options', js: true do
-          expect(page).to have_button(value: 'Like')
-          expect(page).to have_button(value: 'Dislike')
+          within '.question' do
+            expect(page).to have_button(value: 'Like')
+            expect(page).to have_button(value: 'Dislike')
+          end
         end
 
         scenario 'can vote only once', js: true do
-          expect(page).to have_content('+1')
+          within '.question' do
+            expect(page).to have_content('+1')
 
-          like(context: '.question')
+            like
 
-          expect(page).to have_content('+2')
+            expect(page).to have_content('+2')
+          end
         end
 
         scenario 'can revote', js: true do
-          expect(page).to have_content('+1')
+          within '.question' do
+            expect(page).to have_content('+1')
 
-          like(context: '.question')
-          expect(page).to have_content('+2')
+            like
+            expect(page).to have_content('+2')
 
-          dislike(context: '.question')
-          expect(page).to have_content('0')
+            dislike
+            expect(page).to have_content('0')
+          end
         end
 
         scenario 'can cancel vote', js: true do
-          expect(page).to have_content('+1')
+          within '.question' do
+            expect(page).to have_content('+1')
 
-          dislike(context: '.question')
-          expect(page).to have_content('0')
+            dislike
+            expect(page).to have_content('0')
 
-          dislike(context: '.question')
-          expect(page).to have_content('+1')
+            dislike
+            expect(page).to have_content('+1')
+          end
         end
       end
 
       scenario 'can see vote rating of question' do
-        expect(page).to have_content('+1')
+        within '.question' do
+          expect(page).to have_content('+1')
+        end
       end
     end
   end
@@ -80,12 +93,16 @@ feature 'User vote for a question', %q{
     before { visit question_path(question) }
 
     scenario 'no see vote options for a question' do
-      expect(page).to have_no_button(value: 'Like')
-      expect(page).to have_no_button(value: 'Dislike')
+      within '.question' do
+        expect(page).to have_no_button(value: 'Like')
+        expect(page).to have_no_button(value: 'Dislike')
+      end
     end
 
     scenario 'can see vote rating of question' do
-      expect(page).to have_content('+1')
+      within '.question' do
+        expect(page).to have_content('+1')
+      end
     end
   end
 end

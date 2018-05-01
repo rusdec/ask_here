@@ -1,19 +1,17 @@
 module Feature
   module Vote
-    def like(params)
+    def like(params = {})
       params[:name] = 'Like'
-      choose_for(params)
+      click_vote(params)
     end
 
-    def dislike(params)
+    def dislike(params = {})
       params[:name] = 'Dislike'
-      choose_for(params)
+      click_vote(params)
     end
 
-    def choose_for(params)
-      within params[:context] do
-        click_button(value: params[:name])
-      end
+    def click_vote(params)
+      click_button(value: params[:name])
     end
   end
 end
