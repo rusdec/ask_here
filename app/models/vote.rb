@@ -4,8 +4,8 @@ class Vote < ApplicationRecord
 
   validates_uniqueness_of :votable_id, scope: [:votable_type, :user_id]
 
-  scope :likes_for, ->(votable) { where(votable: votable).where(value: true) }
-  scope :dislikes_for, ->(votable) { where(votable: votable).where(value: false) }
+  scope :likes, -> { where(value: true) }
+  scope :dislikes, -> { where(value: false) }
 
   def self.vote_for(votable)
     find_by(votable: votable)

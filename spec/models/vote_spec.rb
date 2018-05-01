@@ -23,18 +23,22 @@ RSpec.describe Vote, type: :model do
   describe 'select likes by type' do
     let!(:question) { create(:question, user: create(:user)) }
     before do
+      create(:question_vote,
+             votable: create(:question, user: create(:user)),
+             user: create(:user),
+             value: true)
       create(:question_vote, votable: question, user: create(:user), value: true)
       2.times do
         create(:question_vote, votable: question, user: create(:user), value: false)
       end
     end
 
-    it '#likes_for' do
-      expect(Vote.likes_for(question).count).to eq(1)
+    it '#likes' do
+      expect(question.votes.likes.count).to eq(1)
     end
 
-    it '#dislikes_for' do
-      expect(Vote.dislikes_for(question).count).to eq(2)
+    it '#dislikes' do
+      expect(question.votes.dislikes.count).to eq(2)
     end
   end
 end
