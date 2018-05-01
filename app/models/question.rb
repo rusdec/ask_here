@@ -1,9 +1,8 @@
 class Question < ApplicationRecord
   include Attachable
+  include Votable
 
   has_many :answers, dependent: :destroy
-  has_many :votes, as: :votable,
-                   dependent: :destroy
 
   belongs_to :user
 
@@ -14,9 +13,6 @@ class Question < ApplicationRecord
   validates :title, { presence: true,
                       length: { minimum: 10,
                                 maximum: 30 } }
-
-  delegate :likes, to: :votes
-  delegate :dislikes, to: :votes
 
   def best_answers
     answers.best_answers
