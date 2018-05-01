@@ -15,6 +15,9 @@ class Question < ApplicationRecord
                       length: { minimum: 10,
                                 maximum: 30 } }
 
+  delegate :likes, to: :votes
+  delegate :dislikes, to: :votes
+
   def best_answers
     answers.best_answers
   end

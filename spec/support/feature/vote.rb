@@ -12,7 +12,7 @@ module Feature
 
     def choose_for(params)
       within params[:context] do
-        click_on params[:name]
+        click_button(value: params[:name])
       end
     end
   end
