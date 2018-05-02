@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20180502161102) do
     t.string "attachable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name", default: "unknown name"
+    t.string "name", default: ""
     t.index ["attachable_id", "attachable_type"], name: "index_attachements_on_attachable_id_and_attachable_type"
   end
 
