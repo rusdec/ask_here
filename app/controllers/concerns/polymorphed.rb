@@ -15,7 +15,7 @@ module Polymorphed
     end
 
     def resource_klass(param)
-      param.split('_')[0].classify.constantize
+      param[0..-3].classify.constantize
     end
   end
 end
