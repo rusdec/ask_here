@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180430113552) do
+ActiveRecord::Schema.define(version: 20180502161102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20180430113552) do
     t.string "attachable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", default: "unknown name"
     t.index ["attachable_id", "attachable_type"], name: "index_attachements_on_attachable_id_and_attachable_type"
   end
 
