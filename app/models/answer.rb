@@ -13,6 +13,10 @@ class Answer < ApplicationRecord
                      length: { minimum: 10,
                                maximum: 1000 } }
 
+  def not_best?
+    !best?
+  end
+
   def not_best!
     update(best: false)
   end
