@@ -1,4 +1,6 @@
 function updateVote(params) {
-  let voteSelector = `#vote_${params.votableType}_${params.votableId}`
-  document.querySelector(voteSelector).outerHTML = params.html
+  let vote = document.querySelector(`#vote-${params.votableType}-${params.votableId}`)
+  if (vote) {
+    vote.outerHTML = params.html
+  }
 }

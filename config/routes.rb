@@ -18,6 +18,7 @@ Rails.application.routes.draw do
                         only: %i[create update destroy] do
       patch :best_answer, on: :member 
       patch :not_best_answer, on: :member 
+      concerns :votable
     end
 
     concerns :votable
