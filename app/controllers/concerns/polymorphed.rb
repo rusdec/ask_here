@@ -4,7 +4,7 @@ module Polymorphed
   included do
     def set_resource
       param = resource_param
-      return nil unless params[param]
+      return nil if params[param].nil?
       instance_variable_set '@resource', resource_klass(param).find(params[param])
     end
 

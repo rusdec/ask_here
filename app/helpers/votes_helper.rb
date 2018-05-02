@@ -1,70 +1,58 @@
 module VotesHelper
-
-  def vote_links(params)
+  def vote_forms(params)
     params[:vote] ||= current_user.votes.build(votable: params[:resource])
-    resource = params[:resource]
-    vote = params[:vote]
+    get_forms(params[:vote], params[:resource]).html_safe
+  end
 
-    likes_count = resource.likes.count.to_s
-    dislikes_count = resource.dislikes.count.to_s
+  def get_forms(vote, resource)
+    like_params = like_params_for(vote, resource)
+    dislike_params = dislike_params_for(vote, resource)
 
     if vote.new_record?
-      like = post_form(vote: vote,
-                       resource: resource,
-                       value: true,
-                       count: likes_count,
-                       button_text: like_button_text)
-
-      dislike = post_form(vote: vote,
-                          resource: resource,
-                          value: false,
-                          count: dislikes_count,
-                          button_text: dislike_button_text)
-
+      "#{post_form(like_params)} #{post_form(dislike_params)}"
     elsif vote.value?
-        like = delete_form(vote: vote,
-                           count: likes_count,
-                           button_text: like_button_text)
-
-        dislike = patch_form(vote: vote,
-                             value: false,
-                             count: dislikes_count,
-                             button_text: dislike_button_text)
-
+      "#{delete_form(like_params)} #{patch_form(dislike_params)}"
     else
-        like = patch_form(vote: vote,
-                          value: true,
-                          count: likes_count,
-                          button_text: like_button_text)
-
-        dislike = delete_form(vote: vote,
-                              count: dislikes_count,
-                              button_text: dislike_button_text)
+      "#{patch_form(like_params)} #{delete_form(dislike_params)}"
     end
-    
-    "#{like} #{dislike}".html_safe
+  end
+
+  def like_params_for(vote, resource)
+    { vote: vote,
+      resource: resource,
+      count: resource.likes.count.to_s,
+      button_text: like_button_text,
+      value: true }
+  end
+
+  def dislike_params_for(vote, resource)
+    { vote: vote,
+      resource: resource,
+      count: resource.dislikes.count.to_s,
+      button_text: dislike_button_text,
+      value: false }
   end
 
   def delete_form(params)
     form_for params[:vote], delete_options do |f|
-      concat(f.label :value, params[:count]) if params[:count]
-      concat(f.submit params[:button_text], class: 'red')
+      concat(f.label(:value, params[:count])) if params[:count]
+      concat(f.submit(params[:button_text], class: 'red'))
     end
   end
 
   def patch_form(params)
     form_for params[:vote], patch_options do |f|
-      concat(f.label :value, params[:count]) if params[:count]
-      concat(f.hidden_field :value, value: params[:value])
-      concat(f.submit params[:button_text])
+      concat(f.label(:value, params[:count])) if params[:count]
+      concat(f.hidden_field(:value, value: params[:value]))
+      concat(f.submit(params[:button_text]))
     end
   end
 
   def post_form(params)
     form_for params[:vote], post_options(params[:resource]) do |f|
-      concat(f.label :value, params[:count]) if params[:count]
-      concat(f.hidden_field :value, value: params[:value])
-      concat(f.submit params[:button_text])
+      concat(f.label(:value, params[:count])) if params[:count]
+      concat(f.hidden_field(:value, value: params[:value]))
+      concat(f.submit(params[:button_text]))
     end
   end
 
@@ -83,7 +71,7 @@ module VotesHelper
   def vote_rating(resource)
     content_tag 'span' do
       rating = resource.likes.count - resource.dislikes.count
-      rating = "+#{rating}" if rating > 0
+      rating = "+#{rating}" if rating.positive?
 
       rating.to_s
     end
