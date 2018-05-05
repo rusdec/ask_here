@@ -1,8 +1,0 @@
-<% if @vote.persisted? %>
-    updateVote({
-      votableType: '<%= @vote.votable.class.to_s.downcase %>',
-      votableId: '<%= @vote.votable.id %>',
-      html: '<%= j render 'shared/vote', resource: @vote.votable %>'
-    })
-<% else %>
-<% end %>

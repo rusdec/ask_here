@@ -3,6 +3,8 @@ class AnswersController < ApplicationController
   before_action :set_question, only: %i[create]
   before_action :set_answer, except: %i[create]
 
+  include Voted
+
   def create
     @answer = current_user.answers.new(answer_params)
     @answer.question = @question
@@ -32,7 +34,8 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, attachements_attributes: [:id, :file, :_destroy])
+    params.require(:answer).permit(:body,
+                                   attachements_attributes: [:id, :file, :_destroy])
   end
 
   def set_answer

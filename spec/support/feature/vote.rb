@@ -1,17 +1,15 @@
 module Feature
   module Vote
-    def like(params = {})
-      params[:name] = 'Like'
-      click_vote(params)
+    def like
+      click_vote('Like')
     end
 
-    def dislike(params = {})
-      params[:name] = 'Dislike'
-      click_vote(params)
+    def dislike
+      click_vote('Dislike')
     end
 
-    def click_vote(params)
-      click_button(value: params[:name])
+    def click_vote(name)
+      click_on name
     end
   end
 end

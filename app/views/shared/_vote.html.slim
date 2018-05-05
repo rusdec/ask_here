@@ -1,4 +1,5 @@
-.vote id=vote_container_klass_name(resource)
+.vote id=vote_container_klass_name(resource) data-id=resource.id data-type=resource.class.to_s.underscore data-changed=!current_user&.vote_for(resource).nil?
   - if current_user&.not_author_of?(resource)
     = vote_forms(resource: resource, vote: current_user.vote_for(resource))
-  = vote_rating(resource)
+  - else
+    = vote_rating(resource)

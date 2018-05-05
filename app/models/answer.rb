@@ -1,9 +1,9 @@
 class Answer < ApplicationRecord
   include Attachable
   include Votable
+  include Userable
 
   belongs_to :question
-  belongs_to :user
 
   default_scope { order(best: :DESC).order(:id) }
   scope :best_answers, -> { where(best: true) }

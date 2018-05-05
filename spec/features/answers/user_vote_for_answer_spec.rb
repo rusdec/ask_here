@@ -17,19 +17,18 @@ feature 'User vote for an answer', %q{
         sign_in(user)
         visit question_path(question)
       end
-=begin
+
       scenario 'no see vote options for a answer', js: true do
         within '.answers' do
-          expect(page).to have_no_button(value: 'Like')
-          expect(page).to have_no_button(value: 'Dislike')
+          expect(page).to have_no_content('Like')
+          expect(page).to have_no_content('Dislike')
         end
       end
       scenario 'can see vote rating of answer', js: true do
         within '.answers' do
-          expect(page).to have_content('+1')
+          expect(page).to have_content('1')
         end
       end
-=end
     end
 
     context 'when not author of answer' do
@@ -41,27 +40,27 @@ feature 'User vote for an answer', %q{
       context 'and vote for a answer' do
         scenario 'see vote options', js: true do
           within '.answers' do
-            expect(page).to have_button(value: 'Like')
-            expect(page).to have_button(value: 'Dislike')
+            expect(page).to have_content('Like')
+            expect(page).to have_content('Dislike')
           end
         end
 
         scenario 'can vote only once', js: true do
           within '.answers' do
-            expect(page).to have_content('+1')
+            expect(page).to have_content('1')
 
             like
 
-            expect(page).to have_content('+2')
+            expect(page).to have_content('2')
           end
         end
 
         scenario 'can revote', js: true do
           within '.answers' do
-            expect(page).to have_content('+1')
+            expect(page).to have_content('1')
 
             like
-            expect(page).to have_content('+2')
+            expect(page).to have_content('2')
 
             dislike
             expect(page).to have_content('0')
@@ -70,20 +69,20 @@ feature 'User vote for an answer', %q{
 
         scenario 'can cancel vote', js: true do
           within '.answers' do
-            expect(page).to have_content('+1')
+            expect(page).to have_content('1')
 
             dislike
             expect(page).to have_content('0')
 
             dislike
-            expect(page).to have_content('+1')
+            expect(page).to have_content('1')
           end
         end
       end
 
       scenario 'can see vote rating of answer' do
         within '.answers' do
-          expect(page).to have_content('+1')
+          expect(page).to have_content('1')
         end
       end
     end
@@ -94,14 +93,14 @@ feature 'User vote for an answer', %q{
 
     scenario 'no see vote options for a answer' do
       within '.answers' do
-        expect(page).to have_no_button(value: 'Like')
-        expect(page).to have_no_button(value: 'Dislike')
+        expect(page).to have_no_content('Like')
+        expect(page).to have_no_content('Dislike')
       end
     end
 
     scenario 'can see vote rating of answer' do
       within '.answers' do
-        expect(page).to have_content('+1')
+        expect(page).to have_content('1')
       end
     end
   end

@@ -9,71 +9,74 @@ module VotesHelper
     dislike_params = dislike_params_for(vote, resource)
 
     if vote.new_record?
-      "#{post_form(like_params)} #{post_form(dislike_params)}"
+      "#{post_form(like_params)} #{vote_rating(resource)} #{post_form(dislike_params)}"
     elsif vote.value?
-      "#{delete_form(like_params)} #{patch_form(dislike_params)}"
+      "#{delete_form(like_params)} #{vote_rating(resource)} #{patch_form(dislike_params)}"
     else
-      "#{patch_form(like_params)} #{delete_form(dislike_params)}"
+      "#{patch_form(like_params)} #{vote_rating(resource)} #{delete_form(dislike_params)}"
     end
   end
 
   def like_params_for(vote, resource)
     { vote: vote,
       resource: resource,
-      count: resource.likes.count.to_s,
       button_text: like_button_text,
+      type: 'like',
       value: true }
   end
 
   def dislike_params_for(vote, resource)
     { vote: vote,
       resource: resource,
-      count: resource.dislikes.count.to_s,
       button_text: dislike_button_text,
+      type: 'dislike',
       value: false }
   end
 
   def delete_form(params)
-    form_for params[:vote], delete_options do |f|
-      concat(f.label(:value, params[:count])) if params[:count]
-      concat(f.submit(params[:button_text], class: 'red'))
-    end
+    link_to params[:button_text],
+            path_to_vote(params[:resource]),
+            delete_options.merge({ class: 'red',
+                                   data: { format: :json,
+                                           vote: params[:type],
+                                           params: "vote[value]=#{params[:value]}" } })
   end
 
   def patch_form(params)
-    form_for params[:vote], patch_options do |f|
-      concat(f.label(:value, params[:count])) if params[:count]
-      concat(f.hidden_field(:value, value: params[:value]))
-      concat(f.submit(params[:button_text]))
-    end
+    link_to params[:button_text],
+            path_to_vote(params[:resource]),
+            patch_options.merge({ data: { format: :json,
+                                          vote: params[:type],
+                                          params: "vote[value]=#{params[:value]}" } })
   end
 
   def post_form(params)
-    form_for params[:vote], post_options(params[:resource]) do |f|
-      concat(f.label(:value, params[:count])) if params[:count]
-      concat(f.hidden_field(:value, value: params[:value]))
-      concat(f.submit(params[:button_text]))
-    end
+    link_to params[:button_text],
+            path_to_vote(params[:resource]),
+            post_options.merge({ data: { format: :json,
+                                         vote: params[:type],
+                                         params: "vote[value]=#{params[:value]}" } })
   end
 
-  def patch_options
-    { remote: true }
+  def path_to_vote(resource)
+    polymorphic_path([:vote, resource])
   end
 
-  def delete_options
-    { remote: true, method: :delete }
+  def patch_options(options = {})
+    { remote: true, method: :patch, data: { format: :json } }
   end
 
-  def post_options(resource)
-    { url: polymorphic_path([resource, :votes]), remote: true }
+  def delete_options(options = {})
+    { remote: true, method: :delete, data: { format: :json } }
+  end
+
+  def post_options(options = {})
+    { remote: true, method: :post, data: { format: :json } }
   end
 
   def vote_rating(resource)
-    content_tag 'span' do
-      rating = resource.likes.count - resource.dislikes.count
-      rating = "+#{rating}" if rating.positive?
-
-      rating.to_s
+    content_tag 'span', data: { vote: 'rate' } do
+      (resource.likes.count - resource.dislikes.count).to_s
     end
   end
 

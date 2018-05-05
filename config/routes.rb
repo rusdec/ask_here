@@ -9,8 +9,12 @@ Rails.application.routes.draw do
     delete :sign_out, to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
-  concern :votable do
-    resources :votes, only: %i[create update destroy], shallow: true
+  concern :votable do |options|
+    member do
+      post :vote, to: "#{options[:model]}#create_vote"
+      delete :vote, to: "#{options[:model]}#destroy_vote"
+      patch :vote, to: "#{options[:model]}#update_vote"
+    end
   end
 
   resources :questions do
@@ -18,10 +22,9 @@ Rails.application.routes.draw do
                         only: %i[create update destroy] do
       patch :best_answer, on: :member 
       patch :not_best_answer, on: :member 
-      concerns :votable
+      concerns :votable, model: :answers
     end
-
-    concerns :votable
+    concerns :votable, model: :questions
   end
 
   # For details on the DSL available within this file,

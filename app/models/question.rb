@@ -1,10 +1,9 @@
 class Question < ApplicationRecord
   include Attachable
   include Votable
+  include Userable
 
   has_many :answers, dependent: :destroy
-
-  belongs_to :user
 
   validates :body, { presence: true,
                      length: { minimum: 10,
@@ -20,8 +19,5 @@ class Question < ApplicationRecord
 
   def persisted_answers
     answers.persisted_answers
-  end
-
-  def vote
   end
 end

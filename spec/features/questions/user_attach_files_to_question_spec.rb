@@ -40,7 +40,7 @@ feature 'User can attach files to question', %q{
           click_on 'Edit'
           attach_files({ context: '.question_editable_attachements', files: files })
           click_on 'Save'
-          
+
           files.each do |file|
             expect(page).to have_content(file[:name])
           end
