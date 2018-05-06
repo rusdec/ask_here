@@ -1,19 +1,19 @@
 require 'rails_helper'
 require 'with_model'
 
-class AnyVotablesController < ApplicationController; end
+class AnyVotedsController < ApplicationController; end
 
-RSpec.describe AnyVotablesController, type: :controller do
+RSpec.describe AnyVotedsController, type: :controller do
 
   controller do
     before_action :authenticate_user!
     include Voted
   end
 
-  with_model :AnyVotable do
+  with_model :AnyVoted do
     table do |t|
       t.string :text, default: ''
-      t.references :user
+      t.integer :user_id
     end
 
     model do
@@ -26,20 +26,20 @@ RSpec.describe AnyVotablesController, type: :controller do
     routes.draw do
       concern :votable do
         member do
-          post :vote, to: 'any_votables#create_vote'
-          patch :vote, to: 'any_votables#update_vote'
-          delete :vote, to: 'any_votables#destroy_vote'
+          post :vote, to: 'any_voteds#create_vote'
+          patch :vote, to: 'any_voteds#update_vote'
+          delete :vote, to: 'any_voteds#destroy_vote'
         end
       end
 
-      resources :any_votables do
-        concerns [:votable]
+      resources :any_voteds do
+        concerns :votable
       end
     end
   end
 
   let(:user) { create(:user) }
-  let(:any_votable) { AnyVotable.create(user: user) }
+  let(:any_votable) { AnyVoted.create(user: user) }
 
   describe 'POST #create_vote' do
     let(:params) do
