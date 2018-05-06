@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   root to: 'questions#index'
 
-  #devise_for :users, path: ''
   devise_for :users, skip: [:sessions]
   as :user do
     get :sign_in, to: 'devise/sessions#new', as: :new_user_session
@@ -11,9 +10,9 @@ Rails.application.routes.draw do
 
   concern :votable do |options|
     member do
-      post :vote, to: "#{options[:model]}#create_vote"
-      delete :vote, to: "#{options[:model]}#destroy_vote"
-      patch :vote, to: "#{options[:model]}#update_vote"
+      post :vote, to: "#{options[:controller]}#create_vote"
+      delete :vote, to: "#{options[:controller]}#destroy_vote"
+      patch :vote, to: "#{options[:controller]}#update_vote"
     end
   end
 
@@ -22,9 +21,9 @@ Rails.application.routes.draw do
                         only: %i[create update destroy] do
       patch :best_answer, on: :member 
       patch :not_best_answer, on: :member 
-      concerns :votable, model: :answers
+      concerns :votable, controller: :answers
     end
-    concerns :votable, model: :questions
+    concerns :votable, controller: :questions
   end
 
   # For details on the DSL available within this file,
