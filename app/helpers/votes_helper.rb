@@ -20,7 +20,6 @@ module VotesHelper
   def like_params_for(vote, resource)
     { vote: vote,
       resource: resource,
-      button_text: like_button_text,
       type: 'like',
       value: true }
   end
@@ -28,50 +27,39 @@ module VotesHelper
   def dislike_params_for(vote, resource)
     { vote: vote,
       resource: resource,
-      button_text: dislike_button_text,
       type: 'dislike',
       value: false }
   end
 
   def delete_form(params)
-    link_to params[:button_text],
+    link_to params[:type].capitalize,
             path_to_vote(params[:resource]),
-            delete_options.merge({ class: 'red',
-                                   data: { format: :json,
-                                           vote: params[:type],
-                                           params: "vote[value]=#{params[:value]}" } })
+            options_for_method(:delete).merge({ class: 'red', data: vote_link_data(params) })
   end
 
   def patch_form(params)
-    link_to params[:button_text],
+    link_to params[:type].capitalize,
             path_to_vote(params[:resource]),
-            patch_options.merge({ data: { format: :json,
-                                          vote: params[:type],
-                                          params: "vote[value]=#{params[:value]}" } })
+            options_for_method(:patch).merge({ data: vote_link_data(params) })
   end
 
   def post_form(params)
-    link_to params[:button_text],
+    link_to params[:type].capitalize,
             path_to_vote(params[:resource]),
-            post_options.merge({ data: { format: :json,
-                                         vote: params[:type],
-                                         params: "vote[value]=#{params[:value]}" } })
+            options_for_method(:post).merge({ data: vote_link_data(params) })
+  end
+
+  def vote_link_data(params)
+    { vote: params[:type],
+      params: value_attribute(params[:value]) }
   end
 
   def path_to_vote(resource)
     polymorphic_path([:vote, resource])
   end
 
-  def patch_options(options = {})
-    { remote: true, method: :patch, data: { format: :json } }
-  end
-
-  def delete_options(options = {})
-    { remote: true, method: :delete, data: { format: :json } }
-  end
-
-  def post_options(options = {})
-    { remote: true, method: :post, data: { format: :json } }
+  def options_for_method(method)
+    { remote: true, method: method, data: { format: :json } }
   end
 
   def vote_rating(resource)
@@ -80,15 +68,11 @@ module VotesHelper
     end
   end
 
-  def like_button_text
-    'Like'
-  end
-
-  def dislike_button_text
-    'Dislike'
-  end
-
   def vote_container_klass_name(resource)
     "vote-#{resource.class.to_s.downcase}-#{resource.id}"
+  end
+
+  def value_attribute(value)
+    "vote[value]=#{value}"
   end
 end
