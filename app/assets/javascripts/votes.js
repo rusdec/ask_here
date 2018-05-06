@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.vote a').forEach((link) => {
-    link.addEventListener('ajax:success', (ev) => {
+  document.querySelectorAll('.vote a').forEach((vote) => {
+    vote.addEventListener('ajax:success', (ev) => {
       let response = parseAjaxResponse(ev)
       if (response.data.errors) {
         showErrors(response.data.errors)
       } else {
-        updateVotesRate({element: link, rate: response.data.votes.rate})
-        switchVoteMethod(link)
+        updateVotesRate({element: vote, rate: response.data.votes.rate})
+        updateVotes(vote)
       }
     })
   })
@@ -19,44 +19,30 @@ function updateVotesRate(params) {
   }
 }
 
-function switchVoteMethod(vote) {
+function updateVotes(vote) {
+  let votePair = votePairFor(vote)
   switch(vote.dataset.method) {
     case 'post':
-      inversePair(vote)
     case 'patch':
+      updateVotesMethods([{vote: vote, method: 'delete'},{vote: votePair, method: 'patch'}])
+      updateVotesMarkers([vote, votePair])
       break
     case 'delete':
-      resetPair(vote)
+      updateVotesMethods([{vote: vote, method: 'post'},{vote: votePair, method: 'post'}])
+      updateVotesMarkers([vote, votePair])
       break
   }
 }
 
-function inversePair(vote) {
-  inverseMarker(vote)
-  inverseMethods({vote: vote, methods: {vote: 'delete', pair: 'patch'}})
+function updateVotesMarkers(votes) {
+  votes.filter(vote => {
+    vote.dataset.method == 'delete' ? vote.classList.add('red')
+                                    : vote.classList.remove('red')
+  })
 }
 
-function resetPair(vote) {
-  [vote, votePairFor(vote)].forEach(v => resetMarker(v))
-  inverseMethods({vote: vote, methods: {vote: 'post', pair: 'post'}})
-}
-
-function inverseMethods(params) {
-  updateVoteMethod({vote: params.vote, method: params.methods.vote})
-  updateVoteMethod({vote: votePairFor(params.vote), method: params.methods.pair})
-}
-
-function inverseMarker(vote) {
-  vote.classList.add('red')
-  resetMarker(votePairFor(vote))
-}
-
-function resetMarker(vote) {
-  vote.classList.remove('red')
-}
-
-function updateVoteMethod(params) {
-  params.vote.dataset.method = params.method
+function updateVotesMethods(elements) {
+  elements.forEach(element => element.vote.dataset.method = element.method)
 }
 
 function votePairFor(vote) {
