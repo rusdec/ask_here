@@ -42,6 +42,5 @@ RSpec.describe Answer, type: :model do
     it 'first' do
       expect(question.answers.first).to eq(best_answer)
     end
-
   end
 end
