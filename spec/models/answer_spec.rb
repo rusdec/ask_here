@@ -27,7 +27,7 @@ RSpec.describe Answer, type: :model do
 
       it 'are not longer the best' do
         best_answer.not_best!
-        expect(best_answer).to_not be_best
+        expect(best_answer).to be_not_best
       end
     end
 
@@ -42,5 +42,6 @@ RSpec.describe Answer, type: :model do
     it 'first' do
       expect(question.answers.first).to eq(best_answer)
     end
+
   end
 end
