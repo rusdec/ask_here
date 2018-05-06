@@ -2,7 +2,7 @@ class Vote < ApplicationRecord
   include Userable
   belongs_to :votable, polymorphic: true
 
-  validates_uniqueness_of :votable_id, scope: [:votable_type, :user_id]
+  validates :user_id, uniqueness: { scope: [:votable_id, :votable_type] }
 
   scope :likes, -> { where(value: true) }
   scope :dislikes, -> { where(value: false) }

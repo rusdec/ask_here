@@ -8,8 +8,8 @@ RSpec.describe Vote, type: :model do
   describe 'validate uniqueness' do
     subject { build :vote }
 
-    it { should validate_uniqueness_of(:votable_id).
-           scoped_to(:votable_type, :user_id) }
+    it { should validate_uniqueness_of(:user_id).
+           scoped_to(:votable_id, :votable_type) }
   end
 
   it 'get vote for specific entity' do
