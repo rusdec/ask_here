@@ -9,9 +9,4 @@ module QuestionsHelper
              remote: true)
     end
   end
-
-  def extract_identifier(form_element)
-    form_element.object.file.identifier
-  end
-
 end

@@ -1,4 +1,4 @@
 ul.question_attachements
   - resource.each do |attachement|
     li.attachement
-      = link_to attachement.file.identifier, attachement.file.url
+      = link_to attachement.name, attachement.file.url
