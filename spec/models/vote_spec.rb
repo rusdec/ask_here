@@ -5,6 +5,9 @@ RSpec.describe Vote, type: :model do
 
   it { should belong_to(:votable) }
 
+  it { should validate_presence_of(:value) }
+  it { should allow_values(1, -1).for(:value) }
+
   describe 'validate uniqueness' do
     subject { build :vote }
 
@@ -25,21 +28,20 @@ RSpec.describe Vote, type: :model do
     let!(:question) { create(:question, user: create(:user)) }
     before do
       create(:question_vote,
-             votable: create(:question, user: create(:user)),
              user: create(:user),
-             value: true)
-      create(:question_vote, votable: question, user: create(:user), value: true)
+             votable: create(:question, user: create(:user)))
+      create(:question_vote, votable: question, user: create(:user))
       2.times do
-        create(:question_vote, votable: question, user: create(:user), value: false)
+        create(:question_vote, votable: question, user: create(:user), value: -1)
       end
     end
 
     it '#likes' do
-      expect(question.votes.likes.count).to eq(1)
+      expect(question.votes.likes).to eq(1)
     end
 
     it '#dislikes' do
-      expect(question.votes.dislikes.count).to eq(2)
+      expect(question.votes.dislikes).to eq(2)
     end
 
     it '#rate' do
@@ -48,6 +50,14 @@ RSpec.describe Vote, type: :model do
 
     it '#rating' do
       expect(question.votes.rating).to eq(likes: 1, dislikes: 2, rate: -1)
+    end
+
+    it '#like?' do
+      expect(question.votes.first).to be_like
+    end
+
+    it '#dislike?' do
+      expect(question.votes.last).to be_dislike
     end
   end
 end

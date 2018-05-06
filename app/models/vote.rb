@@ -2,20 +2,36 @@ class Vote < ApplicationRecord
   include Userable
   belongs_to :votable, polymorphic: true
 
+  validates :value, presence: true
   validates :user_id, uniqueness: { scope: [:votable_id, :votable_type] }
 
-  scope :likes, -> { where(value: true) }
-  scope :dislikes, -> { where(value: false) }
+  class << self
+    def vote_for(votable)
+      find_by(votable: votable)
+    end
 
-  def self.vote_for(votable)
-    find_by(votable: votable)
+    def likes
+      where(value: 1).count
+    end
+
+    def dislikes
+      where(value: -1).count
+    end
+
+    def rate
+      sum(:value)
+    end
+
+    def rating
+      { likes: likes, dislikes: dislikes, rate: rate }
+    end
   end
 
-  def self.rate
-    likes.count - dislikes.count
+  def like?
+    value == 1
   end
 
-  def self.rating
-    { likes: likes.count, dislikes: dislikes.count, rate: rate }
+  def dislike?
+    value == -1
   end
 end

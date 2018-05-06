@@ -16,8 +16,9 @@ module Voted
     end
 
     def update_vote
-      if @vote.&update(vote_params) ? json_respond_vote_success('Vote update success')
-                                    : json_respond_vote_error(vote.errors.full_messages)
+      if @vote
+        @vote.update(vote_params) ? json_respond_vote_success('Vote update success')
+                                  : json_respond_vote_error(@vote.errors.full_messages)
       else
         json_respond_you_can_not_vote
       end
@@ -25,8 +26,9 @@ module Voted
 
 
     def destroy_vote
-      if @vote.&destroy ? json_respond_vote_success('Vote delete success')
-                        : json_respond_vote_error(vote.errors.full_messages)
+      if @vote
+        @vote.destroy ? json_respond_vote_success('Vote delete success')
+                      : json_respond_vote_error(@vote.errors.full_messages)
       else
         json_respond_you_can_not_vote
       end

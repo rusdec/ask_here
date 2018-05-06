@@ -43,7 +43,7 @@ RSpec.describe AnyVotedsController, type: :controller do
 
   describe 'POST #create_vote' do
     let(:params) do
-      { id: any_votable, vote: { value: true } }
+      { id: any_votable, vote: { value: 1 } }
     end
 
     context 'Authenticated user' do
@@ -96,7 +96,7 @@ RSpec.describe AnyVotedsController, type: :controller do
   describe 'PATCH #update' do
     let!(:vote) { create(:vote, user: user, votable: any_votable, value: false) }
     let(:params) do
-      { id: any_votable, vote: { value: true } }
+      { id: any_votable, vote: { value: 1 } }
     end
 
     context 'Authenticated user' do
@@ -151,7 +151,7 @@ RSpec.describe AnyVotedsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { create(:vote, user: user, votable: any_votable, value: false) }
+    before { create(:vote, user: user, votable: any_votable, value: -1) }
     let(:params) { { id: any_votable } }
 
     context 'Authenticated user' do

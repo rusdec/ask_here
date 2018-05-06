@@ -1,16 +1,16 @@
 module VotesHelper
-  def vote_forms(params)
+  def vote_links(params)
     params[:vote] ||= current_user.votes.build(votable: params[:resource])
-    get_forms(params[:vote], params[:resource]).html_safe
+    build_vote_links(params[:vote], params[:resource]).html_safe
   end
 
-  def get_forms(vote, resource)
+  def build_vote_links(vote, resource)
     like_params = like_params_for(vote, resource)
     dislike_params = dislike_params_for(vote, resource)
 
     if vote.new_record?
       "#{post_vote_link(like_params)} #{vote_rating(resource)} #{post_vote_link(dislike_params)}"
-    elsif vote.value?
+    elsif vote.like?
       "#{delete_vote_link(like_params)} #{vote_rating(resource)} #{patch_vote_link(dislike_params)}"
     else
       "#{patch_vote_link(like_params)} #{vote_rating(resource)} #{delete_vote_link(dislike_params)}"
@@ -21,11 +21,11 @@ module VotesHelper
     { vote: vote,
       resource: resource,
       type: 'like',
-      value: true }
+      value: 1 }
   end
 
   def dislike_params_for(vote, resource)
-    like_params_for(vote, resource).merge(type: 'dislike', value: false)
+    like_params_for(vote, resource).merge(type: 'dislike', value: -1)
   end
 
   def delete_vote_link(params)
@@ -61,7 +61,7 @@ module VotesHelper
 
   def vote_rating(resource)
     content_tag 'span', data: { vote: 'rate' } do
-      (resource.likes.count - resource.dislikes.count).to_s
+      resource.rate.to_s
     end
   end
 
