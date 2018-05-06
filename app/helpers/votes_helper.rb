@@ -9,11 +9,11 @@ module VotesHelper
     dislike_params = dislike_params_for(vote, resource)
 
     if vote.new_record?
-      "#{post_form(like_params)} #{vote_rating(resource)} #{post_form(dislike_params)}"
+      "#{post_vote_link(like_params)} #{vote_rating(resource)} #{post_vote_link(dislike_params)}"
     elsif vote.value?
-      "#{delete_form(like_params)} #{vote_rating(resource)} #{patch_form(dislike_params)}"
+      "#{delete_vote_link(like_params)} #{vote_rating(resource)} #{patch_vote_link(dislike_params)}"
     else
-      "#{patch_form(like_params)} #{vote_rating(resource)} #{delete_form(dislike_params)}"
+      "#{patch_vote_link(like_params)} #{vote_rating(resource)} #{delete_vote_link(dislike_params)}"
     end
   end
 
@@ -25,41 +25,38 @@ module VotesHelper
   end
 
   def dislike_params_for(vote, resource)
-    { vote: vote,
-      resource: resource,
-      type: 'dislike',
-      value: false }
+    like_params_for(vote, resource).merge(type: 'dislike', value: false)
   end
 
-  def delete_form(params)
-    link_to params[:type].capitalize,
-            path_to_vote(params[:resource]),
-            options_for_method(:delete).merge({ class: 'red', data: vote_link_data(params) })
+  def delete_vote_link(params)
+    vote_link(params.merge(method: :delete))
   end
 
-  def patch_form(params)
-    link_to params[:type].capitalize,
-            path_to_vote(params[:resource]),
-            options_for_method(:patch).merge({ data: vote_link_data(params) })
+  def patch_vote_link(params)
+    vote_link(params.merge(method: :patch))
   end
 
-  def post_form(params)
-    link_to params[:type].capitalize,
-            path_to_vote(params[:resource]),
-            options_for_method(:post).merge({ data: vote_link_data(params) })
+  def post_vote_link(params)
+    vote_link(params.merge(method: :post))
   end
 
-  def vote_link_data(params)
-    { vote: params[:type],
-      params: value_attribute(params[:value]) }
+  def vote_link(params)
+    options = vote_link_options(params)
+    options.merge!(class: 'red') if params[:method] == :delete
+
+    link_to params[:type].capitalize, path_to_vote(params[:resource]), options
+  end
+
+  def vote_link_options(params)
+    { remote: true,
+      method: params[:method],
+      data: { format: :json,
+              vote: params[:type],
+              params: value_attribute(params[:value]) } }
   end
 
   def path_to_vote(resource)
     polymorphic_path([:vote, resource])
-  end
-
-  def options_for_method(method)
-    { remote: true, method: method, data: { format: :json } }
   end
 
   def vote_rating(resource)
