@@ -2,7 +2,7 @@ class Vote < ApplicationRecord
   include Userable
   belongs_to :votable, polymorphic: true
 
-  validates :value, presence: true
+  validates :value, presence: true, acceptance: { accept: [-1, 1] }
   validates :user_id, uniqueness: { scope: [:votable_id, :votable_type] }
 
   class << self

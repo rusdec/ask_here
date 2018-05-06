@@ -7,6 +7,7 @@ RSpec.describe Vote, type: :model do
 
   it { should validate_presence_of(:value) }
   it { should allow_values(1, -1).for(:value) }
+  it { should_not allow_values('2', '-2', 'f', '-').for(:value) }
 
   describe 'validate uniqueness' do
     subject { build :vote }
