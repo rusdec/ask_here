@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'models_helper'
 
 RSpec.describe Vote, type: :model do
   it_behaves_like 'userable'
@@ -40,6 +40,14 @@ RSpec.describe Vote, type: :model do
 
     it '#dislikes' do
       expect(question.votes.dislikes.count).to eq(2)
+    end
+
+    it '#rate' do
+      expect(question.votes.rate).to eq(-1)
+    end
+
+    it '#rating' do
+      expect(question.votes.rating).to eq(likes: 1, dislikes: 2, rate: -1)
     end
   end
 end

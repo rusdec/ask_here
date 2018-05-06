@@ -38,7 +38,7 @@ module Voted
 
     def json_respond_vote_success(message = '')
       render json: { status: true, message: message,
-                     votes: resource_votes_count }
+                     votes: @votable.rating }
     end
 
     def json_respond_vote_error(messages = [])
@@ -47,13 +47,6 @@ module Voted
 
     def json_respond_you_can_not_vote
       json_respond_vote_error(['You can not vote for it'])
-    end
-
-    def resource_votes_count
-      likes = @votable.likes.count
-      dislikes = @votable.dislikes.count
-
-      { likes: likes, dislikes: dislikes, rate: likes - dislikes }
     end
 
     def set_votable
