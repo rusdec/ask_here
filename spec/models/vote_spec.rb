@@ -1,6 +1,18 @@
 require_relative 'models_helper'
 
 RSpec.describe Vote, type: :model do
+
+  with_model :AnyVotable do
+    table do |t|
+      t.integer :user_id
+    end
+
+    model do
+      include Votable
+      belongs_to :user
+    end
+  end
+
   it_behaves_like 'userable'
 
   it { should belong_to(:votable) }
@@ -16,49 +28,66 @@ RSpec.describe Vote, type: :model do
            scoped_to(:votable_id, :votable_type) }
   end
 
-  it 'get vote for specific entity' do
-    user = create(:user)
-    question = create(:question, user: create(:user))
-    vote = create(:question_vote, votable: question, user: user)
-    create(:question_vote, votable: question, user: create(:user))
+  let(:user) { create(:user) }
+  let(:any_votable) { AnyVotable.create(user: create(:user)) }
 
-    expect(user.votes.vote_for(question)).to eq(vote)
+  it 'get vote for specific entity' do
+    vote = create(:vote, votable: any_votable, user: user)
+
+    expect(user.votes.vote_for(any_votable)).to eq(vote)
   end
 
+
   describe 'select likes by type' do
-    let!(:question) { create(:question, user: create(:user)) }
     before do
-      create(:question_vote,
-             user: create(:user),
-             votable: create(:question, user: create(:user)))
-      create(:question_vote, votable: question, user: create(:user))
+      #one like
+      create(:vote, votable: any_votable, user: create(:user))
       2.times do
-        create(:question_vote, votable: question, user: create(:user), value: -1)
+        #two dislike
+        create(:vote, votable: any_votable, user: create(:user), value: -1)
       end
     end
 
     it '#likes' do
-      expect(question.votes.likes).to eq(1)
+      expect(any_votable.votes.likes).to eq(1)
     end
 
     it '#dislikes' do
-      expect(question.votes.dislikes).to eq(2)
+      expect(any_votable.votes.dislikes).to eq(2)
     end
 
     it '#rate' do
-      expect(question.votes.rate).to eq(-1)
+      expect(any_votable.votes.rate).to eq(-1)
     end
 
     it '#rating' do
-      expect(question.votes.rating).to eq(likes: 1, dislikes: 2, rate: -1)
+      expect(any_votable.votes.rating).to eq(likes: 1, dislikes: 2, rate: -1)
+    end
+  end
+
+  it '#like?' do
+    create(:vote, votable: any_votable, user: user)
+
+    expect(any_votable.votes.first).to be_like
+  end
+
+  it '#dislike?' do
+    create(:vote, votable: any_votable, user: user, value: -1)
+
+    expect(any_votable.votes.last).to be_dislike
+  end
+
+  describe '#vote!' do
+    before do
+      create(:vote, votable: any_votable, user: user, value: 1)
+      user.votes.vote!(votable: any_votable, value: -1)
     end
 
-    it '#like?' do
-      expect(question.votes.first).to be_like
+    it 'delete old record' do
+      expect(user.votes.likes).to eq(0)
     end
-
-    it '#dislike?' do
-      expect(question.votes.last).to be_dislike
+    it 'save new record' do
+      expect(user.votes.dislikes).to eq(1)
     end
   end
 end

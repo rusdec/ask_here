@@ -25,6 +25,14 @@ class Vote < ApplicationRecord
     def rating
       { likes: likes, dislikes: dislikes, rate: rate }
     end
+
+    def vote!(params)
+      vote = vote_for(params[:votable])
+      ApplicationRecord.transaction do
+        vote.destroy unless vote.nil?
+        create(params)
+      end
+    end
   end
 
   def like?
@@ -34,4 +42,5 @@ class Vote < ApplicationRecord
   def dislike?
     value == -1
   end
+
 end

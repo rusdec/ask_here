@@ -10,9 +10,8 @@ Rails.application.routes.draw do
 
   concern :votable do |options|
     member do
-      post :vote, to: "#{options[:controller]}#create_vote"
-      delete :vote, to: "#{options[:controller]}#destroy_vote"
-      patch :vote, to: "#{options[:controller]}#update_vote"
+      post :vote, to: "#{options[:controller]}#add_vote"
+      delete :vote, to: "#{options[:controller]}#cancel_vote"
     end
   end
 

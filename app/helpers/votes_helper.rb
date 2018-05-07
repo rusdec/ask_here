@@ -11,9 +11,9 @@ module VotesHelper
     if vote.new_record?
       "#{post_vote_link(like_params)} #{vote_rating(resource)} #{post_vote_link(dislike_params)}"
     elsif vote.like?
-      "#{delete_vote_link(like_params)} #{vote_rating(resource)} #{patch_vote_link(dislike_params)}"
+      "#{delete_vote_link(like_params)} #{vote_rating(resource)} #{post_vote_link(dislike_params)}"
     else
-      "#{patch_vote_link(like_params)} #{vote_rating(resource)} #{delete_vote_link(dislike_params)}"
+      "#{post_vote_link(like_params)} #{vote_rating(resource)} #{delete_vote_link(dislike_params)}"
     end
   end
 
@@ -30,10 +30,6 @@ module VotesHelper
 
   def delete_vote_link(params)
     vote_link(params.merge(method: :delete))
-  end
-
-  def patch_vote_link(params)
-    vote_link(params.merge(method: :patch))
   end
 
   def post_vote_link(params)

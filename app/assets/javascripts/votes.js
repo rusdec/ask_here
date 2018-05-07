@@ -20,33 +20,27 @@ function updateVotesRate(params) {
 }
 
 function updateVotes(vote) {
-  let votePair = votePairFor(vote)
-  switch(vote.dataset.method) {
-    case 'post':
-    case 'patch':
-      updateVotesMethods([{vote: vote, method: 'delete'},{vote: votePair, method: 'patch'}])
-      updateVotesMarkers([vote, votePair])
-      break
-    case 'delete':
-      updateVotesMethods([{vote: vote, method: 'post'},{vote: votePair, method: 'post'}])
-      updateVotesMarkers([vote, votePair])
-      break
-  }
+  updateVotesMethods(vote, findVotesIn(vote.parentNode))
+  updateVotesMarkers(findVotesIn(vote.parentNode))
 }
 
 function updateVotesMarkers(votes) {
-  votes.filter(vote => {
+  votes.forEach(vote => {
     vote.dataset.method == 'delete' ? vote.classList.add('red')
                                     : vote.classList.remove('red')
   })
 }
 
-function updateVotesMethods(elements) {
-  elements.forEach(element => element.vote.dataset.method = element.method)
+function updateVotesMethods(vote, votes = []) {
+  let inverseMethodsDict = {post: 'delete', delete: 'post'}
+  votes.forEach(element => {
+    if (element != vote) {
+      element.dataset.method = 'post'
+    }
+  })
+  vote.dataset.method = inverseMethodsDict[vote.dataset.method]
 }
 
-function votePairFor(vote) {
-  let votePairDict = { like: 'dislike', dislike: 'like' }
-  let pair = votePairDict[vote.dataset.vote]
-  return vote.parentNode.querySelector('[data-vote="'+pair+'"]')
+function findVotesIn(element) {
+  return element.querySelectorAll('a')
 }
