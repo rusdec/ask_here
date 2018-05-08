@@ -38,6 +38,7 @@ gem 'devise'
 gem 'jquery-rails'
 gem 'carrierwave'
 gem 'cocoon'
+gem 'with_model'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -45,7 +46,7 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.17'
   gem 'selenium-webdriver'
-
+  gem 'geckodriver-helper'
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'database_cleaner'

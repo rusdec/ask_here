@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+
   let(:user) { create(:user) }
   let(:questions) { create_list(:question, 2, user: user) }
   let(:question) { questions.last }

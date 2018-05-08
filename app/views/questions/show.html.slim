@@ -5,15 +5,16 @@
     = render 'question_attachements', resource: @question.attachements
     - if current_user&.author_of?(@question)
       = question_remote_links(@question)
+    = render 'shared/vote', resource: @question
   
   - if current_user&.author_of?(@question)
     = render 'edit_fast', resource: @question
 
 h3= 'Answers'
 .answers
-  = render @question.created_answers
+  = render @question.persisted_answers
 
 - if current_user
   h3= 'New answer'
-  .new-answer
+  #new-answer
     = render 'answers/form', resource: @answer

@@ -1,20 +1,22 @@
 class Answer < ApplicationRecord
+  include Attachable
+  include Votable
+  include Userable
+
   belongs_to :question
-  belongs_to :user
-  has_many :attachements, as: :attachable,
-                          inverse_of: :attachable,
-                          dependent: :destroy
 
   default_scope { order(best: :DESC).order(:id) }
   scope :best_answers, -> { where(best: true) }
-  scope :created_answers, -> { where.not(id: nil) }
+  scope :persisted_answers, -> { where.not(id: nil) }
 
   validates :body, { presence: true,
                      length: { minimum: 10,
                                maximum: 1000 } }
 
-  accepts_nested_attributes_for :attachements, allow_destroy: true,
-                                               reject_if: :all_blank
+  def not_best?
+    !best?
+  end
+
   def not_best!
     update(best: false)
   end

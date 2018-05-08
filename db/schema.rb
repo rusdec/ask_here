@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424135511) do
+ActiveRecord::Schema.define(version: 20180506140614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20180424135511) do
     t.string "attachable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", default: ""
     t.index ["attachable_id", "attachable_type"], name: "index_attachements_on_attachable_id_and_attachable_type"
   end
 
@@ -58,6 +59,16 @@ ActiveRecord::Schema.define(version: 20180424135511) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "votes", force: :cascade do |t|
+    t.integer "votable_id"
+    t.string "votable_type"
+    t.integer "user_id"
+    t.integer "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["votable_id", "user_id", "votable_type"], name: "index_votes_on_votable_id_and_user_id_and_votable_type", unique: true
   end
 
   add_foreign_key "answers", "users"

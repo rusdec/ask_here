@@ -1,13 +1,11 @@
-require 'rails_helper'
+require_relative 'models_helper'
 
 RSpec.describe Answer, type: :model do
+  it_behaves_like 'votable'
+  it_behaves_like 'attachable'
+  it_behaves_like 'userable'
+
   it { should belong_to(:question) }
-  it { should have_many(:attachements).dependent(:destroy) }
-  it do
-    should accept_nested_attributes_for(:attachements).
-      allow_destroy(true)
-  end
-  it { should belong_to(:user) }
 
   it { should validate_presence_of(:body) }
 
@@ -29,7 +27,7 @@ RSpec.describe Answer, type: :model do
 
       it 'are not longer the best' do
         best_answer.not_best!
-        expect(best_answer).to_not be_best
+        expect(best_answer).to be_not_best
       end
     end
 

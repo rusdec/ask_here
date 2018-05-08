@@ -1,9 +1,9 @@
 class Question < ApplicationRecord
+  include Attachable
+  include Votable
+  include Userable
+
   has_many :answers, dependent: :destroy
-  has_many :attachements, as: :attachable,
-                          inverse_of: :attachable,
-                          dependent: :destroy
-  belongs_to :user
 
   validates :body, { presence: true,
                      length: { minimum: 10,
@@ -13,14 +13,11 @@ class Question < ApplicationRecord
                       length: { minimum: 10,
                                 maximum: 30 } }
 
-  accepts_nested_attributes_for :attachements, allow_destroy: true,
-                                               reject_if: :all_blank
-
   def best_answers
     answers.best_answers
   end
 
-  def created_answers
-    answers.created_answers
+  def persisted_answers
+    answers.persisted_answers
   end
 end

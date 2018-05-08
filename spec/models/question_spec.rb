@@ -1,15 +1,11 @@
-require 'rails_helper'
+require_relative 'models_helper'
 
 RSpec.describe Question, type: :model do
+  it_behaves_like 'votable'
+  it_behaves_like 'attachable'
+  it_behaves_like 'userable'
+
   it { should have_many(:answers).dependent(:destroy) }
-  it { should have_many(:attachements).dependent(:destroy) }
-
-  it do
-    should accept_nested_attributes_for(:attachements).
-      allow_destroy(true)
-  end
-
-  it { should belong_to(:user) }
 
   it { should validate_presence_of(:title) }
   it { should validate_presence_of(:body) }
@@ -29,7 +25,7 @@ RSpec.describe Question, type: :model do
     question = user.questions.last
     question.answers.new
 
-    expect(question.created_answers.count).to eq(answers_count)
+    expect(question.persisted_answers.count).to eq(answers_count)
   end
 
   it 'select only best answers' do

@@ -50,10 +50,14 @@ feature 'User choose best answer', %q{
     end
 
     describe 'when not author of question' do
-      scenario 'can\'t choose best answer' do
-        sign_in(create(:user))
+      let(:other_user) { create(:user) }
+      before do
+        create(:answer, question: question, user: other_user)
+        sign_in(other_user)
         visit question_path(question)
+      end
 
+      scenario 'can\'t choose best answer', js: true do
         expect(page).to have_no_content('Best answer')
       end
     end

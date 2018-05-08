@@ -12,7 +12,7 @@ function listenClickAnswerLinksForToggling(linkSelector) {
 }
 
 function listenClickAnswerLinkForToggling(id, linkSelector) {
-  let link = findAnswer(id).querySelector(selector)
+  let link = findAnswer(id).querySelector(linkSelector)
   if (link) {
     link.addEventListener('click', () => { toggleVisibleAnswer(id) })
   }
