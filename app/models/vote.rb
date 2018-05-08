@@ -29,8 +29,8 @@ class Vote < ApplicationRecord
     def vote!(params)
       vote = vote_for(params[:votable])
       ApplicationRecord.transaction do
-        vote.destroy unless vote.nil?
-        create(params)
+        vote.destroy! unless vote.nil?
+        create!(params)
       end
     end
   end
