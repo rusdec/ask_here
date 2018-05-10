@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180506140614) do
+ActiveRecord::Schema.define(version: 20180510165202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20180506140614) do
     t.datetime "updated_at", null: false
     t.string "name", default: ""
     t.index ["attachable_id", "attachable_type"], name: "index_attachements_on_attachable_id_and_attachable_type"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string "body"
+    t.integer "commentable_id"
+    t.integer "user_id"
+    t.string "commentable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "questions", force: :cascade do |t|
