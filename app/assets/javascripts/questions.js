@@ -1,7 +1,29 @@
 document.addEventListener('DOMContentLoaded',() => {
   listenClickLinkEditQuestion()
   listenClickLinkCancelEditQuestion()
+  App.cable.subscriptions.create('QuestionChannel', {
+    connected: function() {
+      this.perform('follow')
+    },
+    received: function(data) {
+      appendQuestion(data)
+    }
+  })
 })
+
+
+function appendQuestion(question) {
+  let questions = document.querySelector('.questions')
+  if (questions) {
+    let body = questions.querySelector('tbody')
+    if (!body) {
+      body = document.createElement('tbody')
+      questions.append(body)
+    }
+
+    body.insertAdjacentHTML('beforeend', question)
+  }
+}
 
 function listenClickLinkEditQuestion() {
   let linkEditQuestion = document.querySelector('.link-edit-question')

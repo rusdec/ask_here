@@ -14,3 +14,6 @@
 //= require jquery
 //= require cocoon
 //= require_tree .
+
+var App = App || {};
+App.cable = ActionCable.createConsumer();
