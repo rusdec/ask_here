@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :comments, only: %i[destroy update]
+  concern :commentable do |options|
+    post :comments, to: "#{options[:controller]}#create_comment"
+  end
+
   resources :questions do
     resources :answers, shallow: true,
                         only: %i[create update destroy] do
@@ -23,6 +28,7 @@ Rails.application.routes.draw do
       concerns :votable, controller: :answers
     end
     concerns :votable, controller: :questions
+    concerns :commentable, controller: :questions
   end
 
   mount ActionCable.server => '/cable'
