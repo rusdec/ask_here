@@ -12,9 +12,17 @@ function parseAjaxResponse(e) {
   return { data: e.detail[0], status: e.detail[1], response: e.detail[2] }
 }
 
-function showErrors(errors = []) {
-  let alerts = document.querySelector('div.alert')
+function clearErrors(selector = 'div.alert') {
+  let alerts = document.querySelector(selector)
+  if (alerts) {
+    alerts.innerHTML = ''
+  }
+}
+
+function showErrors(errors = [], selector = 'div.alert') {
+  let alerts = document.querySelector(selector)
   if (alerts && errors) {
+    clearErrors(selector)
     errors.forEach((error) => {
       let p = document.createElement('p')
       p.textContent = error

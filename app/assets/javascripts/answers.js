@@ -1,45 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
-  listenClickLinkEditAnswers()
-  listenClickLinkCancelEditAnswers()
-})
-
-function listenClickAnswerLinksForToggling(linkSelector) {
-  let links = document.querySelectorAll(linkSelector)
-  links.forEach((link) => {
-    let answerId = link.parentElement.dataset.answerId
-    link.addEventListener('click', () => { toggleVisibleAnswer(answerId) })
-  })
-}
-
-function listenClickAnswerLinkForToggling(id, linkSelector) {
-  let link = findAnswer(id).querySelector(linkSelector)
-  if (link) {
-    link.addEventListener('click', () => { toggleVisibleAnswer(id) })
-  }
-}
-
-function listenClickLinkCancelEditAnswers() {
-  listenClickAnswerLinksForToggling('.link-cancel-edit-answer')
-}
-
-function listenClickLinkEditAnswers() {
-  listenClickAnswerLinksForToggling('.link-edit-answer')
-}
-
-function listenClickLinkEditAnswer(id) {
-  listenClickAnswerLinkForToggling(id, '.link-edit-answer')
-}
-
-function listenClickLinkCancelEditAnswer(id) {
-  listenClickAnswerLinkForToggling(id, '.link-cancel-edit-answer')
-}
-
 function findAnswer(id) {
   return document.querySelector(`.answer[data-id='${id}']`)
-}
-
-function findEditAnswerForm(id) {
-  return findAnswer(id).querySelector('.form-edit-answer')
 }
 
 function newOuterHtmlOfAnswerChild(params) {
@@ -53,19 +13,12 @@ function updateEditAnswerForm(id, html) {
   newOuterHtmlOfAnswerChild({id:id, childSelector:'.form-edit-answer', html:html})
 }
 
-function updateAnswerBody(id, html) {
-  newOuterHtmlOfAnswerChild({id:id, childSelector:'.body', html:html})
+function updateAnswerBody(id, text = '') {
+  findAnswer(id).querySelector('.body').textContent = text
 }
 
 function updateAnswerAttachements(id, html) {
   newOuterHtmlOfAnswerChild({id:id, childSelector:'.answer_attachements', html:html})
-}
-
-function toggleVisibleAnswer(id) {
-  toggleVisibleElements([
-    findEditAnswerForm(id),
-    findAnswer(id).querySelector('.data')
-  ])
 }
 
 /*
