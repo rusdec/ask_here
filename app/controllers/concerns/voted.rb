@@ -1,5 +1,6 @@
 module Voted
   extend ActiveSupport::Concern
+  include JsonResponsed
 
   included do
     before_action :set_votable, only: %i[add_vote cancel_vote]
@@ -8,36 +9,21 @@ module Voted
     def add_vote
       if current_user&.not_author_of?(@votable)
         vote = current_user.votes.vote!(vote_params.merge(votable: @votable))
-        vote.persisted? ? json_respond_vote_success('Vote success')
-                        : json_respond_vote_error(vote.errors.full_messages)
+        json_response_by_result(vote.persisted?, vote, { votes: @votable.rating })
       else
-        json_respond_you_can_not_vote
+        json_response_you_can_not_do_it
       end
     end
 
     def cancel_vote
       if @vote
-        @vote.destroy ? json_respond_vote_success('Vote delete success')
-                      : json_respond_vote_error(@vote.errors.full_messages)
+        json_response_by_result(@vote.destroy, @vote, { votes: @votable.rating })
       else
-        json_respond_you_can_not_vote
+        json_response_you_can_not_do_it
       end
     end
 
     private
-
-    def json_respond_vote_success(message = '')
-      render json: { status: true, message: message,
-                     votes: @votable.rating }
-    end
-
-    def json_respond_vote_error(messages = [])
-      render json: { status: false, errors: messages }
-    end
-
-    def json_respond_you_can_not_vote
-      json_respond_vote_error(['You can not vote for it'])
-    end
 
     def set_votable
       @votable = votable_klass.find(params[:id])

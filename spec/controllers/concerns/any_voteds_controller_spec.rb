@@ -56,7 +56,7 @@ RSpec.describe AnyVotedsController, type: :controller do
 
         it 'response body has error' do
           post :add_vote, params: params, format: :json
-          expect(response.body).to match('{"status":false,"errors":["You can not vote for it"]}')
+          expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
         end
       end
 
@@ -95,7 +95,7 @@ RSpec.describe AnyVotedsController, type: :controller do
 
         it 'response body has success' do
           post :add_vote, params: params, format: :json
-          expect(response.body).to match('{"status":true,"message":"Vote success","votes":{"likes":1,"dislikes":0,"rate":1}}')
+          expect(response.body).to match('{"status":true,"message":"Success","votes":{"likes":1,"dislikes":0,"rate":1}}')
         end
       end
     end
@@ -125,7 +125,7 @@ RSpec.describe AnyVotedsController, type: :controller do
 
         it 'response body has success' do
           delete :cancel_vote, params: params, format: :json
-          expect(response.body).to match('{"status":true,"message":"Vote delete success","votes":{"likes":0,"dislikes":0,"rate":0}}')
+          expect(response.body).to match('{"status":true,"message":"Success","votes":{"likes":0,"dislikes":0,"rate":0}}')
         end
       end
 
@@ -140,7 +140,7 @@ RSpec.describe AnyVotedsController, type: :controller do
 
         it 'response body has error' do
           delete :cancel_vote, params: params, format: :json
-          expect(response.body).to match('{"status":false,"errors":["You can not vote for it"]}')
+          expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
         end
       end
     end
