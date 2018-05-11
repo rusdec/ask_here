@@ -1,10 +1,11 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, except: %i[new create index]
+  before_action :set_question, only: %i[show update destroy]
 
   after_action :publish_question, only: %i[create]
 
   include Voted
+  include Commented
 
   def index
     @questions = Question.all
@@ -41,8 +42,7 @@ class QuestionsController < ApplicationController
   def publish_question
     puts @question.errors.any?
     return if @question.errors.any?
-    ActionCable.server.broadcast(
-      'questions',
+    ActionCable.server.broadcast('questions',
       ApplicationController.render(
         partial: 'questions/question',
         locals: { question: @question }
