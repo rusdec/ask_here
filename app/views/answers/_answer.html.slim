@@ -2,4 +2,4 @@
   - if current_user&.author_of?(answer)
     = inline_edit_element(resource: answer, data: render('answers/answer_data', answer: answer), params: {}, form: render('answers/inline_form', resource: answer))
   - else
-    render 'answers/answer_data', answer: answer
+    = render 'answers/answer_data', answer: answer

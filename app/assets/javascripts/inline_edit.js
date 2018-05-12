@@ -52,10 +52,12 @@ function listenClickEditLink(element) {
 }
 
 function toggleEditVisibility(element) {
-  ['.inline-edit-mode',
-   '.inline-edit-data',
-   '.link-cancel',
-   '.link-edit'].forEach(selector => {
+  [
+    '.inline-edit-mode',
+    '.inline-edit-data',
+    '.link-cancel',
+    '.link-edit'
+  ].forEach(selector => {
     element.querySelector(selector).classList.toggle('hidden')
   })
 }
