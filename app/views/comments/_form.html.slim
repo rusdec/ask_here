@@ -1,0 +1,6 @@
+.new-comment
+  = form_for [resource, resource.comments.new], remote: true, format: :json do |f|
+    .new-comment-errors
+    = f.label :body
+    = f.text_area :body
+    = f.submit

@@ -9,7 +9,7 @@ module Commented
     def create_comment
       if current_user
         comment = current_user.comments.build(comment_params.merge(commentable: @commentable))
-        json_response_by_result(comment.save, comment)
+        json_response_by_result(comment.save, comment, { comment: comment })
       else
         json_response_you_can_not_do_it
       end
