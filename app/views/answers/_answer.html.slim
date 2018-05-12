@@ -3,3 +3,8 @@
     = inline_edit_element(resource: answer, data: render('answers/answer_data', answer: answer), params: {}, form: render('answers/inline_form', resource: answer))
   - else
     = render 'answers/answer_data', answer: answer
+
+  .comments
+    - answer.comments.each do |comment|
+      = render 'shared/comments/comment', comment: comment
+  = render 'shared/comments/form', resource: answer

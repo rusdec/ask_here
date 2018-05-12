@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       patch :best_answer, on: :member 
       patch :not_best_answer, on: :member 
       concerns :votable, controller: :answers
+      concerns :commentable, controller: :answers
     end
     concerns :votable, controller: :questions
     concerns :commentable, controller: :questions

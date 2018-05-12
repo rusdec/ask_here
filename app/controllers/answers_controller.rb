@@ -2,8 +2,10 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: %i[create]
   before_action :set_answer, except: %i[create]
+  skip_before_action :set_answer, only: %i[create_comment]
 
   include Voted
+  include Commented
 
   def create
     @answer = current_user.answers.new(answer_params)
