@@ -1,3 +1,28 @@
+document.addEventListener('DOMContentLoaded',() => {
+  let question = findQuestion()
+  if (question) {
+    App.cable.subscriptions.create('AnswersChannel', {
+      connected: function() {
+        this.perform('follow', {id: question.dataset.id})
+      },
+      received: function(data) {
+        document.querySelector('.answers').insertAdjacentHTML('beforeend', (JST['templates/answer']({
+          answer: data['answer'],
+          votes: data['votes'],
+          attachements: data['attachements'],
+          comments: data['comments']
+        })))
+        let answer = findAnswer(data['answer'].id)
+        if (answer) {
+          findVotesIn(answer).forEach((vote) => listenVoteClick(vote))
+          listenClickEditLink(answer)
+          listenClickCancelLink(answer)
+        }
+      }
+    })
+  }
+})
+
 function findAnswer(id) {
   return document.querySelector(`.answer[data-id='${id}']`)
 }

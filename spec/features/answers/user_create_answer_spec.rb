@@ -8,6 +8,7 @@ feature 'User create answer', %q{
 
   given(:user) { create(:user_with_questions) }
   given(:question) { user.questions.last }
+  given(:answer_attributes) { attributes_for(:answer) }
 
   context 'Authenticated user' do
     before do
@@ -16,7 +17,6 @@ feature 'User create answer', %q{
     end
 
     scenario 'can create answer with valid data', js: true do
-      answer_attributes = attributes_for(:answer)
       create_answer(answer_attributes)
 
       expect(page).to have_content(answer_attributes[:body])
@@ -34,6 +34,24 @@ feature 'User create answer', %q{
 
     scenario 'can\'t create answer' do
       expect(page).to have_no_content('Create Answer')
+    end
+  end
+
+  context 'multiple sessions' do
+    scenario 'answer appears on another user\'s page', js: true do
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+        create_answer(answer_attributes)
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content(answer_attributes[:body])
+      end
     end
   end
 end

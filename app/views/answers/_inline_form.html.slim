@@ -1,6 +1,7 @@
 = form_for resource, remote: true, html: { class: 'form-edit-answer',
-                                           data: { answer_id: resource.id } } do |f|
-  #edit_answer_errors
+                                           data: { answer_id: resource.id },
+                                           format: json } do |f|
+  .edit-answer-errors
   p
     = f.label :body
     = f.text_area :body

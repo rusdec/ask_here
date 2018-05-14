@@ -1,0 +1,112 @@
+.answer data-id=@answer.id id=''
+  //
+  // Best answer links |=> when authenticated && author of question
+  //
+  - if gon.user_id == gon.question_user_id
+    - if @answer.best
+      a class='link-set-as-best-answer hidden' data-remote='true' data-method='patch' href="/answers/#{@answer.id}/best_answer" Best answer
+      a.link-unset-best-answer data-remote='true' data-method='patch' href="/answers/#{@answer.id}/not_best_answer" Not a best
+    - else
+      a.link-set-as-best-answer data-remote='true' data-method='patch' href="/answers/#{@answer.id}/best_answer" Best answer
+      a class='link-unset-best-answer hidden' data-remote='true' data-method='patch' href="/answers/#{@answer.id}/not_best_answer" Not a best
+
+  //
+  // Votes |=> when authenticated
+  //
+  - if gon.user_id
+    .votes id="vote-answer-#{@answer.id}" data-type='answer'
+      // |=> when authenticated &&
+      - if gon.user_id && gon.user_id != @answer.user_id
+        a.vote data-remote='true' data-method='post' data-format='json' data-params='vote[value]=1' href="/answers/#{@answer.id}/vote" Like
+        span data-vote='rate'
+          = " #{@votes.rate} "
+        a.vote data-remote='true' data-method='post' data-format='json' data-params='vote[value]=-1' href="/answers/#{@answer.id}/vote" Dislike
+      - else
+        span data-vote='rate'
+          = @votes.rate
+  //
+  // Answer data |=> all
+  //
+  .inline-edit-data
+    p.body = @answer.body
+
+    //
+    // Answers attachements |=> all
+    //
+    ul.attachements
+      - for attachement in @attachements
+        li
+          a target='_blank' href="#{attachement.file.url}" #{attachement.name}
+
+  //
+  // Edit answer |=> when authenticated && author of answer
+  //
+  - if gon.user_id == @answer.user_id
+    div class='inline-edit-mode hidden'
+      form class="edit_answer_#{@answer.id}" class='form-edit-answer' data-answer-id=@answer.id enctype='multipart/form-data' action="/answers/#{@answer.id}" accept-charset='UTF-8' data-remote=true method='post'
+        input name='utf8' type='hidden' value=true
+        input name='_method' type='hidden' value='patch'
+        .edit-answer-errors
+        p
+          label for='answer_body' Body
+          textarea id='answer_body' name='answer[body]' #{@answer.body}
+
+        // answers attachements
+        .answer_editable_attachements
+          - for attachement, i in @attachements
+            .editable_attachement
+              .file
+                span = attachement.name
+              .edit_actions
+                label for="answer_attachements_attributes_#{i}__destroy" Remove file
+                input name="answer[attachements_attributes][#{i}][_destroy]" value=0 type='hidden'
+                input name="answer[attachements_attributes][#{i}][_destroy]" value=1 id="answer_attachements_attributes_#{i}__destroy" type="checkbox"
+              input name="answer[attachements_attributes][#{i}][id]" value=attachement.id type='hidden' id="answer_attachements_attributes_#{i}_id"
+          
+          p
+            a.add_fields data-association='attachement' data-associations='attachements' data-association-insertion-template='<div class="attachement"><label for="answer_attachements_attributes_new_attachements_file">File</label><input type="file" name="answer[attachements_attributes][new_attachements][file]" id="answer_attachements_attributes_new_attachements_file" /><input type="hidden" name="answer[attachements_attributes][new_attachements][_destroy]" id="answer_attachements_attributes_new_attachements__destroy" value="false" /><a class="remove_fields dynamic" data-wrapper-class="attachement" href="#">Remove file</a></div>' href='#' rel='nofollow' Add file
+ 
+        input name='commit' value='Save' data-disable-with='Save' type='submit'
+
+    // edit answer links
+    .links
+      a.link-delete data-remote=true rel='nofollow' data-method='delete' href="/answers/#{@answer.id}" Delete
+      a.link-edit href='#' rel='nofollow' Edit
+      a class='link-cancel hidden' href='#' Cancel
+
+  //
+  // Comments |=> all
+  //
+  .comments
+    - for comment in @comments
+      .comment data-id=comment.id
+        .inline-edit-data
+          p = comment.body
+
+        // edit comment |=> when authenticated && author of comment
+        - if gon.user_id == comment.user_id
+          div class='inline-edit-mode hidden'
+            form class='edit_comment' action="/comments/#{comment.id}.json" data-remote=true method='post'
+              input name='utf8' type='hidden' value=true
+              input name='_method' type='hidden' value='patch'
+              .edit-comment-errors
+              label for='comment_body' Body
+              textarea id='comment_body' name='comment[body]'
+                comment.body
+              input name='commit' value='Update Comment' data-disable-with='Update Comment' type='submit'
+
+          // edit comment links
+          .links
+            a.link-delete data-remote=true rel='nofollow' data-method='delete' href="/answers/#{@answer.id}" Delete
+            a.link-edit href='#' rel='nofollow' Edit
+            a class='link-cancel hidden' href='#' Cancel
+
+    // new comment |=> when authenticated
+    - if gon.user_id  
+      .new-comment
+        form class='new_comment' action="/answers/#{@answer.id}/comments.json" data-remote=true method='post'
+          input name='utf8' type='hidden' value=true
+          .new-comment-errors
+          label for='comment_body' Body
+          textarea id='comment_body' name='comment[body]'
+          input name='commit' value='Create Comment' data-disable-with='Create Comment' type='submit'

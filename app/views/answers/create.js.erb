@@ -1,8 +1,5 @@
-<% if @answer.persisted? %>
-  document.querySelector('.answers').insertAdjacentHTML('beforeend', '<%= j render @answer %>')
-  listenClickLinkEditAnswer('<%= @answer.id %>')
-  listenClickLinkCancelEditAnswer('<%= @answer.id %>')
-<% else %>
-  document.querySelector('#create_answer_errors').insertAdjacentHTML('afterbegin', '<%= j render 'shared/errors', resource: @answer %>')
+<% if @answer.errors.any? %>
+  document.querySelector('.new-answer-errors').innerHTML = ''
+  document.querySelector('.new-answer-errors').insertAdjacentHTML('afterbegin', '<%= j render 'shared/errors', resource: @answer %>')
 <% end %>
 

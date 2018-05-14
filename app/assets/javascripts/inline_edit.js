@@ -16,7 +16,13 @@ function listenFor(elements, callback) {
 
 function listenUpdateSuccessEvent(element) {
   element.querySelector('form').addEventListener('ajax:success', (ev) => {
-    toggleEditVisibility(element)
+    let response = parseAjaxResponse(ev)
+    console.log(response)
+    if (response.data.errors) {
+      showErrors(response.data.errors)
+    } else {
+      toggleEditVisibility(element)
+    }
   })
 }
 

@@ -1,16 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.vote a').forEach((vote) => {
-    vote.addEventListener('ajax:success', (ev) => {
-      let response = parseAjaxResponse(ev)
-      if (response.data.errors) {
-        showErrors(response.data.errors)
-      } else {
-        updateVotesRate({element: vote, rate: response.data.votes.rate})
-        updateVotes(vote)
-      }
-    })
-  })
+  document.querySelectorAll('.votes .vote').forEach((vote) => listenVoteClick(vote))
 })
+
+function listenVoteClick(vote) {
+  if (!vote) {
+    return
+  }
+  vote.addEventListener('ajax:success', (ev) => {
+    let response = parseAjaxResponse(ev)
+    if (response.data.errors) {
+      showErrors(response.data.errors)
+    } else {
+      updateVotesRate({element: vote, rate: response.data.votes.rate})
+      updateVotes(vote)
+    }
+  })
+}
 
 function updateVotesRate(params) {
   let rate = params.element.parentNode.querySelector('[data-vote="rate"]')
@@ -42,5 +47,5 @@ function updateVotesMethods(vote, votes = []) {
 }
 
 function findVotesIn(element) {
-  return element.querySelectorAll('a')
+  return element.querySelectorAll('.vote')
 }
