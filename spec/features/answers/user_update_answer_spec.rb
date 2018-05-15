@@ -76,8 +76,28 @@ feature 'User update question', %q{
       end
     end
 
+    context 'multiple sessions' do
+      scenario 'updated answer replace old answer on another user\'s page', js: true do
+        new_body = 'NewAnswerValidBody'
+        answer = question.answers.last
+
+        Capybara.using_session('guest') do
+          visit question_path(question)
+        end
+
+        Capybara.using_session('user') do
+          sign_in(user)
+          visit question_path(question)
+          update_answer(answer: answer, body: new_body)
+        end
+
+        Capybara.using_session('guest') do
+          expect(page).to have_content(new_body)
+        end
+      end
+    end
   end
-=begin
+
   context 'Unauthenticated user' do
     before { visit question_path(question) }
 
@@ -85,5 +105,4 @@ feature 'User update question', %q{
       expect(page).to have_no_content('Edit')
     end
   end
-=end
 end

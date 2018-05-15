@@ -1,5 +1,3 @@
 <% if @answer.errors.any? %>
-  document.querySelector('.new-answer-errors').innerHTML = ''
-  document.querySelector('.new-answer-errors').insertAdjacentHTML('afterbegin', '<%= j render 'shared/errors', resource: @answer %>')
 <% end %>
 

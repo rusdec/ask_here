@@ -1,4 +1,4 @@
-.answer data-id=@answer.id id=''
+.answer data-id=@answer.id id='' data-errors-selector='edit-answer-errors'
   //
   // Best answer links |=> when authenticated && author of question
   //

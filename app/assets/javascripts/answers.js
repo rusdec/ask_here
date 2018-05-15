@@ -6,20 +6,37 @@ document.addEventListener('DOMContentLoaded',() => {
         this.perform('follow', {id: question.dataset.id})
       },
       received: function(data) {
-        document.querySelector('.answers').insertAdjacentHTML('beforeend', (JST['templates/answer']({
-          answer: data['answer'],
-          votes: data['votes'],
-          attachements: data['attachements'],
-          comments: data['comments']
-        })))
         let answer = findAnswer(data['answer'].id)
+        let newAnswer = JST['templates/answer']({
+              answer: data['answer'],
+              votes: data['votes'],
+              attachements: data['attachements'],
+              comments: data['comments']
+            })
+
+        if (answer) {
+          // update current answer
+          answer.outerHTML = newAnswer
+          answer = findAnswer(data['answer'].id)
+        } else {
+          // insert new answer
+          document.querySelector('.answers').insertAdjacentHTML('beforeend', newAnswer)
+          answer = findAnswer(data['answer'].id)
+        }
+
         if (answer) {
           findVotesIn(answer).forEach((vote) => listenVoteClick(vote))
           listenClickEditLink(answer)
           listenClickCancelLink(answer)
+          listenUpdateSuccessEvent(answer)
         }
       }
     })
+  }
+
+  let = newAnswer = document.querySelector('#new-answer')
+  if (newAnswer) {
+    listenCreateSuccessEvent(newAnswer)
   }
 })
 
@@ -38,8 +55,8 @@ function updateEditAnswerForm(id, html) {
   newOuterHtmlOfAnswerChild({id:id, childSelector:'.form-edit-answer', html:html})
 }
 
-function updateAnswerBody(id, text = '') {
-  findAnswer(id).querySelector('.body').textContent = text
+function updateAnswerBody(answer, text = '') {
+  answer.querySelector('.body').textContent = text
 }
 
 function updateAnswerAttachements(id, html) {

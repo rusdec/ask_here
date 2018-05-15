@@ -14,15 +14,26 @@ function listenFor(elements, callback) {
   elements.forEach(element => this[callback](element))
 }
 
-function listenUpdateSuccessEvent(element) {
+function listenCreateSuccessEvent(element) {
   element.querySelector('form').addEventListener('ajax:success', (ev) => {
     let response = parseAjaxResponse(ev)
     console.log(response)
     if (response.data.errors) {
-      showErrors(response.data.errors)
+      console.log(findErrorsSelector(element))
+      showErrors(response.data.errors, findErrorsSelector(element))
+    }
+  })
+}
+
+function listenUpdateSuccessEvent(element, callbacks = []) {
+  element.querySelector('form').addEventListener('ajax:success', (ev) => {
+    let response = parseAjaxResponse(ev)
+    if (response.data.errors) {
+      showErrors(response.data.errors, findErrorsSelector(element))
     } else {
       toggleEditVisibility(element)
     }
+    callbacks.forEach(callback => this[callback.name](element, callback.params))
   })
 }
 
@@ -66,4 +77,13 @@ function toggleEditVisibility(element) {
   ].forEach(selector => {
     element.querySelector(selector).classList.toggle('hidden')
   })
+}
+
+function findErrorsSelector(element) {
+  let selector = `.${element.dataset.errorsSelector}`
+  if (selector && element.querySelector(selector)) {
+    return selector
+  } else {
+    return false
+  }
 }

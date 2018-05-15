@@ -11,12 +11,18 @@ module Feature
     def answer_container(answer)
       ".answer[data-id='#{answer.id}']"
     end
+  
+    def edit_answer_form(answer)
+      ".form-edit-answer[data-answer-id='#{answer.id}']"
+    end
 
     def update_answer(params)
       within answer_container(params[:answer]) do
         click_on 'Edit'
-        fill_in 'Body', with: params[:body]
-        click_on 'Save'
+        within edit_answer_form(params[:answer]) do
+          fill_in 'Body', with: params[:body]
+          click_on 'Save'
+        end
       end
     end
 

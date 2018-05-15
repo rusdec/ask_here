@@ -1,9 +1,0 @@
-<% if @answer.errors.any? %>
-  findAnswer('<%= @answer.id%>').querySelector('.edit-answer-errors').innerHTML = ''
-  findAnswer('<%= @answer.id%>').querySelector('.edit-answer-errors').insertAdjacentHTML('afterbegin', '<%= j render 'shared/errors', resource: @answer %>')
-<% else %>
-  updateAnswerBody('<%= @answer.id %>', '<%= j @answer.body %>')
-  updateAnswerAttachements('<%= @answer.id %>', '<%= j render 'answer_attachements', resource: @answer %>')
-  updateEditAnswerForm('<%= @answer.id %>', '<%= j render 'inline_form', resource: @answer %>')
-  listenFor([findAnswer('<%= @answer.id %>')], 'listenUpdateSuccessEvent')
-<% end %>

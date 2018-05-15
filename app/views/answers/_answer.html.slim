@@ -1,4 +1,4 @@
-.answer data-id=answer.id id=(answer.best? ? 'best_answer' : '')
+.answer data-id=answer.id id=(answer.best? ? 'best_answer' : '') data-errors-selector='edit-answer-errors'
   - if current_user&.author_of?(answer)
     = inline_edit_element(resource: answer, data: render('answers/answer_data', answer: answer), params: {}, form: render('answers/inline_form', resource: answer))
   - else
