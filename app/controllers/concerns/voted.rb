@@ -8,8 +8,8 @@ module Voted
 
     def add_vote
       if current_user&.not_author_of?(@votable)
-        vote = current_user.votes.vote!(vote_params.merge(votable: @votable))
-        json_response_by_result(vote.persisted?, vote, { votes: @votable.rating })
+        @vote = current_user.votes.vote!(vote_params.merge(votable: @votable))
+        json_response_by_result({ votes: @votable.rating }, @vote)
       else
         json_response_you_can_not_do_it
       end
@@ -17,7 +17,8 @@ module Voted
 
     def cancel_vote
       if @vote
-        json_response_by_result(@vote.destroy, @vote, { votes: @votable.rating })
+        @vote.destroy
+        json_response_by_result({ votes: @votable.rating }, @vote)
       else
         json_response_you_can_not_do_it
       end

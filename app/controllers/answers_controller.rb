@@ -11,7 +11,7 @@ class AnswersController < ApplicationController
   def create
     @answer = current_user.answers.new(answer_params.merge(question: @question))
     @answer.save
-    json_response_by_result(@answer.errors.empty?, @answer)
+    json_response_by_result
   end
 
   def destroy
@@ -20,7 +20,8 @@ class AnswersController < ApplicationController
 
   def update
     if current_user.author_of?(@answer)
-      json_response_by_result(@answer.update(answer_params), @answer)
+      @answer.update(answer_params)
+      json_response_by_result
     else
       json_response_you_can_not_do_it
     end

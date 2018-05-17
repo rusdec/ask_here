@@ -8,16 +8,17 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     include JsonResponsed
 
     def success
+      @any_json_responsed = JsonResponsibleBot.new
       if params[:params]
-        json_response_by_result(true, OpenStruct.new, { param: params[:params] })
+        json_response_by_result(param: params[:params])
       else
-        json_response_by_result(true, OpenStruct.new)
+        json_response_by_result
       end
     end
 
     def error
-      resource = OpenStruct.new(errors: OpenStruct.new(full_messages: ['Any error']))
-      json_response_by_result(false, resource)
+      @any_json_responsed = JsonResponsibleBot.new(errors_count: 1)
+      json_response_by_result
     end
 
     def you_can_not_do_it
@@ -37,7 +38,7 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with error' do
       get :error, format: :json
 
-      expect(response.body).to match('{"status":false,"errors":["Any error"]}')
+      expect(response.body).to match('{"status":false,"errors":["AnyErrorText"]}')
     end
   end
 
