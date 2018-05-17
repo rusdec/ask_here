@@ -14,22 +14,12 @@ document.addEventListener('DOMContentLoaded',() => {
               comments: data['comments']
             })
 
-        if (answer) {
-          // update current answer
-          answer.outerHTML = newAnswer
-          answer = findAnswer(data['answer'].id)
-        } else {
-          // insert new answer
-          document.querySelector('.answers').insertAdjacentHTML('beforeend', newAnswer)
-          answer = findAnswer(data['answer'].id)
-        }
-
-        if (answer) {
-          findVotesIn(answer).forEach((vote) => listenVoteClick(vote))
-          listenClickEditLink(answer)
-          listenClickCancelLink(answer)
-          listenUpdateSuccessEvent(answer)
-        }
+        createOrUpdateElement({
+          element: answer,
+          elements: document.querySelector('.answers'),
+          newElement: newAnswer,
+          findMethod: 'findAnswer'
+        })
       }
     })
   }

@@ -76,3 +76,29 @@ function toggleEditVisibility(element) {
 }
 
 findErrorsContainer = (element) => element.querySelector('.errors')
+
+/**
+ * @param {Object} params
+ * @param {Object} params.element - any baseElement X
+ * @param {Object} params.elements - any baseElement Y who contain baseElements X
+ * @param {Object} params.newElement - any baseElement Xi
+ * @param {string} params.findMethod - metnod name which find baseElement X
+*/
+function createOrUpdateElement(params) {
+  let element = params.element
+  if (element) {
+    // update
+    element.outerHTML = params.newElement
+  } else {
+    //create
+    params.elements.insertAdjacentHTML('beforeend', params.newElement)
+  }
+  element = this[params.findMethod](element.dataset.id)
+
+  if (element) {
+    listenClickEditLink(element)
+    listenClickCancelLink(element)
+    listenClickDeleteLink(element)
+    listenUpdateSuccessEvent(element)
+  }
+}

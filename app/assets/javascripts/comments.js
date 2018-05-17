@@ -14,20 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     received: function(data) {
       let newComment = JST['templates/comment']({comment: data['comment']})
       let comment = findComment(data['comment'].id)
-      if (comment) {
-        // update
-        comment.outerHTML = newComment
-      } else {
-        // insert new
-        findCommentsContainer(extractCommentableSelector(data)).insertAdjacentHTML('beforeend', newComment)
-      }
-      comment = findComment(data['comment'].id)
-      if (comment) {
-        listenClickEditLink(comment)
-        listenClickCancelLink(comment)
-        listenClickDeleteLink(comment)
-        listenUpdateSuccessEvent(comment)
-      }
+
+      createOrUpdateElement({
+        element: comment,
+        elements: findCommentsContainer(extractCommentableSelector(data)),
+        newElement: newComment,
+        findMethod: 'findComment'
+      })
     }
   })
 })
