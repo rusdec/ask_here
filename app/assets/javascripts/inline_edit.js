@@ -10,17 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-function listenFor(elements, callback) {
-  elements.forEach(element => this[callback](element))
-}
+listenFor = (elements, callback) => { elements.forEach(element => this[callback](element)) }
 
 function listenCreateSuccessEvent(element) {
   element.querySelector('form').addEventListener('ajax:success', (ev) => {
     let response = parseAjaxResponse(ev)
-    console.log(response)
     if (response.data.errors) {
-      console.log(findErrorsSelector(element))
-      showErrors(response.data.errors, findErrorsSelector(element))
+      showErrors(response.data.errors, findErrorsContainer(element))
     }
   })
 }
@@ -29,7 +25,7 @@ function listenUpdateSuccessEvent(element, callbacks = []) {
   element.querySelector('form').addEventListener('ajax:success', (ev) => {
     let response = parseAjaxResponse(ev)
     if (response.data.errors) {
-      showErrors(response.data.errors, findErrorsSelector(element))
+      showErrors(response.data.errors, findErrorsContainer(element))
     } else {
       toggleEditVisibility(element)
     }
@@ -37,11 +33,11 @@ function listenUpdateSuccessEvent(element, callbacks = []) {
   })
 }
 
-function listenClickDeleteLink(element) {
+function listenClickDeleteLink(element, errorsContainer = false) {
   element.querySelector('.link-delete').addEventListener('ajax:success', (ev) => {
     let response = parseAjaxResponse(ev)
     if (response.data.errors) {
-      showErrors(response.data.errors)
+      showErrors(response.data.errors, errorsContainer)
     } else {
       removeComment(element)
     }
@@ -79,11 +75,4 @@ function toggleEditVisibility(element) {
   })
 }
 
-function findErrorsSelector(element) {
-  let selector = `.${element.dataset.errorsSelector}`
-  if (selector && element.querySelector(selector)) {
-    return selector
-  } else {
-    return false
-  }
-}
+findErrorsContainer = (element) => element.querySelector('.errors')

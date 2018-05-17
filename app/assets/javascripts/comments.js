@@ -1,13 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.new-comment').forEach((newCommentForm) => {
-    newCommentForm.addEventListener('ajax:success', (ev) => {
-      let response = parseAjaxResponse(ev)
-      if (response.data.errors) {
-        showErrors(response.data.errors, '.question .new-comment-errors')
+  let newComments = document.querySelectorAll('.new-comment')
+  newComments.forEach(newComment => listenCreateSuccessEvent(newComment))
+
+  App.cable.subscriptions.create('CommentsChannel', {
+    connected: function() {
+      document.querySelectorAll('.question, .answer').forEach(commentable => {
+        this.perform('follow', {
+          id: commentable.dataset.id,
+          commentable_type: commentable.classList[0]
+        })
+      })
+    },
+    received: function(data) {
+      let newComment = JST['templates/comment']({comment: data['comment']})
+      let comment = findComment(data['comment'].id)
+      if (comment) {
+        // update
+        comment.outerHTML = newComment
       } else {
-        // todo: add comment
-        console.log(response.data)
+        // insert new
+        findCommentsContainer(extractCommentableSelector(data)).insertAdjacentHTML('beforeend', newComment)
       }
-    })
+      comment = findComment(data['comment'].id)
+      if (comment) {
+        listenClickEditLink(comment)
+        listenClickCancelLink(comment)
+        listenClickDeleteLink(comment)
+        listenUpdateSuccessEvent(comment)
+      }
+    }
   })
 })
+
+findComment = (id) => document.querySelector(`.comment[data-id="${id}"]`)
+findCommentsContainer = (type) => document.querySelector(`${type} .comments`)
+extractCommentableSelector = (data) => `.${data.commentable_type}[data-id="${data.commentable_id}"]`
