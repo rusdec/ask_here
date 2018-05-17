@@ -1,8 +1,13 @@
+//
 // |=> all
+//
 .comment data-id=@comment.id
   .inline-edit-data
     p = @comment.body
+
+  //
   // |=> authenticated && author
+  //
   - if gon.user_id == @comment.user_id
     div class='inline-edit-mode hidden'
       form.edit_comment id="edit_comment_#{@comment.id}" action="/comments/#{@comment.id}.json" accept-charset='UTF-8' data-remote=true method='post'

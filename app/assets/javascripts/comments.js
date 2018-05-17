@@ -6,16 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
     connected: function() {
       document.querySelectorAll('.question, .answer').forEach(commentable => {
         this.perform('follow', {
-          id: commentable.dataset.id,
+          commentable_id: commentable.dataset.id,
           commentable_type: commentable.classList[0]
         })
       })
     },
     received: function(data) {
+      console.log('receiving...')
       let newComment = JST['templates/comment']({comment: data['comment']})
       let comment = findComment(data['comment'].id)
-
       createOrUpdateElement({
+        id: data['comment'].id,
         element: comment,
         elements: findCommentsContainer(extractCommentableSelector(data)),
         newElement: newComment,

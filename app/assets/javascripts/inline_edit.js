@@ -79,21 +79,21 @@ findErrorsContainer = (element) => element.querySelector('.errors')
 
 /**
  * @param {Object} params
+ * @param {string} params.id - value of data-id of baseElement X 
  * @param {Object} params.element - any baseElement X
  * @param {Object} params.elements - any baseElement Y who contain baseElements X
  * @param {Object} params.newElement - any baseElement Xi
  * @param {string} params.findMethod - metnod name which find baseElement X
 */
 function createOrUpdateElement(params) {
-  let element = params.element
-  if (element) {
+  if (params.element) {
     // update
-    element.outerHTML = params.newElement
+    params.element.outerHTML = params.newElement
   } else {
     //create
     params.elements.insertAdjacentHTML('beforeend', params.newElement)
   }
-  element = this[params.findMethod](element.dataset.id)
+  element = this[params.findMethod](params.id)
 
   if (element) {
     listenClickEditLink(element)

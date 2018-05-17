@@ -6,15 +6,33 @@ document.addEventListener('DOMContentLoaded',() => {
         this.perform('follow', {id: question.dataset.id})
       },
       received: function(data) {
-        let answer = findAnswer(data['answer'].id)
         let newAnswer = JST['templates/answer']({
-              answer: data['answer'],
-              votes: data['votes'],
-              attachements: data['attachements'],
+          answer: data['answer'],
+          votes: data['votes'],
+          comments: data['comments'],
+          partial_attachements: function() {
+            return this.safe(JST['templates/attachements']({
+              attachements: data['attachements']
+            }))
+          },
+          partial_editable_attachements: function() {
+            return this.safe(JST['templates/editable_attachements']({
+              resource_type: 'answer',
+              attachements: data['attachements']
+            }))
+          },
+          partial_comments: function() {
+            return this.safe(JST['templates/comments']({
+              resource_type: 'answer',
+              resource: data['answer'],
               comments: data['comments']
-            })
+            }))
+          },
+        })
 
+        let answer = findAnswer(data['answer'].id)
         createOrUpdateElement({
+          id: data['answer'].id,
           element: answer,
           elements: document.querySelector('.answers'),
           newElement: newAnswer,
@@ -30,9 +48,7 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 })
 
-function findAnswer(id) {
-  return document.querySelector(`.answer[data-id='${id}']`)
-}
+findAnswer = (id) => document.querySelector(`.answer[data-id='${id}']`)
 
 function newOuterHtmlOfAnswerChild(params) {
   let element = findAnswer(params.id).querySelector(params.childSelector)

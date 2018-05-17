@@ -1,0 +1,41 @@
+//
+// Comments |=> all
+//
+h4 Comments
+.comments
+  - for comment in @comments
+    .comment data-id=comment.id
+      .inline-edit-data
+        p = comment.body
+
+      //
+      // Edit comment |=> when authenticated && author of comment
+      //
+      - if gon.user_id == comment.user_id
+        div class='inline-edit-mode hidden'
+          form class='edit_comment' action="/comments/#{comment.id}.json" data-remote=true method='post'
+            input name='utf8' type='hidden' value=true
+            input name='_method' type='hidden' value='patch'
+            .edit-comment-errors
+            label for='comment_body' Body
+            textarea id='comment_body' name='comment[body]'
+              comment.body
+            input name='commit' value='Update Comment' data-disable-with='Update Comment' type='submit'
+        //
+        // Edit comment links
+        //
+        .links
+          a.link-delete data-remote=true rel='nofollow' data-method='delete' href="/#{@resource_type}s/#{@resource.id}" Delete
+          a.link-edit href='#' rel='nofollow' Edit
+          a class='link-cancel hidden' href='#' Cancel
+  //
+  // New comment |=> when authenticated
+  //
+  - if gon.user_id
+    .new-comment
+      form class='new_comment' action="/#{@resource_type}s/#{@resource.id}/comments.json" data-remote=true method='post'
+        input name='utf8' type='hidden' value=true
+        .new-comment-errors
+        label for='comment_body' Body
+        textarea id='comment_body' name='comment[body]'
+        input name='commit' value='Create Comment' data-disable-with='Create Comment' type='submit'
