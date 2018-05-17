@@ -16,6 +16,11 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
       end
     end
 
+    def other_variable
+      @any_variable = JsonResponsibleBot.new
+      json_response_by_result({}, @any_variable)
+    end
+
     def error
       @any_json_responsed = JsonResponsibleBot.new(errors_count: 1)
       json_response_by_result
@@ -28,7 +33,7 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
   
   before do
     routes.draw do
-      [:success, :error, :you_can_not_do_it].each do |method|
+      %i[success error you_can_not_do_it other_variable].each do |method|
         get method, to: "any_json_responseds##{method}"
       end
     end
@@ -62,6 +67,14 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
       get :you_can_not_do_it, format: :json
 
       expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
+    end
+  end
+
+  describe 'GET #other_variable' do
+    it 'respond with success' do
+      get :success, format: :json
+
+      expect(response.body).to match('{"status":true,"message":"Success"}')
     end
   end
 end
