@@ -2,10 +2,9 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show update destroy]
 
-  after_action :publish_question, only: %i[create]
+  after_action :publish_questions, only: %i[create]
 
   include Voted
-  include Commented
 
   def index
     @questions = Question.all
@@ -39,8 +38,7 @@ class QuestionsController < ApplicationController
 
   private
 
-  def publish_question
-    puts @question.errors.any?
+  def publish_questions
     return if @question.errors.any?
     ActionCable.server.broadcast('questions',
       ApplicationController.render(
@@ -50,6 +48,10 @@ class QuestionsController < ApplicationController
     )
   end
 
+  def comment_stream_id
+    params['question_id']
+  end
+
   def question_params
     params.require(:question).permit(:title, :body,
                                      attachements_attributes: [:id, :file, :_destroy])
@@ -57,5 +59,7 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+    gon.question_id = @question.id
+    gon.question_user_id = @question.user.id
   end
 end

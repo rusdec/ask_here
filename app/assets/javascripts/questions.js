@@ -1,16 +1,18 @@
 document.addEventListener('DOMContentLoaded',() => {
   listenClickLinkEditQuestion()
   listenClickLinkCancelEditQuestion()
-  App.cable.subscriptions.create('QuestionChannel', {
-    connected: function() {
-      this.perform('follow')
-    },
-    received: function(data) {
-      appendQuestion(data)
-    }
-  })
-})
 
+  if (document.querySelector('.questions')) {
+    App.cable.subscriptions.create('QuestionsChannel', {
+      connected: function() {
+        this.perform('follow')
+      },
+      received: function(data) {
+        appendQuestion(data)
+      }
+    })
+  }
+})
 
 function appendQuestion(question) {
   let questions = document.querySelector('.questions')
@@ -40,9 +42,9 @@ function listenClickLinkCancelEditQuestion() {
 }
 
 function updateQuestionErrors(errors = null) {
-  let questionErrors = document.querySelector('#question_errors')
+  let questionErrors = document.querySelector('.form-edit-question .errors')
   if (questionErrors) {
-    questionErrors.childNodes.forEach((node) => node.remove())
+    questionErrors.innerHTML = ''
     if (errors) {
       questionErrors.insertAdjacentHTML('afterbegin', errors)
     }
@@ -83,6 +85,10 @@ function findQuestionTitle() {
 
 function findQuestionBody() {
   return document.querySelector('.question .body')
+}
+
+function findQuestion() {
+  return document.querySelector('.question')
 }
 
 function toggleVisibleQuestion() {

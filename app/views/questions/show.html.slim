@@ -1,4 +1,4 @@
-.question
+.question data-id=@question.id
   .data
     h3.title = @question.title
     p.body = @question.body
@@ -7,10 +7,11 @@
       = question_remote_links(@question)
     = render 'shared/vote', resource: @question
     
+    h4= 'Comments'
     .comments
       - @question.comments.each do |comment|
-        = render 'comments/comment', comment: comment
-    = render 'comments/form', resource: @question
+        = render 'shared/comments/comment', comment: comment
+      = render 'shared/comments/form', resource: @question
 
   - if current_user&.author_of?(@question)
     = render 'edit_fast', resource: @question
@@ -21,5 +22,5 @@ h3= 'Answers'
 
 - if current_user
   h3= 'New answer'
-  #new-answer
+  #new-answer data-errors-selector='new-answer-errors'
     = render 'answers/form', resource: @answer
