@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded',() => {
     })
   }
 
-  let = newAnswer = document.querySelector('#new-answer')
+  let newAnswer = document.querySelector('#new-answer')
   if (newAnswer) {
     listenCreateSuccessEvent(newAnswer)
   }

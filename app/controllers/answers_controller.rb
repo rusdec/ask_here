@@ -2,12 +2,10 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: %i[create]
   before_action :set_answer, except: %i[create]
-  skip_before_action :set_answer, only: %i[create_comment]
 
   after_action :publish_answers, only: %i[create update]
 
   include Voted
-  include Commented
   include JsonResponsed
 
   def create

@@ -4,6 +4,7 @@
   - else
     = render 'answers/answer_data', answer: answer
 
+  h4= 'Comments'
   .comments
     - answer.comments.each do |comment|
       = render 'shared/comments/comment', comment: comment
