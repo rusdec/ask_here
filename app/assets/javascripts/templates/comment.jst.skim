@@ -1,0 +1,19 @@
+// |=> all
+.comment data-id=@comment.id
+  .inline-edit-data
+    p = @comment.body
+  // |=> authenticated && author
+  - if gon.user_id == @comment.user_id
+    div class='inline-edit-mode hidden'
+      form.edit_comment id="edit_comment_#{@comment.id}" action="/comments/#{@comment.id}.json" accept-charset='UTF-8' data-remote=true method='post'
+        input name='utf-8' value=true type='hidden'
+        input name='_method' value='patch' type='hidden'
+        .edit-comment-errors
+        lable for='comment_body' Body
+        textarea id='comment_body' name='comment[body]' #{@comment.body}
+        input name='commit' value='Update Comment' data-disable-with='Update Comment' type='submit'
+
+    .links
+      a.link-delete format='json' data-remote=true rel='nofollow' data-method='delete' href="/comments/#{@comment.id}" Delete
+      a.link-edit href='#' rel='nofollow' Edit
+      a class='link-cancel hidden' href='#' rel='nofollow' Cancel
