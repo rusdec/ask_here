@@ -73,7 +73,7 @@ function updateQuestionEditForm(form) {
 }
 
 function updateQuestionAttachements(attachements) {
-  let questionAttachements = document.querySelector('.question_attachements')
+  let questionAttachements = document.querySelector('.question .attachements')
   if (questionAttachements) {
     questionAttachements.outerHTML = attachements
   }

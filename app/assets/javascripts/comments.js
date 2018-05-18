@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     },
     received: function(data) {
-      console.log('receiving...')
-      let newComment = JST['templates/comment']({comment: data['comment']})
+      let newComment = JST['templates/comments/comment']({comment: data['comment']})
       let comment = findComment(data['comment'].id)
       createOrUpdateElement({
         id: data['comment'].id,

@@ -2,7 +2,7 @@
   .data
     h3.title = @question.title
     p.body = @question.body
-    = render 'question_attachements', resource: @question.attachements
+    = render 'shared/attachements', resource: @question.attachements
     - if current_user&.author_of?(@question)
       = question_remote_links(@question)
     = render 'shared/vote', resource: @question
@@ -14,7 +14,7 @@
       = render 'shared/comments/form', resource: @question
 
   - if current_user&.author_of?(@question)
-    = render 'edit_fast', resource: @question
+    = render 'update_form', resource: @question
 
 h3= 'Answers'
 .answers
@@ -22,5 +22,5 @@ h3= 'Answers'
 
 - if current_user
   h3= 'New answer'
-  #new-answer data-errors-selector='new-answer-errors'
+  #new-answer
     = render 'answers/form', resource: @answer

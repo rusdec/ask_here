@@ -11,18 +11,18 @@ document.addEventListener('DOMContentLoaded',() => {
           votes: data['votes'],
           comments: data['comments'],
           partial_attachements: function() {
-            return this.safe(JST['templates/attachements']({
+            return this.safe(JST['templates/attachements/attachements']({
               attachements: data['attachements']
             }))
           },
           partial_editable_attachements: function() {
-            return this.safe(JST['templates/editable_attachements']({
+            return this.safe(JST['templates/attachements/editable_attachements']({
               resource_type: 'answer',
               attachements: data['attachements']
             }))
           },
           partial_comments: function() {
-            return this.safe(JST['templates/comments']({
+            return this.safe(JST['templates/comments/comments']({
               resource_type: 'answer',
               resource: data['answer'],
               comments: data['comments']
@@ -66,7 +66,7 @@ function updateAnswerBody(answer, text = '') {
 }
 
 function updateAnswerAttachements(id, html) {
-  newOuterHtmlOfAnswerChild({id:id, childSelector:'.answer_attachements', html:html})
+  newOuterHtmlOfAnswerChild({id:id, childSelector:'.attachements', html:html})
 }
 
 /*
