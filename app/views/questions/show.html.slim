@@ -23,4 +23,4 @@ h3= 'Answers'
 - if current_user
   h3= 'New answer'
   #new-answer
-    = render 'answers/form', resource: @answer
+    = render 'answers/form', resource: @question.answers.new

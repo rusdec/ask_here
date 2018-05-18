@@ -1,11 +1,13 @@
 module JsonResponsed
   extend ActiveSupport::Concern
 
+  include Polymorphed
+
   included do
     private
 
     def json_response_by_result(params = {}, resource = nil)
-      resource ||= json_responsible_resource
+      resource ||= polymorphic_resource
       resource.errors.any? ? json_response_error(resource.errors.full_messages)
                            : json_response_success('Success', params)
     end
@@ -20,14 +22,6 @@ module JsonResponsed
 
     def json_response_you_can_not_do_it
       json_response_error(['You can not do it'])
-    end
-
-    def json_responsible_resource
-      instance_variable_get("@#{resource_name}")
-    end
-
-    def resource_name
-      controller_name.underscore.singularize
     end
   end
 end
