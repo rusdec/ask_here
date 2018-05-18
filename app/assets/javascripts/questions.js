@@ -1,7 +1,31 @@
 document.addEventListener('DOMContentLoaded',() => {
   listenClickLinkEditQuestion()
   listenClickLinkCancelEditQuestion()
+
+  if (document.querySelector('.questions')) {
+    App.cable.subscriptions.create('QuestionsChannel', {
+      connected: function() {
+        this.perform('follow')
+      },
+      received: function(data) {
+        appendQuestion(data)
+      }
+    })
+  }
 })
+
+function appendQuestion(question) {
+  let questions = document.querySelector('.questions')
+  if (questions) {
+    let body = questions.querySelector('tbody')
+    if (!body) {
+      body = document.createElement('tbody')
+      questions.append(body)
+    }
+
+    body.insertAdjacentHTML('beforeend', question)
+  }
+}
 
 function listenClickLinkEditQuestion() {
   let linkEditQuestion = document.querySelector('.link-edit-question')
@@ -18,9 +42,9 @@ function listenClickLinkCancelEditQuestion() {
 }
 
 function updateQuestionErrors(errors = null) {
-  let questionErrors = document.querySelector('#question_errors')
+  let questionErrors = document.querySelector('.form-edit-question .errors')
   if (questionErrors) {
-    questionErrors.childNodes.forEach((node) => node.remove())
+    questionErrors.innerHTML = ''
     if (errors) {
       questionErrors.insertAdjacentHTML('afterbegin', errors)
     }
@@ -49,7 +73,7 @@ function updateQuestionEditForm(form) {
 }
 
 function updateQuestionAttachements(attachements) {
-  let questionAttachements = document.querySelector('.question_attachements')
+  let questionAttachements = document.querySelector('.question .attachements')
   if (questionAttachements) {
     questionAttachements.outerHTML = attachements
   }
@@ -61,6 +85,10 @@ function findQuestionTitle() {
 
 function findQuestionBody() {
   return document.querySelector('.question .body')
+}
+
+function findQuestion() {
+  return document.querySelector('.question')
 }
 
 function toggleVisibleQuestion() {

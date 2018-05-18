@@ -10,43 +10,44 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with valid parameters' do
       let(:params) do
-        { question_id: question,
-          answer: attributes_for(:answer) }
+        { params: { question_id: question, answer: attributes_for(:answer) },
+          format: :json }
       end
 
       it 'save new answer in database' do
         expect {
-          post :create, params: params, format: :js
+          post :create, params
         }.to change(question.answers, :count).by(1)
       end
 
       it 'new answer belong to his author' do
         expect {
-          post :create, params: params, format: :js
+          post :create, params
         }.to change(user.answers, :count).by(1)
       end
 
-      it 'render create template' do
-        post :create, params: params, format: :js
-        expect(response).to render_template 'create'
+      it 'response body success' do
+        post :create, params
+        expect(response.body).to match('{"status":true,"message":"Success"}')
       end
     end
 
     context 'with invalid parameters' do
       let(:params) do
-        { question_id: question,
-          answer: attributes_for(:invalid_answer) }
+        { params: { question_id: question,
+                    answer: attributes_for(:invalid_answer) },
+          format: :json }
       end
 
       it 'don\'t save new answer in database' do
         expect {
-          post :create, params: params, format: :js
+          post :create, params
         }.to_not change(question.answers, :count)
       end
 
-      it 'render create template' do
-        post :create, params: params, format: :js
-        expect(response).to render_template 'create'
+      it 'response body has error' do
+        post :create, params
+        expect(response.body).to match('{"status":false,"errors":["Body can\'t be blank","Body is too short (minimum is 10 characters)"]}')
       end
     end
   end
@@ -96,7 +97,8 @@ RSpec.describe AnswersController, type: :controller do
     let(:answer) { question.answers.last }
     let(:new_body) { 'NewValidAnswerBody' }
     let(:params) do
-      { id: answer, answer: { body: new_body } }
+      { params: { id: answer, answer: { body: new_body } },
+        format: :json }
     end
     let(:another_user) { create(:user) }
 
@@ -104,7 +106,7 @@ RSpec.describe AnswersController, type: :controller do
       before { sign_in(user) }
 
       it 'can update answer with valid data' do
-        patch :update, params: params, format: :js
+        patch :update, params
         answer.reload
 
         expect(answer.body).to eq(new_body)
@@ -112,17 +114,17 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'can\'t update answer with invalid data' do
         old_answer = answer
-        params[:body] = nil
-        patch :update, params: params, format: :js
+        params[:params][:answer][:body] = nil
+        patch :update, params
         answer.reload
 
         expect(answer.body).to eq(old_answer.body)
       end
 
-      it 'render update view' do
-        patch :update, params: params, format: :js
+      it 'response body success' do
+        post :update, params
 
-        expect(response).to render_template(:update)
+        expect(response.body).to match('{"status":true,"message":"Success"}')
       end
     end
 
@@ -131,23 +133,23 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'can\'t update answer' do
         old_answer = answer
-        patch :update, params: params, format: :js
+        patch :update, params
         answer.reload
 
         expect(answer.body).to eq(old_answer.body)
       end
 
-      it 'render update view' do
-        patch :update, params: params, format: :js
-
-        expect(response).to render_template(:update)
+      it 'response body has error' do
+        post :update, params
+        puts response.body
+        expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
       end
     end
 
     context 'when unauthenticated user' do
       it 'can\'t update answer' do
         old_answer = answer
-        patch :update, params: params, format: :js
+        patch :update, params
 
         answer.reload
 
@@ -176,7 +178,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'can set another best answer' do
-        patch :best_answer, params: params, format: :js 
+        patch :best_answer, params: params, format: :js
         patch :best_answer, params: { id: another_answer }, format: :js
 
         answer.reload
@@ -187,7 +189,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'render best_answer view' do
-        patch :best_answer, params: params, format: :js 
+        patch :best_answer, params: params, format: :js
 
         expect(response).to render_template(:best_answer)
       end
@@ -237,7 +239,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'render not_best_answer view' do
-        patch :not_best_answer, params: params, format: :js 
+        patch :not_best_answer, params: params, format: :js
 
         expect(response).to render_template(:not_best_answer)
       end

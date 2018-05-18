@@ -15,16 +15,26 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :commentable do
+    resources :comments, only: %i[destroy update create], shallow: true
+  end
+
   resources :questions do
     resources :answers, shallow: true,
                         only: %i[create update destroy] do
-      patch :best_answer, on: :member 
-      patch :not_best_answer, on: :member 
+      member do
+        patch :best_answer
+        patch :not_best_answer
+      end
+
       concerns :votable, controller: :answers
+      concerns :commentable
     end
     concerns :votable, controller: :questions
+    concerns :commentable
   end
 
+  mount ActionCable.server => '/cable'
   # For details on the DSL available within this file,
   # see http://guides.rubyonrails.org/routing.html
 end

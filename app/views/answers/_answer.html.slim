@@ -1,11 +1,11 @@
-.answer data-id=answer.id id=(answer.best? ? 'best_answer' : '')
-
-  .data
-    = answer_remote_links(answer)
-    = render 'shared/vote', resource: answer    
-    p.body
-      = answer.body
-    = render 'answers/answer_attachements', resource: answer
-
+.answer data-id=answer.id id=(answer.best? ? 'best_answer' : '') data-errors-selector='edit-answer-errors'
   - if current_user&.author_of?(answer)
-    = render 'answers/edit_fast', resource: answer
+    = inline_edit_element(resource: answer, data: render('answers/answer_data', answer: answer), params: {}, form: render('answers/update_form', resource: answer))
+  - else
+    = render 'answers/answer_data', answer: answer
+
+  h4= 'Comments'
+  .comments
+    - answer.comments.each do |comment|
+      = render 'shared/comments/comment', comment: comment
+  = render 'shared/comments/form', resource: answer

@@ -1,0 +1,66 @@
+.answer data-id=@answer.id id='' data-errors-selector='edit-answer-errors'
+  //
+  // Best answer links |=> when authenticated && author of question
+  //
+  - if gon.user_id == gon.question_user_id
+    - if @answer.best
+      a class='link-set-as-best-answer hidden' data-remote='true' data-method='patch' href="/answers/#{@answer.id}/best_answer" Best answer
+      a.link-unset-best-answer data-remote='true' data-method='patch' href="/answers/#{@answer.id}/not_best_answer" Not a best
+    - else
+      a.link-set-as-best-answer data-remote='true' data-method='patch' href="/answers/#{@answer.id}/best_answer" Best answer
+      a class='link-unset-best-answer hidden' data-remote='true' data-method='patch' href="/answers/#{@answer.id}/not_best_answer" Not a best
+
+  //
+  // Votes |=> when authenticated
+  //
+  - if gon.user_id
+    .votes id="vote-answer-#{@answer.id}" data-type='answer'
+      // |=> when authenticated &&
+      - if gon.user_id && gon.user_id != @answer.user_id
+        a.vote data-remote='true' data-method='post' data-format='json' data-params='vote[value]=1' href="/answers/#{@answer.id}/vote" Like
+        span data-vote='rate'
+          = " #{@votes.rate} "
+        a.vote data-remote='true' data-method='post' data-format='json' data-params='vote[value]=-1' href="/answers/#{@answer.id}/vote" Dislike
+      - else
+        span data-vote='rate'
+          = @votes.rate
+  //
+  // Answer data |=> all
+  //
+  .inline-edit-data
+    p.body = @answer.body
+
+    //
+    // Answers attachements |=> all
+    //
+    = @partial_attachements()
+
+  //
+  // Edit answer |=> when authenticated && author of answer
+  //
+  - if gon.user_id == @answer.user_id
+    div class='inline-edit-mode hidden'
+      form class="edit_answer_#{@answer.id}" class='form-edit-answer' data-answer-id=@answer.id enctype='multipart/form-data' action="/answers/#{@answer.id}" accept-charset='UTF-8' data-remote=true method='post'
+        input name='utf8' type='hidden' value=true
+        input name='_method' type='hidden' value='patch'
+        .errors
+        p
+          label for='answer_body' Body
+          textarea id='answer_body' name='answer[body]' #{@answer.body}
+
+        //
+        // Answers editable attachements
+        //
+        = @partial_editable_attachements()
+ 
+        input name='commit' value='Save' data-disable-with='Save' type='submit'
+
+    //
+    // Edit answer links
+    //
+    .links
+      a.link-delete data-remote=true rel='nofollow' data-method='delete' href="/answers/#{@answer.id}" Delete
+      a.link-edit href='#' rel='nofollow' Edit
+      a class='link-cancel hidden' href='#' Cancel
+
+  = @partial_comments()

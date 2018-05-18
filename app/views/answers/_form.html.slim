@@ -1,6 +1,6 @@
-= form_for [resource.question, resource], remote: true do |f|
+= form_for [resource.question, resource], remote: true, format: :json do |f|
 
-  #create_answer_errors
+  .errors
 
   = f.label :body
   = f.text_area :body

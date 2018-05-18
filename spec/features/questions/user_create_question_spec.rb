@@ -9,7 +9,7 @@ feature 'User create question', %q{
   given(:question) { attributes_for(:question) }
   given(:user) { create(:user) }
 
-  describe 'Authenticated user' do
+  context 'Authenticated user' do
     before { sign_in(user) }
     let(:params) do
       { title: question[:title], body: question[:body] }
@@ -35,5 +35,20 @@ feature 'User create question', %q{
     visit new_question_path
 
     expect(page).to have_content('Log in')
+  end
+
+  context 'multiple sessions' do
+    scenario 'question appears on another user\'s page', js: true do
+      Capybara.using_session('guest') do
+        visit questions_path
+      end
+      Capybara.using_session('author') do
+        sign_in(user)
+        create_question(title: question[:title], body: question[:body])
+      end
+      Capybara.using_session('guest') do
+        expect(page).to have_content(question[:title])
+      end
+    end
   end
 end

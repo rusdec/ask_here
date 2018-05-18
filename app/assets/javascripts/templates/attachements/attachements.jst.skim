@@ -1,0 +1,4 @@
+ ul.attachements
+  - for attachement in @attachements
+    li
+      a target='_blank' href="#{attachement.file.url}" #{attachement.name}

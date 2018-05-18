@@ -38,14 +38,14 @@ module VotesHelper
 
   def vote_link(params)
     options = vote_link_options(params)
-    options.merge!(class: 'red') if params[:method] == :delete
-
+    options[:class] << ' red' if params[:method] == :delete
     link_to params[:type].capitalize, path_to_vote(params[:resource]), options
   end
 
   def vote_link_options(params)
     { remote: true,
       method: params[:method],
+      class: 'vote',
       data: { format: :json,
               vote: params[:type],
               params: value_attribute(params[:value]) } }

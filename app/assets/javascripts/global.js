@@ -12,13 +12,20 @@ function parseAjaxResponse(e) {
   return { data: e.detail[0], status: e.detail[1], response: e.detail[2] }
 }
 
-function showErrors(errors = []) {
-  let alerts = document.querySelector('div.alert')
-  if (alerts && errors) {
+function clearErrors(container) {
+  if (container) {
+    container.innerHTML = ''
+  }
+}
+
+function showErrors(errors = [], container) {
+  container = container || document.querySelector('div.alert')
+  if (container && errors) {
+    clearErrors(container)
     errors.forEach((error) => {
       let p = document.createElement('p')
       p.textContent = error
-      alerts.appendChild(p)
+      container.appendChild(p)
     })
   }
 }

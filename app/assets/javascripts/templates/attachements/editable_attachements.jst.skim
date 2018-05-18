@@ -1,0 +1,15 @@
+//
+// Resource editable attachements
+//
+div class="#{@resource_type}_editable_attachements"
+  - for attachement, i in @attachements
+    .editable_attachement
+      .file
+        span = attachement.name
+      .edit_actions
+        label for="#{@resource_type}_attachements_attributes_#{i}__destroy" Remove file
+        input name="#{@resource_type}[attachements_attributes][#{i}][_destroy]" value=0 type='hidden'
+        input name="#{@resource_type}[attachements_attributes][#{i}][_destroy]" value=1 id="#{@resource_type}_attachements_attributes_#{i}__destroy" type="checkbox"
+      input name="#{@resource_type}[attachements_attributes][#{i}][id]" value=attachement.id type='hidden' id="#{@resource_type}_attachements_attributes_#{i}_id"
+  p
+    a.add_fields data-association='attachement' data-associations='attachements' data-association-insertion-template='<div class="attachement"><label for="#{@resource_type}_attachements_attributes_new_attachements_file">File</label><input type="file" name="#{@resource_type}[attachements_attributes][new_attachements][file]" id="#{@resource_type}_attachements_attributes_new_attachements_file" /><input type="hidden" name="#{@resource_type}[attachements_attributes][new_attachements][_destroy]" id="#{@resource_type}_attachements_attributes_new_attachements__destroy" value="false" /><a class="remove_fields dynamic" data-wrapper-class="attachement" href="#">Remove file</a></div>' href='#' rel='nofollow' Add file

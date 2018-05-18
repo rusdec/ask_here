@@ -1,0 +1,7 @@
+- if current_user
+  .new-comment
+    = form_for [resource, resource.comments.new], remote: true, format: :json do |f|
+      .errors
+      = f.label :body
+      = f.text_area :body
+      = f.submit
