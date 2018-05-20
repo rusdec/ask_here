@@ -1,4 +1,6 @@
-<% if @result %>
+<% if @question.errors.any? %>
+  updateQuestionErrors('<%= j render 'shared/errors', resource: @question %>')
+<% else %>
   updateQuestionErrors()
   updateQuestionTitle(document.querySelector('#question_title').value)
   updateQuestionBody(document.querySelector('#question_body').value)
@@ -8,6 +10,4 @@
   updateQuestionAttachements('<%= j render 'shared/attachements', resource: @question.attachements %>')
 
   listenClickLinkCancelEditQuestion()
-<% else %>
-  updateQuestionErrors('<%= j render 'shared/errors', resource: @question %>')
 <% end %>

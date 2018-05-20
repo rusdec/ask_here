@@ -4,36 +4,35 @@ class QuestionsController < ApplicationController
 
   after_action :publish_questions, only: %i[create]
 
+  respond_to :js, only: %i[update destroy]
+
   include Voted
 
   def index
     @questions = Question.all
   end
 
-  def show
-    @answer = @question.answers.new
-  end
+  def show; end
 
   def new
     @question = current_user.questions.new
   end
 
   def create
-    @question = current_user.questions.new(question_params)
-
-    if @question.save
-      redirect_to @question, alert: 'Question create success'
-    else
-      render :new
-    end
+    respond_with(@question = current_user.questions.create(question_params))
   end
 
   def destroy
-    @result = @question.destroy if current_user.author_of?(@question)
+    if current_user.author_of?(@question)
+      respond_with(@question.destroy)
+    end
   end
 
   def update
-    @result = current_user.author_of?(@question) && @question.update(question_params)
+    if current_user.author_of?(@question)
+      @question.update(question_params)
+      respond_with(@question)
+    end
   end
 
   private

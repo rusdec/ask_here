@@ -28,11 +28,6 @@ RSpec.describe QuestionsController, type: :controller do
     it 'render show view' do
       expect(response).to render_template(:show)
     end
-
-    it 'assign new answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-      expect(assigns(:answer).question_id).to eq question.id
-    end
   end
 
   describe 'GET #new' do
@@ -72,6 +67,11 @@ RSpec.describe QuestionsController, type: :controller do
           post :create, params: params
         }.to change(user.questions, :count).by(1)
       end
+
+      it 'set flash message with success' do
+        post :create, params: params
+        expect(flash.notice).to match('Your question was successfully created')
+      end
     end
 
     context 'with invalid parameters' do
@@ -88,6 +88,11 @@ RSpec.describe QuestionsController, type: :controller do
       it 'render new view' do
         post :create, params: params
         expect(response).to render_template(:new)
+      end
+
+      it 'set flash message with error' do
+        post :create, params: params
+        expect(flash.alert).to match('Sorry, but question could not be created')
       end
     end
   end
