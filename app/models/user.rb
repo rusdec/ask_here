@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :answers, dependent: :destroy
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :authorizations
 
   validates :password, length: { minimum: 5,
                                  maximum: 20 }
@@ -21,5 +22,32 @@ class User < ApplicationRecord
 
   def not_author_of?(entity)
     !author_of?(entity)
+  end
+
+  def self.find_for_oauth(auth)
+    # when User exist and has given Authorization
+    authorization = Authorization.where(provider: auth.provider, uid: auth.uid).first
+    return authorization.user if authorization
+
+    user = find_by(email: auth.info.email)
+    if user
+      # when User exist and hasn't given Authorization
+      user.create_authorization(auth)
+    else
+      # when User not exist
+      password = Devise.friendly_token(10)
+      user = User.create(
+        email: auth.info.email,
+        password: password,
+        password_confirmation: password
+      )
+      user.create_authorization(auth)
+    end
+
+    user
+  end
+
+  def create_authorization(auth)
+    authorizations.create(provider: auth.provider, uid: auth.uid)
   end
 end
