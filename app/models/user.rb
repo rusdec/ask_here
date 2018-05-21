@@ -30,19 +30,17 @@ class User < ApplicationRecord
     return authorization.user if authorization
 
     user = find_by(email: auth.info.email)
-    if user
-      # when User exist and hasn't given Authorization
-      user.create_authorization(auth)
-    else
-      # when User not exist
+
+    # when User not exist
+    unless user
       password = Devise.friendly_token(10)
-      user = User.create(
-        email: auth.info.email,
-        password: password,
-        password_confirmation: password
-      )
-      user.create_authorization(auth)
+      user = User.create(email: auth.info.email,
+                         password: password,
+                         password_confirmation: password)
     end
+
+    # when user exist and hasn't given Authorization
+    user.create_authorization(auth)
 
     user
   end
