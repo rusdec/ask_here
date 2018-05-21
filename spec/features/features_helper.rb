@@ -9,6 +9,7 @@ RSpec.configure do |config|
   config.include Feature::Attachement, type: :feature
   config.include Feature::Vote, type: :feature
   config.include Feature::Comment, type: :feature
+  config.include Feature::OmniauthMacros, type: :feature
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
