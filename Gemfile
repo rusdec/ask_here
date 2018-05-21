@@ -42,6 +42,8 @@ gem 'with_model'
 gem 'gon'
 gem 'skim'
 gem 'responders'
+gem 'omniauth'
+gem 'omniauth-github'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
