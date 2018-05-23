@@ -14,9 +14,6 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 5,
                                  maximum: 20 }
 
-  accepts_nested_attributes_for :authorizations, allow_destroy: true,
-                                                 reject_if: :all_blank
-
   delegate :vote_for, to: :votes
 
   def author_of?(entity)
