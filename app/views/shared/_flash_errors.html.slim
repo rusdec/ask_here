@@ -1,0 +1,6 @@
+.alerts
+  - if flash[:alerts] && flash[:alerts].length > 0
+    h4.alert-heading Errors:
+    ul
+      - flash[:alerts].each do |message|
+        li=message
