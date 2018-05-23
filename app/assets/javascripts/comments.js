@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   App.cable.subscriptions.create('CommentsChannel', {
     connected: function() {
-      document.querySelectorAll('.question, .answer').forEach(commentable => {
+      document.querySelectorAll('.question-container .question, .answer').forEach(commentable => {
         this.perform('follow', {
           commentable_id: commentable.dataset.id,
           commentable_type: commentable.classList[0]
