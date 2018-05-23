@@ -1,0 +1,15 @@
+<h2>Enter your Email</h2>
+
+<%= form_with url: continue_authorization_path, data: { remote: false } do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <%= f.hidden_field :uid, value: @uid %>
+  <%= f.hidden_field :provider, value: @provider %>
+
+  <div class="actions">
+    <%= f.submit "Send" %>
+  </div>
+<% end %>
