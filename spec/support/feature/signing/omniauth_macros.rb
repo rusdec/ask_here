@@ -8,12 +8,9 @@ module Feature
       )
     end
 
-    def mock_twitter_auth_hash
-      OmniAuth.config.mock_auth[:twitter] = OmniAuth::AuthHash.new(
-        provider: 'twitter',
-        uid: '12345',
-        info: {}
-      )
+    def mock_twitter_auth_hash(params = {})
+      params = { provider: 'twitter', uid: '12345', info: {} }.merge(params)
+      OmniAuth.config.mock_auth[:twitter] = OmniAuth::AuthHash.new(params)
     end
 
     def click_sign_in_with(provider)

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'models_helper'
 
 RSpec.describe User, type: :model do
   it { should validate_presence_of(:email) }
@@ -34,7 +34,8 @@ RSpec.describe User, type: :model do
 
   describe '#create_authorization' do
     let(:user) { create(:user) }
-    let(:auth) { OmniAuth::AuthHash.new(provider: 'github', uid: '12345') }
+    let(:auth) { any_provider_auth_hash_without_email }
+    let!(:authorization) { user.create_authorization(auth) }
 
     it 'creates authorization for user' do
       expect {
@@ -43,24 +44,16 @@ RSpec.describe User, type: :model do
     end
 
     it 'creates authorization with provider' do
-      authorization = user.create_authorization(auth)
-
       expect(authorization.provider).to eq(auth.provider)
     end
 
     it 'creates authorization with uid' do
-      authorization = user.create_authorization(auth)
-
       expect(authorization.uid).to eq(auth.uid)
     end
   end
 
   describe '.create_user' do
-    let(:auth) do
-      OmniAuth::AuthHash.new(uid: '12345',
-                             provider: 'github',
-                             info: { email: 'example@mail.com' })
-    end
+    let(:auth) { any_provider_auth_hash }
 
     context 'when auth.with_request_email is given' do
       before { auth.with_request_email = true }
@@ -95,9 +88,8 @@ RSpec.describe User, type: :model do
 
   describe '#create_authorization' do
     let(:user) { create(:user) }
-    let(:auth) do
-      OmniAuth::AuthHash.new(provider: 'any_provider', uid: 'any_uid')
-    end
+    let(:auth) { any_provider_auth_hash_without_email }
+    let!(:authorization) { user.create_authorization(auth) }
 
     it 'creates authorization for user' do
       expect {
@@ -106,14 +98,10 @@ RSpec.describe User, type: :model do
     end
 
     it 'creates authorization with provider' do
-      user.create_authorization(auth)
-
       expect(user.authorizations.first.provider).to eq(auth.provider)
     end
 
     it 'creates authorization with uid' do
-      user.create_authorization(auth)
-
       expect(user.authorizations.first.uid).to eq(auth.uid)
     end
   end
@@ -133,9 +121,7 @@ RSpec.describe User, type: :model do
     end
 
     context 'when user has not authorization' do
-      let(:auth) do
-        OmniAuth::AuthHash.new(params.merge(info: { email: user.email }))
-      end
+      let(:auth) { any_provider_auth_hash(user.email) }
 
       context 'and user exist' do
         it 'does not create new user' do
@@ -150,9 +136,7 @@ RSpec.describe User, type: :model do
       end
 
       context 'and user not exist' do
-        let(:auth) do
-          OmniAuth::AuthHash.new(params.merge(info: { email: 'test@example.com' }))
-        end
+        let(:auth) { any_provider_auth_hash }
 
         context 'and email given via special form' do
           before { auth.with_request_email = true }

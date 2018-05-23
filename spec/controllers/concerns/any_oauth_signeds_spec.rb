@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-class AnyOauthSignedsController < ApplicationController; end
+#class AnyOauthSignedsController < ApplicationController; end
+class AnyOauthSignedsController < Devise::OmniauthCallbacksController; end
 
 RSpec.describe AnyOauthSignedsController, type: :controller do
   controller AnyOauthSignedsController do
@@ -26,24 +27,11 @@ RSpec.describe AnyOauthSignedsController, type: :controller do
 
       try_to_sign_in
     end
-
-    private
-
-    def set_flash_message(key, kind, options = {})
-      message = find_message(kind, options)
-      if options[:now]
-        flash.now[key] = message if message.present?
-      else
-        flash[key] = message if message.present?
-      end
-    end
-
-    def find_message(kind, options)
-      "Successfully authenticated from #{options[:kind]} account."
-    end
   end
 
   before do
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+
     routes.draw do
       get :sign_in_flow_test, to: 'any_oauth_signeds#sign_in_flow_test'
       get :try_to_sign_in_test, to: 'any_oauth_signeds#try_to_sign_in_test'
@@ -55,11 +43,12 @@ RSpec.describe AnyOauthSignedsController, type: :controller do
   let(:params) do
     { uid: 'any_uid', provider: 'any_provider' }
   end
+  let(:params_with_email) { params.merge(email: 'example@email.com') }
 
   describe 'POST #authorization_after_request_email' do
     before do
       post :authorization_after_request_email,
-           params: params.merge!(email: 'example@email.com')
+           params: params_with_email
     end
 
     it 'redirect to sign in' do
@@ -74,7 +63,7 @@ RSpec.describe AnyOauthSignedsController, type: :controller do
   describe 'GET #try_to_sign_in_test' do
     context 'when email valid' do
       before do
-        get :try_to_sign_in_test, params: params.merge!(email: 'example@mail.com')
+        get :try_to_sign_in_test, params: params_with_email
       end
 
       it 'redirect to root' do
