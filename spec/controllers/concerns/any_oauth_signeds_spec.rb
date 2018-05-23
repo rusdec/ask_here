@@ -47,11 +47,28 @@ RSpec.describe AnyOauthSignedsController, type: :controller do
     routes.draw do
       get :sign_in_flow_test, to: 'any_oauth_signeds#sign_in_flow_test'
       get :try_to_sign_in_test, to: 'any_oauth_signeds#try_to_sign_in_test'
+      post :authorization_after_request_email,
+           to: 'any_oauth_signeds#authorization_after_request_email'
     end
   end
 
   let(:params) do
     { uid: 'any_uid', provider: 'any_provider' }
+  end
+
+  describe 'POST #authorization_after_request_email' do
+    before do
+      post :authorization_after_request_email,
+           params: params.merge!(email: 'example@email.com')
+    end
+
+    it 'redirect to sign in' do
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it 'set flash message' do
+      expect(flash[:alert]).to eq(I18n.t('devise.failure.unconfirmed'))
+    end
   end
 
   describe 'GET #try_to_sign_in_test' do
