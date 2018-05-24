@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180510165202) do
+ActiveRecord::Schema.define(version: 20180522072138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20180510165202) do
     t.datetime "updated_at", null: false
     t.string "name", default: ""
     t.index ["attachable_id", "attachable_type"], name: "index_attachements_on_attachable_id_and_attachable_type"
+  end
+
+  create_table "authorizations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "provider"
+    t.string "uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_authorizations_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -66,6 +75,11 @@ ActiveRecord::Schema.define(version: 20180510165202) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -81,5 +95,6 @@ ActiveRecord::Schema.define(version: 20180510165202) do
   end
 
   add_foreign_key "answers", "users"
+  add_foreign_key "authorizations", "users"
   add_foreign_key "questions", "users"
 end

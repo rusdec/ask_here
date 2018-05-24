@@ -42,17 +42,23 @@ gem 'with_model'
 gem 'gon'
 gem 'skim'
 gem 'responders'
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'omniauth-twitter'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.17'
+  #gem 'capybara', '~> 2.17'
+  gem 'capybara'
   gem 'selenium-webdriver'
   gem 'geckodriver-helper'
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'database_cleaner'
+  gem 'letter_opener'
+  gem 'capybara-email'
 end
 
 group :development do

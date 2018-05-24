@@ -6,6 +6,7 @@ FactoryBot.define do
   factory :user do
     email
     password 'Qwerty123'    
+    confirmed_at Time.now
 
     transient do
       questions_count 1

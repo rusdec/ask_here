@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
   root to: 'questions#index'
 
-  devise_for :users, skip: [:sessions]
+  devise_for :users, skip: [:sessions],
+             controllers: { omniauth_callbacks: 'omniauth_callbacks',
+                            registrations: 'users/registrations' }
   as :user do
     get :sign_in, to: 'devise/sessions#new', as: :new_user_session
     post :sign_in, to: 'devise/sessions#create', as: :user_session
     delete :sign_out, to: 'devise/sessions#destroy', as: :destroy_user_session
+    post :continue_authorization, to: 'omniauth_callbacks#authorization_after_request_email'
   end
 
   concern :votable do |options|

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+html
+  head
+    title = AskHere
+    = csrf_meta_tags
+
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = action_cable_meta_tag
+    = Gon::Base.render_data
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+  body
+    - if current_user
+      = link_to 'Sign out', destroy_user_session_path, method: :delete
+    - else
+      = link_to 'Sign in', new_user_session_path
+
+    .notice
+      = notice
+    .alert
+      = alert
+    = render 'shared/flash_errors'
+
+    = yield
