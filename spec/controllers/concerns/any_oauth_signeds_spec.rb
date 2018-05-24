@@ -97,6 +97,8 @@ RSpec.describe AnyOauthSignedsController, type: :controller do
 
     context 'when auth email exist' do
       before do
+        session[:auth_uid] = 'any_uid'
+        session[:auth_provider] = 'any_provider'
         get :sign_in_flow_test, params: params.merge!(email: email)
       end
 
@@ -106,6 +108,14 @@ RSpec.describe AnyOauthSignedsController, type: :controller do
 
       it 'set flash message' do
         expect(flash[:notice]).to eq('Successfully authenticated from Any_provider account.')
+      end
+
+      it 'session.auth_uid equal nil' do
+        expect(session[:auth_uid]).to be_nil
+      end
+
+      it 'session.auth_uid equal nil' do
+        expect(session[:auth_provider]).to be_nil
       end
     end
 
@@ -151,12 +161,12 @@ RSpec.describe AnyOauthSignedsController, type: :controller do
 
         context 'when authorization not exist' do
           before { get :sign_in_flow_test, params: params }
-          it 'assign auth.uid to @uid' do
-            expect(assigns(:uid)).to eq(params[:uid])
+          it 'assign auth.uid to session session.auth_uid' do
+            expect(session[:auth_uid]).to eq(params[:uid])
           end
 
-          it 'assign auth.provider to @provider' do
-            expect(assigns(:params)).to eq(params[:params])
+          it 'assign auth.provider to session.auth_provider' do
+            expect(session[:auth_provider]).to eq(params[:provider])
           end
 
           it 'render request_email view' do

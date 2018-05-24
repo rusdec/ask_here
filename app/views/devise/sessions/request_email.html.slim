@@ -1,0 +1,10 @@
+h2 Enter your Email
+
+= form_with url: continue_authorization_path, data: { remote: false } do |f|
+  .field
+    = f.label :email
+    br
+    = f.email_field :email, autofocus: true, autocomplete: 'email'
+
+  .actions
+    = f.submit 'Send'

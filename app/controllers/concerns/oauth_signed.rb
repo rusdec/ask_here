@@ -4,8 +4,8 @@ module OauthSigned
    included do
      def authorization_after_request_email
        request.env['omniauth.auth'] = OmniAuth::AuthHash.new(
-         uid: params[:uid],
-         provider: params[:provider],
+         uid: session[:auth_uid],
+         provider: session[:auth_provider],
          info: { email: params[:email] },
          with_request_email: true
        )
@@ -36,7 +36,7 @@ module OauthSigned
 
          # user with uid and provider not exist
          else
-           @uid, @provider = uid_from(request), provider_from(request)
+           set_session_auth_variables
            render 'devise/sessions/request_email'
          end
        end
@@ -53,6 +53,7 @@ module OauthSigned
            set_flash_message(:notice, :success,
                              kind: provider_from(request).capitalize)
          end
+         clear_session_auth_variables
        end
      end
 
@@ -66,6 +67,15 @@ module OauthSigned
 
      def uid_from(auth)
        auth.env['omniauth.auth'].uid
+     end
+
+     def set_session_auth_variables
+       session[:auth_uid] = uid_from(request)
+       session[:auth_provider] = provider_from(request)
+     end
+
+     def clear_session_auth_variables
+       [:auth_uid, :auth_provider].each { |key| session[key] = nil }
      end
    end
 end
