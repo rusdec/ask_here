@@ -1,4 +1,4 @@
-- if current_user
+- if can?(:create, Comment)
   .new-comment
     = form_for [resource, resource.comments.new], remote: true, format: :json do |f|
       .errors

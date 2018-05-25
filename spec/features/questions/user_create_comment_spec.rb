@@ -74,7 +74,7 @@ feature 'User create comment', %q{
   end
 
   context 'Unauthenticated user' do
-    scenario 'can\'t create comment' do
+    scenario 'no see Add comment link' do
       visit question_path(question)
       
       expect(page).to have_no_content('Add comment')

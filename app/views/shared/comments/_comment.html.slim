@@ -1,5 +1,5 @@
 .comment data-id=comment.id
-  - if current_user&.author_of?(comment)
+  - if can?(:author_actions, comment)
     = inline_edit_element(resource: comment, data: render('shared/comments/comment_data', comment: comment), params: { delete_link_params: { format: :json } }, form: render('shared/comments/update_form', comment: comment))
   - else
     = render 'shared/comments/comment_data', comment: comment
