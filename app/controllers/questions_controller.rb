@@ -1,10 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-
-  authorize_resource
-  skip_authorize_resource only: :new
-
   before_action :set_question, only: %i[show update destroy]
+  authorize_resource
   after_action :publish_questions, only: %i[create]
 
   respond_to :js, only: %i[update destroy]
@@ -26,16 +23,12 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@question)
-      respond_with(@question.destroy)
-    end
+    respond_with(@question.destroy)
   end
 
   def update
-    if current_user.author_of?(@question)
-      @question.update(question_params)
-      respond_with(@question)
-    end
+    @question.update(question_params)
+    respond_with(@question)
   end
 
   private

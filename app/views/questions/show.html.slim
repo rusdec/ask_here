@@ -21,7 +21,7 @@
   .answers
     = render @question.persisted_answers
 
-  - if current_user
+  - if can?(:create, Answer)
     h3= 'New answer'
     #new-answer
       = render 'answers/form', resource: @question.answers.new

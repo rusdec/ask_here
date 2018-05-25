@@ -4,10 +4,15 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
 
-  check_authorizations
+  check_authorization
 
   protect_from_forgery with: :exception
   before_action :gon_user
+
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:alert] = exception.message
+    redirect_to root_path
+  end
 
   private
 
