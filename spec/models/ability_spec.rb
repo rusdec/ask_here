@@ -20,6 +20,14 @@ describe Ability do
       it { should be_able_to(:best_answer_actions, answer, user: user) }
       it { should_not be_able_to(:best_answer_actions, other_answer, user: user) }
     end
+
+    context 'Votable' do
+      let(:votable) { create(:question, user: create(:user)) }
+      let(:other_votable) { create(:question, user: user) }
+
+      it { should be_able_to(:vote_actions, votable, user: user) }
+      it { should_not be_able_to(:vote_actions, other_votable, user: user) }
+    end
   end
 
   context 'User' do
@@ -62,6 +70,14 @@ describe Ability do
 
       it { should be_able_to(:author_actions, comment, user: user) }
       it { should_not be_able_to(:author_actions, other_comment, user: user) }
+    end
+
+    context 'Votable' do
+      let(:votable) { create(:question, user: create(:user)) }
+      let(:other_votable) { create(:question, user: user) }
+
+      it { should be_able_to(:vote_actions, votable, user: user) }
+      it { should_not be_able_to(:vote_actions, other_votable, user: user) }
     end
   end
 

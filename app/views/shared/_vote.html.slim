@@ -1,5 +1,5 @@
 .votes id=vote_container_klass_name(resource) data-type=resource.class.to_s.underscore
-  - if current_user&.not_author_of?(resource)
+  - if can?(:vote_actions, resource)
     = vote_links(resource: resource, vote: current_user.vote_for(resource))
   - else
     = vote_rating(resource)

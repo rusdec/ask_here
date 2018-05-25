@@ -45,6 +45,7 @@ class Ability
     alias_action :create, :read, :update, :destroy, to: :crud
     can(:crud, :all)
 
+    vote_abilities
     best_answer_abilities
   end
 
@@ -54,6 +55,7 @@ class Ability
 
     guest_abilities
     best_answer_abilities
+    vote_abilities
     can(:create, :all)
   end
 
@@ -65,6 +67,13 @@ class Ability
     alias_action :best_answer, :not_best_answer, to: :best_answer_actions
     can :best_answer_actions, Answer do |answer|
       user.author_of?(answer.question)
+    end
+  end
+
+  def vote_abilities
+    alias_action :add_vote, :cancel_vote, to: :vote_actions
+    can :vote_actions, [Answer, Question] do |votable|
+      user.not_author_of?(votable)
     end
   end
 end
