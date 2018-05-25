@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: %i[create]
   before_action :set_answer, except: %i[create]
+  authorize_resource
 
   after_action :publish_answers, only: %i[create update]
 
@@ -15,24 +16,20 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.destroy if current_user.author_of?(@answer)
+    @answer.destroy
   end
 
   def update
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-      json_response_by_result
-    else
-      json_response_you_can_not_do_it
-    end
+    @answer.update(answer_params)
+    json_response_by_result
   end
 
   def best_answer
-    @answer.best! if current_user.author_of?(@answer.question)
+    @answer.best!
   end
 
   def not_best_answer
-    @answer.not_best! if current_user.author_of?(@answer.question)
+    @answer.not_best!
   end
 
   private

@@ -57,7 +57,7 @@ RSpec.describe AnswersController, type: :controller do
       { id: answer }
     end
 
-    context 'author' do
+    context 'when author' do
       before { sign_in(user) }
 
       it 'delete answer' do
@@ -72,7 +72,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'not authenticated user' do
+    context 'when unauthenticated user' do
       it 'can\'t delete answer' do
         expect {
           delete :destroy, params: params, format: :js
@@ -80,13 +80,18 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'not author' do
+    context 'when not author' do
       before { sign_in(create(:user)) }
 
       it 'can\'t delete answer' do
         expect {
           delete :destroy, params: params, format: :js
         }.to_not change(question.answers, :count)
+      end
+
+      it 'redirect to root' do
+        delete :destroy, params: params, format: :js
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -139,10 +144,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq(old_answer.body)
       end
 
-      it 'response body has error' do
+      it 'redirect to root' do
         post :update, params
-        puts response.body
-        expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
+        expect(response).to redirect_to(root_path)
       end
     end
 
