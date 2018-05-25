@@ -42,16 +42,29 @@ class Ability
   private
 
   def admin_abilities
-    can(:manage, :all)
+    alias_action :create, :read, :update, :destroy, to: :crud
+    can(:crud, :all)
+
+    best_answer_abilities
   end
 
   def user_abilities
+    alias_action :update, :destroy, to: :author_actions
+    can(:author_actions, :all, user: user)
+
     guest_abilities
+    best_answer_abilities
     can(:create, :all)
-    can([:update, :destroy], :all, user: user)
   end
 
   def guest_abilities
     can(:read, :all)
+  end
+
+  def best_answer_abilities
+    alias_action :best_answer, :not_best_answer, to: :best_answer_actions
+    can :best_answer_actions, Answer do |answer|
+      user.author_of?(answer.question)
+    end
   end
 end

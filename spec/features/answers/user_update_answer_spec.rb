@@ -69,7 +69,7 @@ feature 'User update question', %q{
     end
 
     context 'when not author of answer' do
-      scenario 'can\'t edit answer of another user' do
+      scenario 'no see Edit answer link' do
         visit question_path(create(:question, user: create(:user)))
 
         expect(page).to have_no_content('Edit')
@@ -101,7 +101,7 @@ feature 'User update question', %q{
   context 'Unauthenticated user' do
     before { visit question_path(question) }
 
-    scenario 'can\'t edit question' do
+    scenario 'no see Edit answer link' do
       expect(page).to have_no_content('Edit')
     end
   end

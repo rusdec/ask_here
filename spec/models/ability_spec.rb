@@ -6,42 +6,62 @@ describe Ability do
 
   context 'Admin' do
     let(:user) { create(:user, admin: true) }
-    it { should be_able_to(:manage, :all) }
+    it { should be_able_to(:crud, :all) }
+
+    context 'Answer' do
+      let(:answer) do
+        create(:answer, question: create(:question, user: user), user: user)
+      end
+      let(:other_answer) do
+        create(:answer,
+               question: create(:question, user: create(:user)), user: create(:user))
+      end
+
+      it { should be_able_to(:best_answer_actions, answer, user: user) }
+      it { should_not be_able_to(:best_answer_actions, other_answer, user: user) }
+    end
   end
 
   context 'User' do
     let(:user) { create(:user, admin: false) }
-    let(:other_user) { create(:user) }
     let(:entities) { [:question, :answer, :comment] }
 
     it { should be_able_to([:read, :create], :all) } 
 
-    # question
-    it { should be_able_to([:update, :destroy], create(:question, user: user), user: user) }
-    it { should_not be_able_to([:update, :destroy], create(:question, user: other_user), user: user) }
+    context 'Question' do
+      let(:question) { create(:question, user: user) }
+      let(:other_question) { create(:question, user: create(:user)) }
 
-    #answer
-    it do
-      should be_able_to([:update, :destroy], create(:answer,
-                                                    question: create(:question, user: user),
-                                                    user: user), user: user)
-    end
-    it do
-      should_not be_able_to([:update, :destroy], create(:answer,
-                                                        question: create(:question, user: user),
-                                                        user: other_user), user: user)
+      it { should be_able_to(:author_actions, question, user: user) }
+      it { should_not be_able_to(:author_actions, other_question, user: user) }
     end
 
-    #comment
-    it do
-      should be_able_to([:update, :destroy], create(:comment,
-                                                    commentable: create(:question, user: user),
-                                                    user: user), user: user)
+    context 'Answer' do
+      let(:answer) do
+        create(:answer, question: create(:question, user: user), user: user)
+      end
+      let(:other_answer) do
+        create(:answer,
+               question: create(:question, user: create(:user)), user: create(:user))
+      end
+
+      it { should be_able_to(:author_actions, answer, user: user) }
+      it { should_not be_able_to(:author_actions, other_answer, user: user) }
+
+      it { should be_able_to(:best_answer_actions, answer, user: user) }
+      it { should_not be_able_to(:best_answer_actions, other_answer, user: user) }
     end
-    it do
-      should_not be_able_to([:update, :destroy], create(:comment,
-                                                        commentable: create(:question, user: user),
-                                                        user: other_user), user: user)
+
+    context 'Comment' do
+      let(:comment) do
+        create(:comment, commentable: create(:question, user: user), user: user)
+      end
+      let(:other_comment) do
+        create(:comment, commentable: create(:question, user: user), user: create(:user))
+      end
+
+      it { should be_able_to(:author_actions, comment, user: user) }
+      it { should_not be_able_to(:author_actions, other_comment, user: user) }
     end
   end
 

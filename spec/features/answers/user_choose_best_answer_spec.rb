@@ -57,13 +57,13 @@ feature 'User choose best answer', %q{
         visit question_path(question)
       end
 
-      scenario 'can\'t choose best answer', js: true do
+      scenario 'no see Best answer link', js: true do
         expect(page).to have_no_content('Best answer')
       end
     end
   end
 
-  scenario 'Unauthenticated user can\'t choose best answer' do
+  scenario 'Unauthenticated user no see Best answer link' do
     visit question_path(question)
 
     expect(page).to have_no_content('Best answer')
