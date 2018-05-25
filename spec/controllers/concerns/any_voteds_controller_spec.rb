@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../controllers_helper'
 require 'with_model'
 
 class AnyVotedsController < ApplicationController; end
@@ -95,7 +95,9 @@ RSpec.describe AnyVotedsController, type: :controller do
 
         it 'response body has success' do
           post :add_vote, params: params, format: :json
-          expect(response.body).to match('{"status":true,"message":"Success","votes":{"likes":1,"dislikes":0,"rate":1}}')
+          expect(response.body).to include_json(
+            json_success_hash.merge(votes: { likes: 1, dislikes: 0, rate: 1 })
+          )
         end
       end
     end
@@ -125,7 +127,9 @@ RSpec.describe AnyVotedsController, type: :controller do
 
         it 'response body has success' do
           delete :cancel_vote, params: params, format: :json
-          expect(response.body).to match('{"status":true,"message":"Success","votes":{"likes":0,"dislikes":0,"rate":0}}')
+          expect(response.body).to include_json(
+            json_success_hash.merge(votes: { likes: 0, dislikes: 0, rate: 0 })
+          )
         end
       end
 

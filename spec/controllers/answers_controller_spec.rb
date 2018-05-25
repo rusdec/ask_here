@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'controllers_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user_with_question_and_answers) }
@@ -28,7 +28,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'response body success' do
         post :create, params
-        expect(response.body).to match('{"status":true,"message":"Success"}')
+        expect(response.body).to include_json(json_success_hash)
       end
     end
 
@@ -47,7 +47,11 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'response body has error' do
         post :create, params
-        expect(response.body).to match('{"status":false,"errors":["Body can\'t be blank","Body is too short (minimum is 10 characters)"]}')
+        expect(response.body).to include_json(
+          status: false,
+          errors: ["Body can\'t be blank",
+                   "Body is too short (minimum is 10 characters)"]
+        )
       end
     end
   end
@@ -129,7 +133,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'response body success' do
         post :update, params
 
-        expect(response.body).to match('{"status":true,"message":"Success"}')
+        expect(response.body).to include_json(json_success_hash)
       end
     end
 

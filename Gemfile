@@ -60,6 +60,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'letter_opener'
   gem 'capybara-email'
+  gem 'rspec-json_expectations'
 end
 
 group :development do

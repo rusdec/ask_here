@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../controllers_helper'
 require 'with_model'
 
 class AnyJsonResponsedsController < ApplicationController; end
@@ -44,7 +44,7 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with error' do
       get :error, format: :json
 
-      expect(response.body).to match('{"status":false,"errors":["AnyErrorText"]}')
+      expect(response.body).to include_json(status: false, errors: ['AnyErrorText'])
     end
   end
 
@@ -52,13 +52,16 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with success' do
       get :success, format: :json
 
-      expect(response.body).to match('{"status":true,"message":"Success"}')
+      expect(response.body).to include_json(json_success_hash)
     end
+
     context 'when params is given' do
       it 'respond with success and params' do
         get :success, params: { params: 'Any param' }, format: :json
 
-       expect(response.body).to match('{"status":true,"message":"Success","param":"Any param"}')
+        expect(response.body).to include_json(
+          json_success_hash.merge(param: 'Any param')
+        )
       end
     end
   end
@@ -67,7 +70,10 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with error' do
       get :you_can_not_do_it, format: :json
 
-      expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
+      expect(response.body).to include_json(
+        status: false,
+        errors: ['You can not do it']
+      )
     end
   end
 
@@ -75,7 +81,7 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with success' do
       get :success, format: :json
 
-      expect(response.body).to match('{"status":true,"message":"Success"}')
+      expect(response.body).to include_json(json_success_hash)
     end
   end
 end

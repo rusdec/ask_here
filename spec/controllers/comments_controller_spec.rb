@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'controllers_helper'
 require 'with_model'
 
 RSpec.describe CommentsController, type: :controller do
@@ -57,7 +57,7 @@ RSpec.describe CommentsController, type: :controller do
 
         it 'response body has success' do
           post :create, params
-          expect(response.body).to match('{"status":true,"message":"Success"}')
+          expect(response.body).to include_json(json_success_hash)
         end
       end
 
@@ -110,7 +110,7 @@ RSpec.describe CommentsController, type: :controller do
 
         it 'response body has success' do
           patch :update, params
-          expect(response.body).to match('{"status":true,"message":"Success"}')
+          expect(response.body).to include_json(json_success_hash)
         end
       end
 
@@ -161,7 +161,7 @@ RSpec.describe CommentsController, type: :controller do
 
         it 'response body has success' do
           delete :destroy, params
-          expect(response.body).to match('{"status":true,"message":"Success"}')
+          expect(response.body).to include_json(json_success_hash)
         end
       end
 
