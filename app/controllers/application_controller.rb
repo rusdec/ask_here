@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
 
+  check_authorizations
+
   protect_from_forgery with: :exception
   before_action :gon_user
 

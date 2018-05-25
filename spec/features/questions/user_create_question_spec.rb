@@ -15,6 +15,11 @@ feature 'User create question', %q{
       { title: question[:title], body: question[:body] }
     end
 
+    scenario 'see ask question link' do
+      visit questions_path
+      expect(page).to have_content('Ask question')
+    end
+
     scenario 'can create question with valid data' do
       create_question(params)
       question = user.questions.order(:id).last
@@ -31,10 +36,11 @@ feature 'User create question', %q{
     end
   end
 
-  scenario 'Not authenticated user can\'t create question' do
-    visit new_question_path
-
-    expect(page).to have_content('Log in')
+  context 'Unauthenticated user' do
+    scenario 'no see ask question link' do
+      visit questions_path
+      expect(page).to_not have_content('Ask question')
+    end
   end
 
   context 'multiple sessions' do

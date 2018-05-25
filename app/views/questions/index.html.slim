@@ -2,3 +2,6 @@ table.questions
   tr
     td = 'Title'
   = render @questions
+
+- if can?(:create, Question)
+  link_to 'Ask question', new_question_path

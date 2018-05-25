@@ -1,7 +1,10 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show update destroy]
 
+  authorize_resource
+  skip_authorize_resource only: :new
+
+  before_action :set_question, only: %i[show update destroy]
   after_action :publish_questions, only: %i[create]
 
   respond_to :js, only: %i[update destroy]
