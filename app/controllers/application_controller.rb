@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
 
-  check_authorization
+  check_authorization :unless => :devise_controller?
 
   protect_from_forgery with: :exception
   before_action :gon_user

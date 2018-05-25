@@ -2,33 +2,25 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_comment, except: %i[create]
   before_action :set_commentable, only: %i[create]
+  authorize_resource
 
   after_action :publish_comment, only: %i[create update]
 
   include JsonResponsed
 
   def create
-    @comment = current_user.comments.build(comment_params.merge(commentable: @commentable))
-    @comment.save
+    @comment = current_user.comments.create(comment_params.merge(commentable: @commentable))
     json_response_by_result
   end
 
   def destroy
-    if @comment
-      @comment.destroy
-      json_response_by_result
-    else
-      json_response_you_can_not_do_it
-    end
+    @comment.destroy
+    json_response_by_result
   end
 
   def update
-    if @comment
-      @comment.update(comment_params)
-      json_response_by_result
-    else
-      json_response_you_can_not_do_it
-    end
+    @comment.update(comment_params)
+    json_response_by_result
   end
 
   private
@@ -43,7 +35,7 @@ class CommentsController < ApplicationController
   end
   
   def set_comment
-    @comment = current_user.comments.find_by(id: params[:id])
+    @comment = Comment.find_by(id: params[:id])
   end
 
   def comment_params

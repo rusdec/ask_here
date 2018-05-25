@@ -124,6 +124,11 @@ RSpec.describe CommentsController, type: :controller do
 
           expect(comment.body).to eq(old_body)
         end
+
+        it 'redirect to root' do
+          patch :update, params
+          expect(response).to redirect_to(root_path)
+        end
       end
     end
 
@@ -169,9 +174,9 @@ RSpec.describe CommentsController, type: :controller do
           }.to_not change(user.comments, :count)
         end
 
-        it 'response body has error' do
-          delete :destroy, params
-          expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
+        it 'redirect to root' do
+          patch :update, params
+          expect(response).to redirect_to(root_path)
         end
       end
     end
