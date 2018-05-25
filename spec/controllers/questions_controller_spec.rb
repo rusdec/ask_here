@@ -3,14 +3,16 @@ require 'rails_helper'
 RSpec.describe QuestionsController, type: :controller do
 
   let(:user) { create(:user) }
-  let(:questions) { create_list(:question, 2, user: user) }
-  let(:question) { questions.last }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    before { get :index }
+    before do
+      create_list(:question, 2, user: user)
+      get :index
+    end
 
     it 'populates an array of all questions' do
-      expect(assigns(:questions)).to eq questions
+      expect(assigns(:questions)).to eq Question.all
     end
 
     it 'render index view' do

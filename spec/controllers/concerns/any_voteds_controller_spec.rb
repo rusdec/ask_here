@@ -54,9 +54,9 @@ RSpec.describe AnyVotedsController, type: :controller do
           }.to_not change(Vote, :count)
         end
 
-        it 'response body has error' do
+        it 'redirect to root' do
           post :add_vote, params: params, format: :json
-          expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
+          expect(response).to redirect_to(root_path)
         end
       end
 
@@ -138,9 +138,9 @@ RSpec.describe AnyVotedsController, type: :controller do
           }.to_not change(user.votes, :count)
         end
 
-        it 'response body has error' do
+        it 'redirect to root' do
           delete :cancel_vote, params: params, format: :json
-          expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
+          expect(response).to redirect_to(root_path)
         end
       end
     end

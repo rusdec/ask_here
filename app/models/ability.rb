@@ -71,9 +71,11 @@ class Ability
   end
 
   def vote_abilities
-    alias_action :add_vote, :cancel_vote, to: :vote_actions
-    can :vote_actions, [Answer, Question] do |votable|
+    can :add_vote, :all do |votable|
       user.not_author_of?(votable)
+    end
+    can :cancel_vote, :all do |vote|
+      vote
     end
   end
 end
