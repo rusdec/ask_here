@@ -6,6 +6,7 @@ class AnyJsonResponsedsController < ApplicationController; end
 RSpec.describe AnyJsonResponsedsController, type: :controller do
   controller do
     include JsonResponsed
+    skip_authorization_check
 
     def success
       @any_json_responsed = JsonResponsibleBot.new

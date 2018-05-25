@@ -5,6 +5,7 @@ class AnyPolymorphedsController < ApplicationController; end
 RSpec.describe AnyPolymorphedsController, type: :controller do
   controller AnyPolymorphedsController do
     include Polymorphed
+    skip_authorization_check
 
     def index
       @any_polymorphed = 'AnyValue'

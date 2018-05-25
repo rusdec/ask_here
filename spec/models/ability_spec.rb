@@ -24,9 +24,14 @@ describe Ability do
     context 'Votable' do
       let(:votable) { create(:question, user: create(:user)) }
       let(:other_votable) { create(:question, user: user) }
+      let(:vote) { create(:vote, votable: votable, user: user) }
+      let(:other_vote) { nil }
 
-      it { should be_able_to(:vote_actions, votable, user: user) }
-      it { should_not be_able_to(:vote_actions, other_votable, user: user) }
+      it { should be_able_to(:add_vote, votable, user: user) }
+      it { should_not be_able_to(:add_vote, other_votable, user: user) }
+
+      it { should be_able_to(:cancel_vote, vote, user: user) }
+      it { should_not be_able_to(:cancel_vote, other_vote, user: user) }
     end
   end
 
@@ -75,9 +80,14 @@ describe Ability do
     context 'Votable' do
       let(:votable) { create(:question, user: create(:user)) }
       let(:other_votable) { create(:question, user: user) }
+      let(:vote) { create(:vote, votable: votable, user: user) }
+      let(:other_vote) { nil }
 
-      it { should be_able_to(:vote_actions, votable, user: user) }
-      it { should_not be_able_to(:vote_actions, other_votable, user: user) }
+      it { should be_able_to(:add_vote, votable, user: user) }
+      it { should_not be_able_to(:add_vote, other_votable, user: user) }
+
+      it { should be_able_to(:cancel_vote, vote, user: user) }
+      it { should_not be_able_to(:cancel_vote, other_vote, user: user) }
     end
   end
 
