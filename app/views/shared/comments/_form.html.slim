@@ -1,6 +1,6 @@
 - if can?(:create, Comment)
   .new-comment
-    = form_for [resource, resource.comments.new], remote: true, format: :json do |f|
+    = form_for [resource, resource.comments.new], remote: true, data: { type: :json } do |f|
       .errors
       = f.label :body
       = f.text_area :body

@@ -1,6 +1,5 @@
 = form_for resource, remote: true, html: { class: 'form-edit-answer',
-                                           data: { answer_id: resource.id },
-                                           format: :json } do |f|
+                                           data: { answer_id: resource.id, type: :json } } do |f|
   .errors
 
   p

@@ -35,7 +35,9 @@ RSpec.describe CommentsController, type: :controller do
 
   describe 'POST #create' do
     let(:params) do
-      { params: { any_commentable_id: any_commentable, comment: attributes_for(:comment) },
+      { params: { 
+          any_commentable_id: any_commentable,
+          comment: attributes_for(:comment) },
         format: :json }
     end
 
@@ -88,7 +90,6 @@ RSpec.describe CommentsController, type: :controller do
     end
   end
 
-
   describe 'PATCH #update' do
     let!(:comment) { create(:comment, user: user, commentable: any_commentable) }
     let(:new_body) { 'NewValidCommentBodyText' }
@@ -125,9 +126,22 @@ RSpec.describe CommentsController, type: :controller do
           expect(comment.body).to eq(old_body)
         end
 
-        it 'redirect to root' do
-          patch :update, params
-          expect(response).to redirect_to(root_path)
+        context 'and format' do
+          context 'html' do
+            it 'redirect to root' do
+              params[:format] = :html
+              patch :update, params
+              expect(response).to redirect_to(root_path)
+            end
+          end
+
+          context 'json' do
+            it 'return error hash' do
+              params[:format] = :json
+              patch :update, params
+              expect(response.body).to include_json(json_access_denied_hash)
+            end
+          end
         end
       end
     end
@@ -174,9 +188,22 @@ RSpec.describe CommentsController, type: :controller do
           }.to_not change(user.comments, :count)
         end
 
-        it 'redirect to root' do
-          patch :update, params
-          expect(response).to redirect_to(root_path)
+        context 'and format' do
+          context 'html' do
+            it 'redirect to root' do
+              params[:format] = :html
+              delete :destroy, params
+              expect(response).to redirect_to(root_path)
+            end
+          end
+
+          context 'json' do
+            it 'return error hash' do
+              params[:format] = :json
+              delete :destroy, params
+              expect(response.body).to include_json(json_access_denied_hash)
+            end
+          end
         end
       end
     end

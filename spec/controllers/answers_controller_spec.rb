@@ -93,9 +93,20 @@ RSpec.describe AnswersController, type: :controller do
         }.to_not change(question.answers, :count)
       end
 
-      it 'redirect to root' do
-        delete :destroy, params: params, format: :js
-        expect(response).to redirect_to(root_path)
+      context 'and format' do
+        context 'html' do
+          it 'redirect to root' do
+            delete :destroy, params: params
+            expect(response).to redirect_to(root_path)
+          end
+        end
+
+        context 'json' do
+          it 'return error hash' do
+            delete :destroy, params: params, format: :json
+            expect(response.body).to include_json(json_access_denied_hash)
+          end
+        end
       end
     end
   end
@@ -141,16 +152,29 @@ RSpec.describe AnswersController, type: :controller do
       before { sign_in(another_user) }
 
       it 'can\'t update answer' do
-        old_answer = answer
+        old_answer_body = answer.body
         patch :update, params
         answer.reload
 
-        expect(answer.body).to eq(old_answer.body)
+        expect(old_answer_body).to eq(answer.body)
       end
 
-      it 'redirect to root' do
-        post :update, params
-        expect(response).to redirect_to(root_path)
+      context 'and format' do
+        context 'html' do
+          it 'redirect to root' do
+            params[:format] = :html
+            patch :update, params
+            expect(response).to redirect_to(root_path)
+          end
+        end
+
+        context 'json' do
+          it 'return error hash' do
+            params[:format] = :json
+            patch :update, params
+            expect(response.body).to include_json(json_access_denied_hash)
+          end
+        end
       end
     end
 

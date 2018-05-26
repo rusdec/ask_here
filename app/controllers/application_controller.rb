@@ -10,8 +10,20 @@ class ApplicationController < ActionController::Base
   before_action :gon_user
 
   rescue_from CanCan::AccessDenied do |exception|
-    flash[:alert] = exception.message
-    redirect_to root_path
+    respond_to do |format|
+      format.html do
+        flash[:alert] = exception.message
+        redirect_to root_path
+      end
+
+      format.json do
+        render json: { status: false, errors: [exception.message] }
+      end
+
+      format.js do
+        render js: exception.message, status: :forbidden
+      end
+    end
   end
 
   private

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'controllers_helper'
 
 RSpec.describe QuestionsController, type: :controller do
 
@@ -134,13 +134,24 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'can\'t delete question' do
         expect {
-          delete :destroy, params: { id: second_user_question }, format: :js
+          delete :destroy, params: { id: second_user_question }, format: :json
         }.to_not change(second_user.questions, :count)
       end
 
-      it 'redirect to root' do
-        delete :destroy, params: { id: second_user_question }, format: :js
-        expect(response).to redirect_to(root_path)
+      context 'and format' do
+        context 'html' do
+          it 'redirect to root' do
+            delete :destroy, params: { id: second_user_question }, format: :html
+            expect(response).to redirect_to(root_path)
+          end
+        end
+
+        context 'json' do
+          it 'return error hash' do
+            delete :destroy, params: { id: second_user_question }, format: :json
+            expect(response.body).to include_json(json_access_denied_hash)
+          end
+        end
       end
     end
   end
@@ -185,23 +196,34 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when authenticated user is not author' do
-      let!(:old_title) { question.title }
-      let!(:old_body) { question.body }
 
-      before do
-        sign_in(create(:user))
-        patch :update, params: params, format: :js
-      end
+      before { sign_in(create(:user)) }
 
       it 'can\'t update question' do
+        old_title = question.title
+        old_body = question.body
+
+        patch :update, params: params, format: :json
         question.reload
 
         expect(question.title).to eq(old_title)
         expect(question.body).to eq(old_body)
       end
 
-      it 'redirect to root' do
-        expect(response).to redirect_to(root_path)
+      context 'and format' do
+        context 'html' do
+          it 'redirect to root' do
+            patch :update, params: params, format: :html
+            expect(response).to redirect_to(root_path)
+          end
+        end
+
+        context 'json' do
+          it 'return error hash' do
+            patch :update, params: params, format: :json
+            expect(response.body).to include_json(json_access_denied_hash)
+          end
+        end
       end
     end
 
@@ -209,7 +231,7 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:old_question) { question }
 
       it 'can\'t update question' do
-        patch :update, params: params, format: :js
+        patch :update, params: params, format: :json
 
         question.reload
 

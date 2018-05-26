@@ -54,9 +54,20 @@ RSpec.describe AnyVotedsController, type: :controller do
           }.to_not change(Vote, :count)
         end
 
-        it 'redirect to root' do
-          post :add_vote, params: params, format: :json
-          expect(response).to redirect_to(root_path)
+        context 'and format' do
+          context 'html' do
+            it 'redirect to root' do
+              post :add_vote, params: params, format: :html
+              expect(response).to redirect_to(root_path)
+            end
+          end
+
+          context 'json' do
+            it 'return error hash' do
+              post :add_vote, params: params, format: :json
+              expect(response.body).to include_json(json_access_denied_hash)
+            end
+          end
         end
       end
 
@@ -142,9 +153,20 @@ RSpec.describe AnyVotedsController, type: :controller do
           }.to_not change(user.votes, :count)
         end
 
-        it 'redirect to root' do
-          delete :cancel_vote, params: params, format: :json
-          expect(response).to redirect_to(root_path)
+        context 'and format' do
+          context 'html' do
+            it 'redirect to root' do
+              delete :cancel_vote, params: params, format: :html
+              expect(response).to redirect_to(root_path)
+            end
+          end
+
+          context 'json' do
+            it 'return error hash' do
+              delete :cancel_vote, params: params, format: :json
+              expect(response.body).to include_json(json_access_denied_hash)
+            end
+          end
         end
       end
     end
