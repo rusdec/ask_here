@@ -32,7 +32,7 @@ feature 'User create answer', %q{
   context 'Unauthenticated user' do
     before { visit question_path(question) }
 
-    scenario 'can\'t create answer' do
+    scenario 'no see Create answer link' do
       expect(page).to have_no_content('Create Answer')
     end
   end

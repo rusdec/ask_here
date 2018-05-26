@@ -1,6 +1,6 @@
 module AnswersHelper
   def best_answer_links(answer)
-    if current_user&.author_of?(answer.question)
+    if can?(:best_answer_actions, answer)
       content_tag :div, class: 'best-answer-links', data: { answer_id: answer.id } do
         concat(link_to 'Not a Best',
                not_best_answer_answer_path(answer),

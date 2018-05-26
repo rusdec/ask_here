@@ -4,7 +4,7 @@
       h3.title = @question.title
       p.body = @question.body
       = render 'shared/attachements', resource: @question.attachements
-      - if current_user&.author_of?(@question)
+      - if can?(:update, @question)
         = question_remote_links(@question)
       = render 'shared/vote', resource: @question
       
@@ -14,14 +14,14 @@
           = render 'shared/comments/comment', comment: comment
         = render 'shared/comments/form', resource: @question
 
-    - if current_user&.author_of?(@question)
+    - if can?(:update, @question)
       = render 'update_form', resource: @question
 
   h3= 'Answers'
   .answers
     = render @question.persisted_answers
 
-  - if current_user
+  - if can?(:create, Answer)
     h3= 'New answer'
     #new-answer
       = render 'answers/form', resource: @question.answers.new

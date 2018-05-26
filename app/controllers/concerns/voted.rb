@@ -7,21 +7,15 @@ module Voted
     before_action :set_vote, only: %i[cancel_vote]
 
     def add_vote
-      if current_user&.not_author_of?(@votable)
-        @vote = current_user.votes.vote!(vote_params.merge(votable: @votable))
-        json_response_by_result({ votes: @votable.rating }, @vote)
-      else
-        json_response_you_can_not_do_it
-      end
+      authorize! :add_vote, @votable
+      @vote = current_user.votes.vote!(vote_params.merge(votable: @votable))
+      json_response_by_result({ votes: @votable.rating }, @vote)
     end
 
     def cancel_vote
-      if @vote
-        @vote.destroy
-        json_response_by_result({ votes: @votable.rating }, @vote)
-      else
-        json_response_you_can_not_do_it
-      end
+      authorize! :cancel_vote, @vote
+      @vote.destroy
+      json_response_by_result({ votes: @votable.rating }, @vote)
     end
 
     private

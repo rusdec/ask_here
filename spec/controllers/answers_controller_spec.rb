@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'controllers_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user_with_question_and_answers) }
@@ -28,7 +28,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'response body success' do
         post :create, params
-        expect(response.body).to match('{"status":true,"message":"Success"}')
+        expect(response.body).to include_json(json_success_hash)
       end
     end
 
@@ -47,7 +47,11 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'response body has error' do
         post :create, params
-        expect(response.body).to match('{"status":false,"errors":["Body can\'t be blank","Body is too short (minimum is 10 characters)"]}')
+        expect(response.body).to include_json(
+          status: false,
+          errors: ["Body can\'t be blank",
+                   "Body is too short (minimum is 10 characters)"]
+        )
       end
     end
   end
@@ -57,7 +61,7 @@ RSpec.describe AnswersController, type: :controller do
       { id: answer }
     end
 
-    context 'author' do
+    context 'when author' do
       before { sign_in(user) }
 
       it 'delete answer' do
@@ -72,7 +76,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'not authenticated user' do
+    context 'when unauthenticated user' do
       it 'can\'t delete answer' do
         expect {
           delete :destroy, params: params, format: :js
@@ -80,13 +84,29 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'not author' do
+    context 'when not author' do
       before { sign_in(create(:user)) }
 
       it 'can\'t delete answer' do
         expect {
           delete :destroy, params: params, format: :js
         }.to_not change(question.answers, :count)
+      end
+
+      context 'and format' do
+        context 'html' do
+          it 'redirect to root' do
+            delete :destroy, params: params
+            expect(response).to redirect_to(root_path)
+          end
+        end
+
+        context 'json' do
+          it 'return error hash' do
+            delete :destroy, params: params, format: :json
+            expect(response.body).to include_json(json_access_denied_hash)
+          end
+        end
       end
     end
   end
@@ -124,7 +144,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'response body success' do
         post :update, params
 
-        expect(response.body).to match('{"status":true,"message":"Success"}')
+        expect(response.body).to include_json(json_success_hash)
       end
     end
 
@@ -132,17 +152,29 @@ RSpec.describe AnswersController, type: :controller do
       before { sign_in(another_user) }
 
       it 'can\'t update answer' do
-        old_answer = answer
+        old_answer_body = answer.body
         patch :update, params
         answer.reload
 
-        expect(answer.body).to eq(old_answer.body)
+        expect(old_answer_body).to eq(answer.body)
       end
 
-      it 'response body has error' do
-        post :update, params
-        puts response.body
-        expect(response.body).to match('{"status":false,"errors":["You can not do it"]}')
+      context 'and format' do
+        context 'html' do
+          it 'redirect to root' do
+            params[:format] = :html
+            patch :update, params
+            expect(response).to redirect_to(root_path)
+          end
+        end
+
+        context 'json' do
+          it 'return error hash' do
+            params[:format] = :json
+            patch :update, params
+            expect(response.body).to include_json(json_access_denied_hash)
+          end
+        end
       end
     end
 
