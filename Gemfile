@@ -46,6 +46,7 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-twitter'
 gem 'cancancan', '~> 2.0'
+gem 'doorkeeper', '4.2.6'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
