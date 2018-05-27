@@ -10,7 +10,7 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def all
-    respond_with(User.where.not(id: current_resource_owner.id))
+    respond_with(User.where.not(id: current_resource_owner))
   end
 
   private
