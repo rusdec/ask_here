@@ -47,7 +47,7 @@ describe 'Profile API' do
   end # describe 'GET /me'
 
   describe 'GET /all' do
-    let(:uri_all) { "#{all_api_v1_profiles_path}.json" }
+    let(:uri_all) { "#{api_v1_profiles_path}.json" }
 
     context 'when unauthorized' do
       context 'and isn\'t access_token ' do

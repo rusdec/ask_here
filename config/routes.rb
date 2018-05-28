@@ -4,10 +4,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resource :profiles do
-        [:me, :all].each do |path|
-          get path, on: :collection
-        end
+      resources :profiles do
+        get :me, on: :collection
       end
     end
   end
