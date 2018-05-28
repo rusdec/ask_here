@@ -100,7 +100,7 @@ describe 'Questions API' do
         end
       end
 
-      %w(short_title).each do |attr|
+      %w(short_title answers).each do |attr|
         it "question object not contains #{attr}" do
           expect(response.body).to_not have_json_path("question/#{attr}")
         end
