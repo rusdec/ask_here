@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   root to: 'questions#index'
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles do
+        get :me, on: :collection
+      end
+    end
+  end
 
   devise_for :users, skip: [:sessions],
              controllers: { omniauth_callbacks: 'omniauth_callbacks',
