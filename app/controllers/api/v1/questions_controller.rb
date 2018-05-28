@@ -4,7 +4,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
 
   def index
     authorize! :read, Question
-    respond_with(@questions)
+    respond_with(@questions, each_serializer: QuestionsSerializer)
   end
 
   def show
