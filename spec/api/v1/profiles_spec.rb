@@ -79,9 +79,7 @@ describe 'Profile API' do
       end
 
       it "contains users" do
-        users.each do |user|
-          expect(response.body).to include_json(user.to_json)
-        end
+        expect(response.body).to eq(users.to_json)
       end
 
       it 'not contains authenticated user' do
