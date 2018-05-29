@@ -4,7 +4,6 @@ describe 'Questions API' do
   let(:user) { create(:user) }
   let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
-=begin
   describe 'GET /index' do
     let (:uri) { "#{api_v1_questions_path}.json" }
 
@@ -81,7 +80,6 @@ describe 'Questions API' do
     end # context 'when authorized'
   end # describe 'GET /show'
 
-=end
   describe 'POST /create' do
     let(:uri) { "#{api_v1_questions_path}.json" }
     let(:params_without_token) do
