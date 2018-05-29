@@ -1,0 +1,27 @@
+{
+  "id": "../",
+  "type": "object",
+  "properties": {
+    "answer": {
+      "type":"object",
+      "maxProperties": 7,
+      "minProperties": 7,
+      "required": ["id", "body", "best", "created_at", "updated_at", "comments", "attachements"],
+      "properties": {
+        "id":   {"type":"integer"},
+        "body": {"type": "string"},
+        "best": {"type": "boolean"},
+        "created_at": {"type":"string", "format":"date-time"},
+        "updated_at": {"type":"string", "format":"date-time"},
+        "comments": {
+          "type": "array",
+          "items": {"$ref": "comments/comment.json"}
+        },
+        "attachements": {
+          "type": "array",
+          "items": {"$ref": "attachements/attachement.json"}
+        }
+      }
+    }
+  }
+}
