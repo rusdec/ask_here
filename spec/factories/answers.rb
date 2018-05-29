@@ -15,7 +15,5 @@ FactoryBot.define do
 
   factory :invalid_answer, class: Answer do
     body nil
-    question_id nil
-    user_id nil
   end
 end
