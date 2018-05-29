@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "required": ["name", "url"],
+  "maxProperties": 2,
+  "minProperties": 2,
+  "properties": {
+    "name": {"type": "string"},
+    "url": {
+      "type": "string",
+      "pattern": "^\/uploads\/attachement\/file\/[0-9]+\/.+$"
+    }
+  }
+}

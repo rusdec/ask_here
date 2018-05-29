@@ -81,6 +81,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'launchy'
   gem 'json_spec'
+  gem 'json_matchers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../api_helper'
 
 describe 'Questions API' do
   let(:user) { create(:user) }
@@ -36,27 +36,8 @@ describe 'Questions API' do
         expect(response).to be_successful
       end
 
-      it 'returns two questions' do
-        expect(response.body).to have_json_size(2).at_path('questions')
-      end
-
-      %w(id title body created_at updated_at).each do |attr|
-        it "question object contains #{attr}" do
-          expect(response.body).to be_json_eql(
-            question.send(attr.to_sym).to_json
-          ).at_path("questions/0/#{attr}")
-        end
-      end
-
-      %w(comments answers attachements).each do |attr|
-        it "question object not contains #{attr}" do
-          expect(response.body).to_not have_json_path("questions/0/#{attr}")
-        end
-      end
-
-      it 'question object contains short_title' do
-        expect(response.body).to be_json_eql(question.title.truncate(10).to_json)
-          .at_path('questions/0/short_title')
+      it 'returns questions object is identical to its schema' do
+        expect(response.body).to match_json_schema('v1/questions/index')
       end
     end # context 'when authorized'
   end # describe 'GET /index'
@@ -93,60 +74,8 @@ describe 'Questions API' do
         expect(response).to be_successful
       end
 
-      %w(id title body created_at updated_at).each do |attr|
-        it "question object contains #{attr}" do
-          expect(response.body).to be_json_eql(question.send(attr.to_sym).to_json)
-            .at_path("question/#{attr}")
-        end
-      end
-
-      %w(short_title answers).each do |attr|
-        it "question object not contains #{attr}" do
-          expect(response.body).to_not have_json_path("question/#{attr}")
-        end
-      end
-
-      context 'comments' do
-        it 'included in question object' do
-          expect(response.body).to have_json_size(1).at_path('question/comments')
-        end
-
-        %w(id body created_at updated_at).each do |attr|
-          it "comment object contains #{attr}" do
-            expect(response.body).to be_json_eql(comment.send(attr.to_sym).to_json)
-              .at_path("question/comments/0/#{attr}")
-          end
-        end
-
-        %w(commentable_id commentable_type user_id).each do |attr|
-          it "comment object not contains #{attr}" do
-            expect(response.body).to_not have_json_path("question/comments/0/#{attr}")
-          end
-        end
-      end
-
-      context 'attachements' do
-        it 'included in question object' do
-          expect(response.body).to have_json_size(1).at_path('question/attachements')
-        end
-
-        %w(name).each do |attr|
-          it "attachement object contains #{attr}" do
-            expect(response.body).to be_json_eql(attachement.send(attr.to_sym).to_json)
-              .at_path("question/attachements/0/#{attr}")
-          end
-        end
-
-        %w(id).each do |attr|
-          it "attachement object not contains #{attr}" do
-            expect(response.body).to_not have_json_path("question/attachements/0/#{attr}")
-          end
-        end
-
-        it 'contains url' do
-          expect(response.body).to be_json_eql(attachement.file.url.to_json)
-            .at_path('question/attachements/0/url')
-        end
+      it 'returns question object is identical to its schema' do
+        expect(response.body).to match_json_schema('v1/questions/show')
       end
     end # context 'when authorized'
   end
