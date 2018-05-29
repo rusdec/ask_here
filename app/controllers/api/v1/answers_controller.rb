@@ -15,7 +15,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
 
   def create
     respond_with(@answer = current_resource_owner.answers.create(
-      answer_params.merge(question: @question)))
+                             answer_params.merge(question: @question)))
   end
 
   private

@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "required": ["id", "email", "admin", "created_at", "updated_at"],
+        "minProperties": 5,
+        "maxProperties": 5,
+        "properties": {
+          "id": {"type": "integer"},
+          "email": {"type": "string", "format": "email"},
+          "admin": {"type":"boolean"},
+          "created_at": {"type":"string", "format": "date-time"},
+          "updated_at": {"type":"string", "format": "date-time"}
+        }
+      }
+    }
+  }
+}

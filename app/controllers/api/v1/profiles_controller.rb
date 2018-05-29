@@ -8,7 +8,7 @@ class Api::V1::ProfilesController < Api::V1::BaseController
 
   def index
     authorize! :read, @users
-    respond_with(@users)
+    respond_with(@users, each_serializers: UsersSerializer)
   end
 
   private
