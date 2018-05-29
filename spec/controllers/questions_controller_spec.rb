@@ -149,7 +149,7 @@ RSpec.describe QuestionsController, type: :controller do
         context 'json' do
           it 'return error hash' do
             delete :destroy, params: { id: second_user_question }, format: :json
-            expect(response.body).to include_json(json_access_denied_hash)
+            expect(response.body).to eq(json_access_denied_hash.to_json)
           end
         end
       end
@@ -221,7 +221,7 @@ RSpec.describe QuestionsController, type: :controller do
         context 'json' do
           it 'return error hash' do
             patch :update, params: params, format: :json
-            expect(response.body).to include_json(json_access_denied_hash)
+            expect(response.body).to eq(json_access_denied_hash.to_json)
           end
         end
       end

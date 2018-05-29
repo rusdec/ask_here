@@ -65,7 +65,7 @@ RSpec.describe AnyVotedsController, type: :controller do
           context 'json' do
             it 'return error hash' do
               post :add_vote, params: params, format: :json
-              expect(response.body).to include_json(json_access_denied_hash)
+              expect(response.body).to eq(json_access_denied_hash.to_json)
             end
           end
         end
@@ -106,8 +106,8 @@ RSpec.describe AnyVotedsController, type: :controller do
 
         it 'response body has success' do
           post :add_vote, params: params, format: :json
-          expect(response.body).to include_json(
-            json_success_hash.merge(votes: { likes: 1, dislikes: 0, rate: 1 })
+          expect(response.body).to eq(
+            json_success_hash.merge(votes: { likes: 1, dislikes: 0, rate: 1 }).to_json
           )
         end
       end
@@ -138,8 +138,8 @@ RSpec.describe AnyVotedsController, type: :controller do
 
         it 'response body has success' do
           delete :cancel_vote, params: params, format: :json
-          expect(response.body).to include_json(
-            json_success_hash.merge(votes: { likes: 0, dislikes: 0, rate: 0 })
+          expect(response.body).to eq(
+            json_success_hash.merge(votes: { likes: 0, dislikes: 0, rate: 0 }).to_json
           )
         end
       end
@@ -164,7 +164,7 @@ RSpec.describe AnyVotedsController, type: :controller do
           context 'json' do
             it 'return error hash' do
               delete :cancel_vote, params: params, format: :json
-              expect(response.body).to include_json(json_access_denied_hash)
+              expect(response.body).to eq(json_access_denied_hash.to_json)
             end
           end
         end

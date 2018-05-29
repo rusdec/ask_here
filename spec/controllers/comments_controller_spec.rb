@@ -59,7 +59,7 @@ RSpec.describe CommentsController, type: :controller do
 
         it 'response body has success' do
           post :create, params
-          expect(response.body).to include_json(json_success_hash)
+          expect(response.body).to eq(json_success_hash.to_json)
         end
       end
 
@@ -111,7 +111,7 @@ RSpec.describe CommentsController, type: :controller do
 
         it 'response body has success' do
           patch :update, params
-          expect(response.body).to include_json(json_success_hash)
+          expect(response.body).to eq(json_success_hash.to_json)
         end
       end
 
@@ -139,7 +139,7 @@ RSpec.describe CommentsController, type: :controller do
             it 'return error hash' do
               params[:format] = :json
               patch :update, params
-              expect(response.body).to include_json(json_access_denied_hash)
+              expect(response.body).to eq(json_access_denied_hash.to_json)
             end
           end
         end
@@ -175,7 +175,7 @@ RSpec.describe CommentsController, type: :controller do
 
         it 'response body has success' do
           delete :destroy, params
-          expect(response.body).to include_json(json_success_hash)
+          expect(response.body).to eq(json_success_hash.to_json)
         end
       end
 
@@ -201,7 +201,7 @@ RSpec.describe CommentsController, type: :controller do
             it 'return error hash' do
               params[:format] = :json
               delete :destroy, params
-              expect(response.body).to include_json(json_access_denied_hash)
+              expect(response.body).to eq(json_access_denied_hash.to_json)
             end
           end
         end

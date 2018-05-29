@@ -64,7 +64,6 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'letter_opener'
   gem 'capybara-email'
-  gem 'rspec-json_expectations'
 end
 
 group :development do
@@ -82,6 +81,7 @@ group :test do
   gem 'launchy'
   gem 'json_spec'
   gem 'json_matchers'
+  gem 'rspec-json_expectations'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
