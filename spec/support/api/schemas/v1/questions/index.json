@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "short_title", "body", "created_at", "updated_at"],
+        "minProperties": 6,
+        "maxProperties": 6,
+        "properties": {
+          "id": {"type":"integer"},
+          "title":  {"type": "string"},
+          "short_title": {"type": "string"},
+          "body":   {"type": "string"},
+          "created_at": {"type": "string", "format": "date-time"},
+          "updated_at": {"type": "string", "format": "date-time"}
+        }
+      }
+    }
+  }
+}

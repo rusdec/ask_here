@@ -47,6 +47,9 @@ gem 'omniauth-github'
 gem 'omniauth-twitter'
 gem 'cancancan', '~> 2.0'
 gem 'doorkeeper', '4.2.6'
+gem 'active_model_serializers'
+gem 'oj'
+gem 'oj_mimic_json'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -61,7 +64,6 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'letter_opener'
   gem 'capybara-email'
-  gem 'rspec-json_expectations'
 end
 
 group :development do
@@ -78,6 +80,8 @@ group :test do
   gem 'rails-controller-testing'
   gem 'launchy'
   gem 'json_spec'
+  gem 'json_matchers'
+  gem 'rspec-json_expectations'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,0 +1,27 @@
+{
+  "id":"../#",
+  "type": "object",
+  "properties": {
+    "question": {
+      "type": "object",
+      "required": ["id", "title", "body", "created_at", "updated_at", "comments", "attachements"],
+      "minProperties":7,
+      "maxProperties":7,
+      "properties": {
+        "id": {"type":"integer"},
+        "title":  {"type": "string"},
+        "body":   {"type": "string"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "comments": {
+          "type": "array",
+          "items": {"$ref":"comments/comment.json#"}
+        },
+        "attachements": {
+          "type": "array",
+          "items": {"$ref": "attachements/attachement.json#"}
+        }
+      }
+    }
+  }
+}

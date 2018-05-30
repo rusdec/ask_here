@@ -1,0 +1,21 @@
+{
+  "type":"object",
+  "properties": {
+    "answers": {
+      "type":"array",
+      "items": {
+        "type":"object",
+        "maxProperties": 5,
+        "minProperties": 5,
+        "required": ["id", "body", "best", "created_at", "updated_at"],
+        "properties": {
+          "id":   {"type":"integer"},
+          "body": {"type":"string"},
+          "best": {"type":"boolean"},
+          "created_at": {"type":"string", "format":"date-time"},
+          "updated_at": {"type":"string", "format":"date-time"}
+        }
+      }
+    }
+  }
+}

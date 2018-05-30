@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../api_helper'
 
 describe 'Profile API' do
   describe 'GET /me' do
@@ -32,10 +32,8 @@ describe 'Profile API' do
         expect(response).to be_successful
       end
 
-      %w(id email admin created_at updated_at).each do |name|
-        it "contains #{name}" do
-          expect(response.body).to be_json_eql(me.send(name.to_sym).to_json).at_path(name)
-        end
+      it 'returns object profile is identical to its schema' do
+        expect(response.body).to match_json_schema('v1/users/show')
       end
 
       %w(password encrypted_password).each do |name|
@@ -78,8 +76,8 @@ describe 'Profile API' do
         expect(response).to be_successful
       end
 
-      it "contains users" do
-        expect(response.body).to eq(users.to_json)
+      it "returns users objct is identical to its schema" do
+        expect(response.body).to match_json_schema('v1/users/index')
       end
 
       it 'not contains authenticated user' do

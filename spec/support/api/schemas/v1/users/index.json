@@ -1,0 +1,10 @@
+{
+  "id": "#",
+  "type": "object",
+  "properties": {
+    "users": {
+      "type": "array",
+      "items": {"$ref": "show.json"}
+    }
+  }
+}

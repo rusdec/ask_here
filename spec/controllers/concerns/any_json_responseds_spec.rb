@@ -44,7 +44,7 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with error' do
       get :error, format: :json
 
-      expect(response.body).to include_json(status: false, errors: ['AnyErrorText'])
+      expect(response.body).to eq({status: false, errors: ['AnyErrorText']}.to_json)
     end
   end
 
@@ -52,15 +52,15 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with success' do
       get :success, format: :json
 
-      expect(response.body).to include_json(json_success_hash)
+      expect(response.body).to eq(json_success_hash.to_json)
     end
 
     context 'when params is given' do
       it 'respond with success and params' do
         get :success, params: { params: 'Any param' }, format: :json
 
-        expect(response.body).to include_json(
-          json_success_hash.merge(param: 'Any param')
+        expect(response.body).to eq(
+          json_success_hash.merge(param: 'Any param').to_json
         )
       end
     end
@@ -70,10 +70,8 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with error' do
       get :you_can_not_do_it, format: :json
 
-      expect(response.body).to include_json(
-        status: false,
-        errors: ['You can not do it']
-      )
+      expect(response.body).to eq({ status: false,
+                                    errors: ['You can not do it'] }.to_json)
     end
   end
 
@@ -81,7 +79,7 @@ RSpec.describe AnyJsonResponsedsController, type: :controller do
     it 'respond with success' do
       get :success, format: :json
 
-      expect(response.body).to include_json(json_success_hash)
+      expect(response.body).to eq(json_success_hash.to_json)
     end
   end
 end

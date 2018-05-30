@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "required": ["id", "body", "created_at", "updated_at"],
+  "maxProperties": 4,
+  "minProperties": 4,
+  "properties": {
+    "id": {"type": "integer"},
+    "body": {"type": "string"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  }
+}
