@@ -2,35 +2,18 @@ require_relative '../api_helper'
 
 describe 'Profile API' do
   describe 'GET /me' do
-    let(:uri_me) { "#{me_api_v1_profiles_path}.json" }
+    let(:uri) { "#{me_api_v1_profiles_path}.json" }
 
-    context 'when unauthorized' do
-      context 'and isn\'t access_token ' do
-        it 'returns status 401' do
-          get uri_me
-          expect(response.status).to eq(401)
-        end
-      end
+    let(:api_authenticable) do
+      { request_type: :get, request_uri: uri, options: {} }
+    end
+    it_behaves_like 'API authenticable'
 
-      context 'and access_token is invalid' do
-        it 'returns status 401' do
-          get uri_me, params: { access_token: 'invalid_token' }
-          expect(response.status).to eq(401)
-        end
-      end
-    end # context 'when unauthorized'
-
-    context 'when authorized' do
+    context 'when authentiacted' do
       let(:me) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      before do
-        get uri_me, params: { access_token: access_token.token }
-      end
-
-      it 'returns status 200' do
-        expect(response).to be_successful
-      end
+      before { get uri, params: { access_token: access_token.token } }
 
       it 'returns object profile is identical to its schema' do
         expect(response.body).to match_json_schema('v1/users/show')
@@ -45,38 +28,21 @@ describe 'Profile API' do
   end # describe 'GET /me'
 
   describe 'GET /all' do
-    let(:uri_all) { "#{api_v1_profiles_path}.json" }
+    let(:uri) { "#{api_v1_profiles_path}.json" }
 
-    context 'when unauthorized' do
-      context 'and isn\'t access_token ' do
-        it 'returns status 401' do
-          get uri_all
-          expect(response.status).to eq(401)
-        end
-      end
+    let(:api_authenticable) do
+      { request_type: :get, request_uri: uri, options: {} }
+    end
+    it_behaves_like 'API authenticable'
 
-      context 'and access_token is invalid' do
-        it 'returns status 401' do
-          get uri_all, params: { access_token: 'invalid_token' }
-          expect(response.status).to eq(401)
-        end
-      end
-    end # context 'when unauthorized'
-
-    context 'when authorized' do
+    context 'when authenticated' do
       let(:me) { create(:user) }
       let!(:users) { create_list(:user, 2) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      before do
-        get uri_all, params: { access_token: access_token.token }
-      end
+      before { get uri, params: { access_token: access_token.token } }
 
-      it 'returns status 200' do
-        expect(response).to be_successful
-      end
-
-      it "returns users objct is identical to its schema" do
+      it "returns users object is identical to its schema" do
         expect(response.body).to match_json_schema('v1/users/index')
       end
 
