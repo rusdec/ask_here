@@ -9,8 +9,8 @@ feature 'User can attach and deattach files to question', %q{
   given(:user) { create(:user) }
 
    given(:files_attachable) do
-    { resource: 'question',
-      resources: 'question',
+    { resource_name: 'question',
+      resource_name_plural: 'question',
       new_resource_uri: new_question_path,
       edit_resource_uri: question_path(create(:question, user: user)),
       bad_author_uri: question_path(

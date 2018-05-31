@@ -9,8 +9,8 @@ feature 'User can attach and deattach files to answer', %q{
   given(:question) { create(:question_with_answers, user: user, answers_count: 1) }
 
   given(:files_attachable) do
-    { resource: 'answer',
-      resources: 'answers', 
+    { resource_name: 'answer',
+      resource_name_plural: 'answers', 
       new_resource_uri: question_path(question),
       edit_resource_uri: question_path(question),
       bad_author_uri: question_path(

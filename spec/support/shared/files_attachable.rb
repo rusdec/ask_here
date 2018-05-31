@@ -1,14 +1,16 @@
 # These lets files_attachable must be declared
 #   @let files_attachable [Hash]
-#     @param resource [String] the any resource name
-#     @param resources [String] the any plural (or not) name 
+#     @param resource_name [String] the any resource name
+#     @param resources_name_plural [String] the any plural (or not) name 
 #     @param new_resource_uri [String] the path for create new resource page
 #     @param edit_resource_uri [String] the path for edit new resource page
 #     @param bad_author_uri [String] the path for edit new resource page with user
-#       who is not author of resource
+#                                    who is not author of resource
+#     @param user [Object] instance of User
+
 shared_examples_for 'files attachable' do
-  given(:resource) { files_attachable[:resource] }
-  given(:resources) { files_attachable[:resources] }
+  given(:resource_name) { files_attachable[:resource_name] }
+  given(:resource_name_plural) { files_attachable[:resource_name_plural] }
   given(:files) do
     [{ name: 'restart.txt', path: "#{Rails.root}/tmp/restart.txt" },
      { name: 'LICENSE', path: "#{Rails.root}/LICENSE" }]
@@ -21,11 +23,11 @@ shared_examples_for 'files attachable' do
 
       context 'when create new resource' do
         before { visit files_attachable[:new_resource_uri] }
-        given(:resource_attributes) { attributes_for(files_attachable[:resource].to_sym) }
+        given(:resource_attributes) { attributes_for(resource_name.to_sym) }
 
         scenario 'can attach one or more files', js: true do
-          send("create_#{resource}", resource_attributes) do
-            attach_files({ context: ".attachements", files: files})
+          send("create_#{resource_name}", resource_attributes) do
+            attach_files(context: ".attachements", files: files)
           end
 
           files.each do |file|
@@ -38,9 +40,9 @@ shared_examples_for 'files attachable' do
         before { visit files_attachable[:edit_resource_uri] }
         context "and edit created resource" do
           scenario 'can attach one or more files', js: true do
-            within ".#{resources}" do
+            within ".#{resource_name_plural}" do
               click_on 'Edit'
-              attach_files({ context: ".#{resource}_editable_attachements", files: files })
+              attach_files(context: ".#{resource_name}_editable_attachements", files: files)
               click_on 'Save'
             end
 
@@ -57,7 +59,7 @@ shared_examples_for 'files attachable' do
         end
 
         scenario 'no see add file option' do
-          within ".#{resources}" do
+          within ".#{resource_name_plural}" do
             expect(page).to have_no_content('Add file')
           end
         end
@@ -81,15 +83,15 @@ shared_examples_for 'files attachable' do
 
       context 'when create new resource' do
         before { visit files_attachable[:new_resource_uri] }
-        given(:resource_attributes) { attributes_for(resource.to_sym) }
+        given(:resource_attributes) { attributes_for(resource_name.to_sym) }
 
         scenario 'can delete attach one or more files', js: true do
-          within "#new_#{resource}" do
+          within "#new_#{resource_name}" do
             fill_in 'Body', with: resource_attributes[:body]
             attach_files({ context: '.attachements', files: files })
             
             remove_attached_files('.attachements')
-            click_on "Create #{resource.capitalize}"
+            click_on "Create #{resource_name.capitalize}"
           end
           
           files.each do |file|
@@ -103,15 +105,15 @@ shared_examples_for 'files attachable' do
           before { visit files_attachable[:edit_resource_uri] }
 
           scenario 'can delete one or more files', js: true do
-            within ".#{resources}" do
+            within ".#{resource_name_plural}" do
               #attach files
               click_on 'Edit'
-              attach_files({ context: ".#{resource}_editable_attachements", files: files })
+              attach_files(context: ".#{resource_name}_editable_attachements", files: files)
               click_on 'Save'
 
               #remove attached files
               click_on 'Edit'
-              remove_attached_files_when_edit(".#{resource}_editable_attachements")
+              remove_attached_files_when_edit(".#{resource_name}_editable_attachements")
               click_on 'Save'
             end
 
@@ -128,7 +130,7 @@ shared_examples_for 'files attachable' do
         end
 
         scenario 'no see remove attach option' do
-          within ".#{resources}" do
+          within ".#{resource_name_plural}" do
             expect(page).to have_no_content('Remove file')
           end
         end

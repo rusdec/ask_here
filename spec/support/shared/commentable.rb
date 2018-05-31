@@ -1,6 +1,13 @@
+# These lets commentable must be declared
+#   @let commentable [Hash]
+#     @param resource_name [String] the any resource name
+#     @param resource_name_plural [String] the any plural (or not) name
+#     @param resource_uri [String] the path for resource page
+#     @param resource [Object] the instance of any commentale class (Answer, Question, etc)
+
 shared_examples_for 'commentable' do
-  let(:resource_name) { commentable[:resource_name] }
-  let(:resource_name_plural) { commentable[:resource_name_plural] }
+  given(:resource_name) { commentable[:resource_name] }
+  given(:resource_name_plural) { commentable[:resource_name_plural] }
 
   describe 'Create comment' do
     context 'when authenticated user' do

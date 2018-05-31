@@ -3,10 +3,10 @@
 #     @param resource_name [String] the any resource name
 #     @param resource_name_plural [String] the any plural (or not) name
 #     @param resource_uri [String] the path for resource page
-#     @param resource [Object] the instance of class (Answer, Question, etc)
-#     @param user [Object] the instance of User
-shared_examples_for 'votable' do
+#     @param resource [Object] the instance of any votable class (Answer, Question, etc)
+#     @param user [User] the instance of User
 
+shared_examples_for 'votable' do
   given(:resource_name) { votable[:resource_name] }
   given(:resource_name_plural) { votable[:resource_name_plural] }
 
