@@ -1,6 +1,6 @@
 require_relative '../features_helper'
 
-feature 'User can attach files to question', %q{
+feature 'User can attach and deattach files to question', %q{
   As author of question
   I can attach any files to question
   so that I can clarify the my problem
