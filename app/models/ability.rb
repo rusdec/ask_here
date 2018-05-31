@@ -21,14 +21,13 @@ class Ability
     alias_action :create, :read, :update, :destroy, to: :crud
     can(:crud, :all)
 
+    author_abilities
     vote_abilities
     best_answer_abilities
   end
 
   def user_abilities
-    alias_action :update, :destroy, to: :author_actions
-    can(:author_actions, :all, user: user)
-
+    author_abilities
     guest_abilities
     best_answer_abilities
     vote_abilities
@@ -53,5 +52,10 @@ class Ability
     can :cancel_vote, :all do |vote|
       vote
     end
+  end
+
+  def author_abilities
+    alias_action :update, :destroy, to: :author_actions
+    can(:author_actions, :all, user: user)
   end
 end
