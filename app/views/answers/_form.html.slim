@@ -5,7 +5,7 @@
   = f.label :body
   = f.text_area :body
 
-  .new_answer_attachements
+  .attachements
     = f.fields_for :attachements do |a|
       = render 'shared/attachement_fields', f: a
     p
