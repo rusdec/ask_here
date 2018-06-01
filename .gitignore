@@ -28,6 +28,7 @@
 config/database.yml
 
 *.swp
+*.swo
 
 /public/uploads
 /public/uploads/*

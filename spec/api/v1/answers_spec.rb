@@ -8,32 +8,15 @@ describe 'Answers API' do
     let!(:question) { create(:question, user: user) }
     let (:uri) { "#{api_v1_question_answers_path(question)}.json" }
 
-    context 'when unauthorized' do
-      context 'and isn\'t access_token ' do
-        it 'returns status 401' do
-          get uri
-          expect(response.status).to eq(401)
-        end
-      end
-
-      context 'and access_token is invalid' do
-        it 'returns status 401' do
-          get uri, params: { access_token: 'invalid_token' }
-          expect(response.status).to eq(401)
-        end
-      end
-    end # context 'when unauthorized'
+    let(:api_authenticable) do
+      { request_type: :get, request_uri: uri, options: {} }
+    end
+    it_behaves_like 'API authenticable'
 
     context 'when authorized' do
       let!(:answers) { create_list(:answer, 2, question: question, user: user) }
 
-      before do
-        get uri, params: { access_token: access_token.token }
-      end
-
-      it 'returns status 200' do
-        expect(response).to be_successful
-      end
+      before { get uri, params: { access_token: access_token.token } }
 
       it 'returns answers object is identical to its schema' do
         expect(response.body).to match_json_schema('v1/answers/index')
@@ -47,33 +30,15 @@ describe 'Answers API' do
     end
     let!(:comment) { create(:comment, commentable: answer, user: user) }
     let!(:attachement) { create(:attachement, attachable: answer) }
-
     let(:uri) { "#{api_v1_answer_path(answer)}.json" }
 
-    context 'when unauthorized' do
-      context 'and isn\'t access_token ' do
-        it 'returns status 401' do
-          get uri
-          expect(response.status).to eq(401)
-        end
-      end
-
-      context 'and access_token is invalid' do
-        it 'returns status 401' do
-          get uri, params: { access_token: 'invalid_token' }
-          expect(response.status).to eq(401)
-        end
-      end
-    end # context 'when unauthorized'
+    let(:api_authenticable) do
+      { request_type: :get, request_uri: uri, options: {} }
+    end
+    it_behaves_like 'API authenticable'
 
     context 'when authorized' do
-      before do
-        get uri, params: { access_token: access_token.token }
-      end
-
-      it 'returns status 200' do
-        expect(response).to be_successful
-      end
+      before { get uri, params: { access_token: access_token.token } }
 
       it 'returns answers object is identical to its schema' do
         expect(response.body).to match_json_schema('v1/answers/show')
@@ -87,6 +52,12 @@ describe 'Answers API' do
     let(:params_without_token) do
       { question: question, answer: attributes_for(:answer) }
     end
+    
+    let(:api_authenticable) do
+      { request_type: :post, request_uri: uri,
+        options: { params: params_without_token } }
+    end
+    it_behaves_like 'API authenticable'
 
     context 'when unauthorized' do
       context 'and isn\'t access_token ' do
