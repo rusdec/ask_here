@@ -14,6 +14,8 @@ class Question < ApplicationRecord
                       length: { minimum: 10,
                                 maximum: 30 } }
 
+  scope :new_for_the_last_day, ->() { where('created_at >= ?', 1.day.ago) }
+
   def best_answers
     answers.best_answers
   end

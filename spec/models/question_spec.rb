@@ -35,4 +35,20 @@ RSpec.describe Question, type: :model do
 
     expect(question.best_answers.count).to eq(best_answers_count)
   end
+
+  context '.new_for_the_last_day' do
+    let!(:questions) { create_list(:question, 3, user: create(:user)) }
+    before do
+      questions[1].update(created_at: 23.hours.ago)
+      questions.last.update(created_at: 3.day.ago)
+    end
+
+    it 'should return only two questions' do
+      expect(Question.new_for_the_last_day.count).to eq(2)
+    end
+
+    it 'should not contain question with invalid created date' do
+      expect(Question.new_for_the_last_day).to_not be_include(questions.last)
+    end
+  end
 end
