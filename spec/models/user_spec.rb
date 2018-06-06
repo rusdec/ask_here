@@ -1,6 +1,7 @@
 require_relative 'models_helper'
 
 RSpec.describe User, type: :model do
+
   it { should validate_presence_of(:email) }
   it { should validate_presence_of(:password) }
 
@@ -13,6 +14,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:authorizations) }
+  it { should have_many(:subscriptions) }
 
   it { should delegate_method(:vote_for).to(:votes) }
 
