@@ -1,7 +1,9 @@
 module SubscriptionsHelper
   def subscribe_links(subscribable)
-    subscription = current_user.subscriptions.find_by(subscribable: subscribable)
-    subscription ? unfollow_link(subscription) : follow_link(subscribable)
+    if current_user
+      subscription = current_user.subscriptions.find_by(subscribable: subscribable)
+      subscription ? unfollow_link(subscription) : follow_link(subscribable)
+    end
   end
 
   def follow_link(subscribable)

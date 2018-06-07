@@ -34,14 +34,26 @@ RSpec.describe Answer, type: :model do
 
     it 'may be only one per question' do
       answer = question.answers.find_by(best: false)
-
-      expect {
-        answer.best!
-      }.to_not change(question.best_answers, :count)
+      expect{ answer.best! }.to_not change(question.best_answers, :count)
     end
 
     it 'first' do
       expect(question.answers.first).to eq(best_answer)
+    end
+
+    context '#send_new_answer_notification' do
+      let!(:question) { create(:question, user: create(:user)) }
+
+      it 'should send after create' do
+        expect(NewAnswerNotificationJob).to receive(:perform_later)
+        create(:answer, question: question, user: create(:user))
+      end
+
+      it 'should not send after update' do
+        answer = create(:answer, question: question, user: create(:user))
+        expect(NewAnswerNotificationJob).to_not receive(:perform_later)
+        answer.update(body: 'AnyValidAnswerBodyText')
+      end
     end
   end
 end
