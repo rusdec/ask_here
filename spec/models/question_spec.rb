@@ -52,4 +52,14 @@ RSpec.describe Question, type: :model do
       expect(Question.new_for_the_last_day).to_not be_include(questions.last)
     end
   end
+
+  context 'when user create question' do
+    let(:user) { create(:user) }
+
+    it 'subscribes to question after create' do
+      expect {
+        create(:question, user: user)
+      }.to change(user.subscriptions, :count).by(1)
+    end
+  end
 end
