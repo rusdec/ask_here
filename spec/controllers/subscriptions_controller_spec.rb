@@ -50,7 +50,7 @@ RSpec.describe SubscriptionsController, type: :controller do
 
       it 'return successful' do
         post :create, params: params, format: format
-        expect(response.body).to eq(json_success_hash.to_json)
+        expect(response.body).to match_json_schema('subscriptions/create')
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe SubscriptionsController, type: :controller do
 
       it 'return successfull' do
         delete :destroy, params: params, format: format
-        expect(response.body).to eq(json_success_hash.to_json)
+        expect(response.body).to match_json_schema('subscriptions/destroy')
       end
     end
 

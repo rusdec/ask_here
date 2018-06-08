@@ -1,1 +1,1 @@
-a.unfollow href="/subscriptions/#{@subscriptions.id}" data-remote=true data-method='delete' format='json' unfollow
+a.unfollow href="/subscriptions/#{@subscription.id}" data-remote=true data-method='delete' format='json' unfollow

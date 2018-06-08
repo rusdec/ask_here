@@ -8,12 +8,15 @@ class SubscriptionsController < ApplicationController
 
   def create
     @subscription = current_user.subscriptions.create(subscribable: @subscribable)
-    json_response_by_result
+    json_response_by_result(subscription: @subscription)
   end
 
   def destroy
     @subscription.destroy
-    json_response_by_result
+    json_response_by_result(subscribable: { 
+      klass: @subscription.subscribable_type.pluralize.underscore,
+      id: @subscription.subscribable.id }
+    )
   end
 
   private

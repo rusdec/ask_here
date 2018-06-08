@@ -1,1 +1,1 @@
-a.follow href="#{@subscribable.class.underscore}/#{@subscribable.id}/subscriptions" data-remote=true data-method='post' format='json' follow
+a.follow href="/#{@subscribable.klass}/#{@subscribable.id}/subscriptions" data-remote=true data-method='post' format='json' follow

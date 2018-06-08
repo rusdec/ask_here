@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {"type": "boolean"},
+    "message": {"type": "string"},
+    "subscription": {
+      "type": "object",
+      "required": ["id", "user_id", "created_at", "updated_at", "subscribable_id", "subscribable_type"],
+      "maxProperties": 6,
+      "properties": {
+        "id": {"type": "integer"},
+        "user_id": {"type": "integer"},
+        "subscribable_id": {"type": "integer"},
+        "subscribable_type": {"type": "string"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
