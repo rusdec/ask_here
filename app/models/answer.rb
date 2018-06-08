@@ -14,6 +14,8 @@ class Answer < ApplicationRecord
                      length: { minimum: 10,
                                maximum: 1000 } }
 
+  after_commit :send_new_answer_notification, on: :create
+
   def not_best?
     !best?
   end
@@ -27,5 +29,11 @@ class Answer < ApplicationRecord
       question.best_answers.update_all(best: false)
       update!(best: true)
     end
+  end
+
+  private
+
+  def send_new_answer_notification
+    NewAnswerNotificationJob.perform_later(self)
   end
 end

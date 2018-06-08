@@ -34,6 +34,10 @@ Rails.application.routes.draw do
     resources :comments, only: %i[destroy update create], shallow: true
   end
 
+  concern :subscribable do
+    resources :subscriptions, only: %i[create destroy], shallow: true
+  end
+
   resources :questions do
     resources :answers, shallow: true,
                         only: %i[create update destroy] do
@@ -45,8 +49,10 @@ Rails.application.routes.draw do
       concerns :votable, controller: :answers
       concerns :commentable
     end
+
     concerns :votable, controller: :questions
     concerns :commentable
+    concerns :subscribable
   end
 
   mount ActionCable.server => '/cable'

@@ -5,9 +5,9 @@
 #     @param options [Hash] the other options of request
 
 shared_examples_for 'API authenticable' do
-  given(:request_type) { api_authenticable[:request_type] }
-  given(:options) { api_authenticable[:options] }
-  given(:request_uri) { api_authenticable[:request_uri] }
+  let(:request_type) { api_authenticable[:request_type] }
+  let(:options) { api_authenticable[:options] }
+  let(:request_uri) { api_authenticable[:request_uri] }
   before { options[:params] ||= {} }
 
   context 'when unauthenticated' do

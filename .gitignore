@@ -33,3 +33,5 @@ config/database.yml
 /public/uploads
 /public/uploads/*
 Gemfile.lock
+
+*.rdb

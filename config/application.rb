@@ -2,6 +2,9 @@ require_relative 'boot'
 
 require 'rails/all'
 
+require 'sidekiq'
+Sidekiq::Extensions.enable_delay!
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -30,5 +33,7 @@ module AskHere
                        controller_specs: true
       g.fixture_replacement :factory_bot, dir: 'spec/factories'
     end
+
+    config.active_job.queue_adapter = :sidekiq
   end
 end

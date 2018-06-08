@@ -1,0 +1,1 @@
+a.unfollow href="/subscriptions/#{@subscription.id}" data-remote=true data-method='delete' format='json' unfollow

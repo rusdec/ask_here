@@ -1,0 +1,1 @@
+a.follow href="/#{@subscribable.klass}/#{@subscribable.id}/subscriptions" data-remote=true data-method='post' format='json' follow
