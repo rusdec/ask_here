@@ -14,7 +14,7 @@ class Answer < ApplicationRecord
                      length: { minimum: 10,
                                maximum: 1000 } }
 
-  after_create :send_new_answer_notification
+  after_commit :send_new_answer_notification, on: :create
 
   def not_best?
     !best?
