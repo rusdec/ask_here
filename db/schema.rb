@@ -108,8 +108,7 @@ ActiveRecord::Schema.define(version: 2018_06_06_094527) do
     t.string "subscribable_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["subscribable_id", "subscribable_type"], name: "index_subscriptions_on_subscribable_id_and_subscribable_type"
-    t.index ["user_id", "subscribable_id"], name: "index_subscriptions_on_user_id_and_subscribable_id"
+    t.index ["user_id", "subscribable_id", "subscribable_type"], name: "uniqueness_subscription", unique: true
   end
 
   create_table "users", force: :cascade do |t|
