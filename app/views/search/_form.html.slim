@@ -1,0 +1,12 @@
+= form_with url: search_path, method: :get, local: true do |f|
+  .
+    = f.label :query
+    = f.text_field :query, value: @raw_query
+  .
+    = f.label :resource
+    = select_searchable_context(f)
+  .
+    = f.label :per_page
+    = select_per_page(f)
+  .
+    = f.submit 'Find'

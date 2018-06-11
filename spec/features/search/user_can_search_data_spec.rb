@@ -15,9 +15,25 @@ feature 'User can search data', %q{
       visit search_path
     end
 
+    scenario 'see search input field in header' do
+      within '.header' do
+        expect(page).to have_button('Find')
+        expect(page).to have_content('Query')
+      end
+    end
+
+    scenario 'max view body is 100 characters', js: true do
+      question = create(:question, user: user, body: 'BodyText ' << 'text '*100)
+      index
+      find_by_context(context: 'question', text: 'BodyText')
+      expect(page).to have_content(question.body.truncate(100))
+    end
+
     scenario 'query in text input field after reloadpage', js: true do
       find_by_context(context: 'question', text: 'Query must be in input field')
-      expect(find('[name="query"]').value).to eq('Query must be in input field')
+      within '.body' do
+        expect(find('[name="query"]').value).to eq('Query must be in input field')
+      end
     end
 
     context 'when find questions' do
@@ -139,5 +155,39 @@ feature 'User can search data', %q{
         end
       end
     end # context 'when find by user'
+
+    context 'when pagination' do
+      let(:user) { create(:user) }
+      let!(:questions) { create_list(:question, 40, user: user) }
+
+      before do
+        index
+        find_by_context(context: 'question', text: user.email)
+      end
+
+      scenario 'see only first 20 questions', js: true do
+        questions[0..19].each do |question|
+          expect(page).to have_link(question.title)
+          expect(page).to have_content(question.body.truncate(100))
+        end
+
+        questions[20..-1].each do |question|
+          expect(page).to_not have_link(question.title)
+          expect(page).to_not have_content(question.body.truncate(100))
+        end
+      end
+
+      scenario 'user see pagination', js: true do
+        within '.pagination' do
+          expect(page).to have_content(1)
+          expect(page).to have_link(2)
+        end
+      end
+
+      scenario 'user no see pagination when no result' do
+        find_by_context(context: 'question', text: create(:user).email)
+        expect(page).to_not have_content(1)
+      end
+    end # context 'pagination'
   end
 end
