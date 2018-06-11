@@ -11,12 +11,12 @@ feature 'User can search data', %q{
     let!(:questions) { create_list(:question_with_answers, 2, user: user) }
     let(:question) { questions.last }
     before do
-      index
       sign_in(user)
       visit search_path
     end
 
     context 'when find questions' do
+      before { index }
 
       scenario 'can search by question title', js: true do
         find_by_context(context: 'question', text: question.title)
@@ -38,7 +38,10 @@ feature 'User can search data', %q{
 
     context 'when find answers' do
       let(:answer) { question.answers.last }
-      before { find_by_context(context: 'answer', text: answer.body) }
+      before do
+        index
+        find_by_context(context: 'answer', text: answer.body)
+      end
 
       scenario 'can search by answer body', js: true do
         expect(page).to have_content(question.title)
@@ -76,5 +79,40 @@ feature 'User can search data', %q{
         expect(page).to have_link(question.title, count: 2)
       end
     end # context 'when find answers'
+
+    context 'when find all' do
+      let(:text) { ' SharedBodyText' }
+      let!(:question) { create(:question, user: user, body: 'Question' << text) }
+      let!(:answer) do
+        create(:answer, question: question, user: user, body: 'Answer' << text)
+      end
+      let!(:comment_for_question) do
+        create(:comment, commentable: question, user: user,
+               body: 'Question Comment' << text)
+      end
+
+      let!(:comment_for_answer) do
+        create(:comment, commentable: question, user: user,
+               body: 'Answer Comment' << text)
+      end
+
+      before do
+        index
+        find_by_context(context: 'all', text: text)
+      end
+
+      scenario 'see links to question page', js: true do
+        expect(page).to have_link(question.title, count: 4)
+      end
+
+      scenario 'see body of each finded resorces', js: true do
+        [question,
+         answer,
+         comment_for_question,
+         comment_for_answer].each do |resource|
+          expect(page).to have_content(resource.body)
+        end
+      end
+    end
   end
 end
