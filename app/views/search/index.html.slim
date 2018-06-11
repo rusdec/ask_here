@@ -1,0 +1,17 @@
+= form_with url: search_path, method: :get, local: true do |f|
+  .
+    = f.label :query
+    = f.text_field :query
+  .
+    = f.label :resource
+    = select_searchable_context(f)
+  .
+    = f.submit 'Find'
+
+.results
+  - @find_data.each do |data|
+    .result
+      = question_link(data)
+      .
+        p = data.body.truncate(100)
+      
