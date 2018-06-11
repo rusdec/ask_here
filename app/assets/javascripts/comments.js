@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   let newComments = document.querySelectorAll('.new-comment')
+  if (!newComments) {
+    return
+  }
   newComments.forEach(newComment => listenCreateSuccessEvent(newComment))
 
   App.cable.subscriptions.create('CommentsChannel', {

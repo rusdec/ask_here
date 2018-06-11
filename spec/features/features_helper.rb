@@ -12,6 +12,7 @@ RSpec.configure do |config|
   config.include Feature::Comment, type: :feature
   config.include Feature::OmniauthMacros, type: :feature
   config.include Feature::Sphinx, type: :feature
+  config.include Feature::Search, type: :feature
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

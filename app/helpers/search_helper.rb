@@ -13,7 +13,7 @@ module SearchHelper
   end
 
   def searchable_context
-    contexts = %i(question answer)
+    contexts = %i(question answer comment)
       
     contexts.map do |context|
       OpenStruct.new(name: context)
