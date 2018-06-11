@@ -59,11 +59,11 @@ feature 'User can search data', %q{
       end
 
       scenario 'see link to question page', js: true do
-        fill_in 'query', with: question.title
+        fill_in 'query', with: answer.body
         click_on 'Find'
 
         expect(page).to have_link(question.title)
       end
-    end
+    end # context 'when find answers'
   end
 end
