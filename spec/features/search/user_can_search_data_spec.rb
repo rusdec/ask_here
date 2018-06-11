@@ -15,13 +15,20 @@ feature 'User can search data', %q{
       visit search_path
     end
 
+    scenario 'query in text input field after reloadpage', js: true do
+      find_by_context(context: 'question', text: 'Query must be in input field')
+      expect(find('[name="query"]').value).to eq('Query must be in input field')
+    end
+
     context 'when find questions' do
       before { index }
 
       scenario 'can search by question title', js: true do
         find_by_context(context: 'question', text: question.title)
-        expect(page).to have_content(question.title)
-        expect(page).to have_content(question.body.truncate(100))
+        within '.results' do
+          expect(page).to have_content(question.title)
+          expect(page).to have_content(question.body.truncate(100))
+        end
       end
 
       scenario 'can search by question body', js: true do

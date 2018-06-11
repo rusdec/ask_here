@@ -1,28 +1,21 @@
 class SearchController < ApplicationController
-  skip_authorization_check
+  before_action :set_query
+  before_action :set_context
 
   def index
-    @current_query = current_query
-    @find_data =  if params[:resource] && params[:query]
-                    resource_to_klass.search(query)
-                  else
-                    []
-                  end
+    @resources = @query.empty? ? [] : @context.search(@query)
+    authorize! :read, @resources
   end
 
   private
 
-  def current_query
-     params[:query] || ''
+  def set_query
+    @query = params[:query] ? ThinkingSphinx::Query.escape(params[:query]) : ''
   end
 
-  def query
-    ThinkingSphinx::Query.escape(params[:query])
-  end
-
-  def resource_to_klass
-    params[:resource].capitalize.constantize
+  def set_context
+    @context = params[:resource].capitalize.constantize
   rescue
-    params[:resource] = ThinkingSphinx
+    @context = ThinkingSphinx
   end
 end
