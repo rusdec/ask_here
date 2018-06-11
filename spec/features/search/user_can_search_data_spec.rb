@@ -113,6 +113,24 @@ feature 'User can search data', %q{
           expect(page).to have_content(resource.body)
         end
       end
-    end
+    end # context 'when find all'
+
+    context 'when find by user' do
+      before do
+        index
+        find_by_context(context: 'all', text: user.email)
+      end
+      
+      scenario "find all users resources by user email", js: true do
+        questions.each do |question|
+          expect(page).to have_link(question.title)
+          expect(page).to have_content(question.body)
+
+          question.answers.each do |answer|
+            expect(page).to have_content(answer.body)
+          end
+        end
+      end
+    end # context 'when find by user'
   end
 end

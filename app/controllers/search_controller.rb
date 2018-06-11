@@ -17,7 +17,7 @@ class SearchController < ApplicationController
   end
 
   def query
-    params[:query]
+    ThinkingSphinx::Query.escape(params[:query])
   end
 
   def resource_to_klass
