@@ -16,6 +16,7 @@ RSpec.describe Question, type: :model do
     should validate_length_of(:title).
       is_at_least(10).is_at_most(30)
   end
+
   it do
     should validate_length_of(:body).
       is_at_least(10).is_at_most(1000)
