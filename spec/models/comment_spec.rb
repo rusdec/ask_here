@@ -14,6 +14,7 @@ RSpec.describe Comment, type: :model do
   end
 
   it_behaves_like 'userable'
+  it_behaves_like 'searchable'
 
   it { should belong_to(:commentable) }
 

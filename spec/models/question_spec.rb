@@ -6,7 +6,8 @@ RSpec.describe Question, type: :model do
   it_behaves_like 'userable'
   it_behaves_like 'commentable'
   it_behaves_like 'subscribable'
-
+  it_behaves_like 'searchable'
+  
   it { should have_many(:answers).dependent(:destroy) }
 
   it { should validate_presence_of(:title) }
