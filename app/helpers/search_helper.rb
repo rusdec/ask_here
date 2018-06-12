@@ -8,21 +8,19 @@ module SearchHelper
   end
 
   def select_searchable_context(form)
-    form.select :resource,
-                options_from_collection_for_select(searchable_context, :name, :name)
+    form.select :context, options_for_select(searchable_context, @raw_context)
   end
 
   def searchable_context
-    contexts = %i(question answer comment all)
-    contexts.map { |context| OpenStruct.new(name: context) }
+    contexts = %w(question answer comment all)
+    contexts.map { |context| [context, context] }
   end
 
   def select_per_page(form)
-    form.select :per_page,
-                options_from_collection_for_select(per_page_count, :count, :count)
+    form.select :per_page, options_for_select(per_page_count, @per_page)
   end
 
   def per_page_count
-    %w(20 50 100).map { |count| OpenStruct.new(count: count) }
+    %w(20 50 100).map { |count| [count, count] }
   end
 end

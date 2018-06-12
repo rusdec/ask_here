@@ -3,7 +3,7 @@
     = f.label :query
     = f.text_field :query, value: @raw_query
   .
-    = f.label :resource
+    = f.label :context
     = select_searchable_context(f)
   .
     = f.label :per_page

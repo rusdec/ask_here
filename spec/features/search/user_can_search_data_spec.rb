@@ -6,20 +6,12 @@ feature 'User can search data', %q{
   so that I can find needed data fastest
 } do
 
-  context 'Authenticated user' do
+  context 'All user' do
     let(:user) { create(:user) }
     let!(:questions) { create_list(:question_with_answers, 2, user: user) }
     let(:question) { questions.last }
     before do
-      sign_in(user)
       visit search_path
-    end
-
-    scenario 'see search input field in header' do
-      within '.header' do
-        expect(page).to have_button('Find')
-        expect(page).to have_content('Query')
-      end
     end
 
     scenario 'max view body is 100 characters', js: true do
@@ -158,7 +150,7 @@ feature 'User can search data', %q{
 
     context 'when pagination' do
       let(:user) { create(:user) }
-      let!(:questions) { create_list(:question, 40, user: user) }
+      let!(:questions) { create_list(:question, 100, user: user) }
 
       before do
         index
@@ -177,6 +169,20 @@ feature 'User can search data', %q{
         end
       end
 
+      scenario 'see 30 questions when use per_page', js: true do
+        find_by_context(per_page: 50,
+                        context: 'question',
+                        text: user.email)
+
+        questions[0..49].each do |question|
+          expect(page).to have_link(question.title)
+        end
+
+        questions[50..-1].each do |question|
+          expect(page).to_not have_link(question.title)
+        end
+      end
+
       scenario 'user see pagination', js: true do
         within '.pagination' do
           expect(page).to have_content(1)
@@ -184,9 +190,9 @@ feature 'User can search data', %q{
         end
       end
 
-      scenario 'user no see pagination when no result' do
+      scenario 'user no see pagination when no result', js: true do
         find_by_context(context: 'question', text: create(:user).email)
-        expect(page).to_not have_content(1)
+        expect(page).to_not have_content(/^1$/)
       end
     end # context 'pagination'
   end
