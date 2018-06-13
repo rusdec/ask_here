@@ -35,3 +35,5 @@ config/database.yml
 Gemfile.lock
 
 *.rdb
+/db/sphinx/
+/config/*.sphinx.conf

@@ -1,0 +1,11 @@
+.header
+  - if current_user
+    = link_to 'Sign out', destroy_user_session_path, method: :delete
+  - else
+    = link_to 'Sign in', new_user_session_path
+  = render 'search/header_form' 
+  .notice
+    = notice
+  .alert
+    = alert
+  = render 'shared/flash_errors'

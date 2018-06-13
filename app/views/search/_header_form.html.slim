@@ -1,0 +1,8 @@
+= form_with url: search_path, method: :get, local: true do |f|
+  .
+    = f.label :query
+    = f.text_field :query
+  .
+    = hidden_field_tag(:context, :all)
+  .
+    = f.submit 'Find'

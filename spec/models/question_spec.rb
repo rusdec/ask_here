@@ -6,7 +6,8 @@ RSpec.describe Question, type: :model do
   it_behaves_like 'userable'
   it_behaves_like 'commentable'
   it_behaves_like 'subscribable'
-
+  it_behaves_like 'searchable'
+  
   it { should have_many(:answers).dependent(:destroy) }
 
   it { should validate_presence_of(:title) }
@@ -16,6 +17,7 @@ RSpec.describe Question, type: :model do
     should validate_length_of(:title).
       is_at_least(10).is_at_most(30)
   end
+
   it do
     should validate_length_of(:body).
       is_at_least(10).is_at_most(1000)

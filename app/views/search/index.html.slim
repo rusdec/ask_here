@@ -1,0 +1,11 @@
+= render 'form'
+
+.results
+  - @resources.each do |resource|
+    .result
+      = question_link(resource)
+      .
+        p = resource.body.truncate(100)
+
+- unless @resources.empty?
+  = will_paginate(@resources)
