@@ -1,7 +1,7 @@
 require_relative '../features_helper'
 require 'capybara/email/rspec'
 
-feature 'DailyMailers' do
+feature 'NewAnswerNotificationMailer' do
   let!(:question) { create(:question_with_answers, user: create(:user)) }
   let(:answer) { question.answers.last }
   let(:subscription) { create(:subscription, subscribable: question,
