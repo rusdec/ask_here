@@ -26,6 +26,7 @@
 .ruby-gemset
 
 config/database.yml
+config/cable.yml
 
 *.swp
 *.swo
@@ -36,4 +37,4 @@ Gemfile.lock
 
 *.rdb
 /db/sphinx/
-/config/*.sphinx.conf
+config/*.sphinx.conf
