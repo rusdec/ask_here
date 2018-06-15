@@ -13,11 +13,11 @@
 #   rake "some:great:rake:task"
 # end
 #
-every 1.days do
+every :day do
   runner "DailyDigestJob.perform_now"
 end
 
-every 60.minutes do
+every :hour do
   rails "ts:index"
 end
 # Learn more: http://github.com/javan/whenever
