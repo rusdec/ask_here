@@ -56,6 +56,7 @@ gem 'whenever'
 gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'will_paginate'
+gem 'dotenv'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
