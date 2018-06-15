@@ -6,8 +6,11 @@
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
+server "95.213.203.42", user: "deployer", roles: %w{app db web}
 
-
+set :rails_env, :production
+set :stage, :production
+set :sidekiq_queue, %w(default mailer)
 
 # role-based syntax
 # ==================
@@ -59,3 +62,9 @@
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+set :ssh_options, {
+  port: 6522,
+  keys: %w(/Users/rusdec/.ssh/id_rsa),
+  forward_agent: false,
+  auth_methods: %w(publickey password)
+}

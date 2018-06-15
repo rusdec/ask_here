@@ -38,3 +38,4 @@ Gemfile.lock
 *.rdb
 /db/sphinx/
 config/*.sphinx.conf
+.env
