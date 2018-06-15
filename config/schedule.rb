@@ -18,6 +18,6 @@ every :day do
 end
 
 every :hour do
-  rails "ts:index"
+  rake "ts:index"
 end
 # Learn more: http://github.com/javan/whenever
