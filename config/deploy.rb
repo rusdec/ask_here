@@ -49,5 +49,26 @@ namespace 'deploy' do
     end
   end
 
+  desc 'Restart thinking sphinx'
+  task :ts_restart do
+    on roles(:db) do
+      within release_path do
+        execute "searchd -c #{release_path}/config/#{fetch(:rails_env)}.sphinx.conf --stop"
+        execute "searchd -c #{release_path}/config/#{fetch(:rails_env)}.sphinx.conf"
+      end
+    end
+  end
+
+  desc 'Thinking sphinx index'
+  task :ts_index do
+    on roles(:db) do
+      within release_path do
+        execute :rake, 'ts:index'
+      end
+    end
+  end
+
   after :publishing, :restart
+  after :publishing, :ts_index
+  after :publishing, :ts_restart
 end
