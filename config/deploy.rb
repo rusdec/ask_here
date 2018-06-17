@@ -48,19 +48,21 @@ namespace 'deploy' do
     end
   end
 
-  desc 'Restart thinking sphinx'
+  desc 'Stop thinking sphinx'
   task :ts_stop do
     on roles(:db) do
       execute "searchd -c #{release_path}/config/#{fetch(:rails_env)}.sphinx.conf --stop"
     end
   end
 
+  desc 'Start thinking sphinx'
   task :ts_start do
     on roles(:db) do
       execute "searchd -c #{release_path}/config/#{fetch(:rails_env)}.sphinx.conf"
     end
   end
 
+  desc 'Restart thinking sphinx'
   task :ts_restart do
     on roles(:db) do
       invoke 'deploy:ts_stop'
@@ -77,7 +79,8 @@ namespace 'deploy' do
     end
   end
 
-  after :publishing, :restart
-  after :publishing, :ts_index
-  after :publishing, :ts_restart
+  after :publishing, 'deploy:restart'
+  after :publishing, 'sphinx:ts_index'
+  after :publishing, 'sphinx:ts_restart'
 end
+
