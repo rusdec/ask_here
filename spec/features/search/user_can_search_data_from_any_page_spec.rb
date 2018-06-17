@@ -15,9 +15,8 @@ feature 'User can search data from any page', %q{
     end
 
     scenario 'see only search input field in header' do
-      within '.header' do
+      within 'header' do
         expect(page).to have_button('Find')
-        expect(page).to have_content('Query')
 
         expect(page).to_not have_content('Context')
         expect(page).to_not have_content('Per page')
@@ -25,7 +24,7 @@ feature 'User can search data from any page', %q{
     end
 
     scenario 'find by all', js: true do
-      within '.header' do
+      within 'header' do
         fill_in 'query', with: user.email
         click_on 'Find'
       end

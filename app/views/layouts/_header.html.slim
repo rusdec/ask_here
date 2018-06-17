@@ -1,11 +1,13 @@
-.header
-  - if current_user
-    = link_to 'Sign out', destroy_user_session_path, method: :delete
-  - else
-    = link_to 'Sign in', new_user_session_path
-  = render 'search/header_form' 
-  .notice
-    = notice
-  .alert
-    = alert
-  = render 'shared/flash_errors'
+header class='navbar navbar-expand-lg'
+  = link_to 'Ask Here', root_path, class: 'navbar-brand'
+  . class='collapse navbar-collapse'
+    ul class='navbar-nav mr-auto'
+      - if current_user
+        li class='nav-item active'
+          = link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'nav-link'
+      - else
+        li class='nav-item active'
+          = link_to 'Sign in', new_user_session_path, class: 'nav-link'
+        li class='nav-item active'
+          = link_to 'Sign up', new_user_registration_path, class: 'nav-link'
+    = render 'search/header_form' 
