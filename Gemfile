@@ -86,7 +86,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.3', require: false
   gem 'capistrano-rvm', require: false
   gem 'capistrano-sidekiq', require: false
-  gem 'unicorn-capistrano3', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 group :test do
