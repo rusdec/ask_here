@@ -42,7 +42,7 @@ pid "#{app_path}/current/tmp/pids/unicorn.pid"
 stderr_path "log/unicorn.stderr.log"
 stdout_path "log/unicorn.stdout.log"
 
-before_exec do
+before_exec do |server|
   ENV['BUNDLE_GEMFILE'] = "#{app_path}/current/Gemfile"
 end
 # combine Ruby 2.0.0+ with "preload_app true" for memory savings

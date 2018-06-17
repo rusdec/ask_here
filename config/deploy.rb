@@ -44,18 +44,27 @@ namespace 'deploy' do
   desc 'Restart application server'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      #execute :touch, release_path.join('tmp/restart.txt')
-      invoke 'unicorn:reload'
+      invoke 'unicorn:restart'
     end
   end
 
   desc 'Restart thinking sphinx'
+  task :ts_stop do
+    on roles(:db) do
+      execute "searchd -c #{release_path}/config/#{fetch(:rails_env)}.sphinx.conf --stop"
+    end
+  end
+
+  task :ts_start do
+    on roles(:db) do
+      execute "searchd -c #{release_path}/config/#{fetch(:rails_env)}.sphinx.conf"
+    end
+  end
+
   task :ts_restart do
     on roles(:db) do
-      within release_path do
-        execute "searchd -c #{release_path}/config/#{fetch(:rails_env)}.sphinx.conf --stop"
-        execute "searchd -c #{release_path}/config/#{fetch(:rails_env)}.sphinx.conf"
-      end
+      invoke 'deploy:ts_stop'
+      invoke 'deploy:ts_start'
     end
   end
 
