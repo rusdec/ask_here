@@ -57,6 +57,7 @@ gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'will_paginate'
 gem 'dotenv-rails'
+gem 'unicorn-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -85,6 +86,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.3', require: false
   gem 'capistrano-rvm', require: false
   gem 'capistrano-sidekiq', require: false
+  gem 'unicorn-capistrano3', require: false
 end
 
 group :test do
