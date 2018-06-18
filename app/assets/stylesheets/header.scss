@@ -1,0 +1,18 @@
+header {
+  background-color: #3d222c;
+
+  a {
+    color: white;
+    &:hover {
+      color: white;
+      text-decoration: underline;
+    }
+    &:visited {
+      text-decoration: none;
+    }
+    &:active {
+      color: white;
+      text-decoration: underline;
+    }
+  }
+}

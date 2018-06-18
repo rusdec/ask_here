@@ -14,6 +14,8 @@
 //= require jquery
 //= require cocoon
 //= require skim
+//= require popper
+//= require bootstrap
 //= require_tree ./templates
 //= require_tree .
 
