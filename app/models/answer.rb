@@ -4,7 +4,7 @@ class Answer < ApplicationRecord
   include Userable
   include Commentable
 
-  belongs_to :question
+  belongs_to :question, touch: true
 
   default_scope { order(best: :DESC).order(:id) }
   scope :best_answers, -> { where(best: true) }

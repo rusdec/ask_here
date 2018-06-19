@@ -16,7 +16,7 @@ RSpec.describe Comment, type: :model do
   it_behaves_like 'userable'
   it_behaves_like 'searchable'
 
-  it { should belong_to(:commentable) }
+  it { should belong_to(:commentable).touch(:true) }
 
   it { should validate_presence_of(:body) }
 

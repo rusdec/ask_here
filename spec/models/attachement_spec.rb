@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Attachement, type: :model do
-  it { should belong_to(:attachable) }
+  it { should belong_to(:attachable).touch(:true) }
 
   it 'save file name' do
     attachement = create(:attachement, attachable: create(:question,
