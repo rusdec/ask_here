@@ -9,7 +9,7 @@ class QuestionsController < ApplicationController
   include Voted
 
   def index
-    @questions = Question.all
+    @questions = Question.order(created_at: :desc)
   end
 
   def show; end

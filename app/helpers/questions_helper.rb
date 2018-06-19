@@ -9,4 +9,8 @@ module QuestionsHelper
              remote: true)
     end
   end
+
+  def question_info(question)
+    "#{question.user.email} | #{question.created_at.strftime('%d.%m.%Y')}"
+  end
 end

@@ -11,8 +11,8 @@ RSpec.describe QuestionsController, type: :controller do
       get :index
     end
 
-    it 'populates an array of all questions' do
-      expect(assigns(:questions)).to eq Question.all
+    it 'populates an array of all questions ordered by created_at by desc' do
+      expect(assigns(:questions)).to eq Question.order(created_at: :desc)
     end
 
     it 'render index view' do

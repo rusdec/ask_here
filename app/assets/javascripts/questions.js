@@ -17,13 +17,7 @@ document.addEventListener('DOMContentLoaded',() => {
 function appendQuestion(question) {
   let questions = document.querySelector('.questions')
   if (questions) {
-    let body = questions.querySelector('tbody')
-    if (!body) {
-      body = document.createElement('tbody')
-      questions.append(body)
-    }
-
-    body.insertAdjacentHTML('beforeend', question)
+    questions.insertAdjacentHTML('afterbegin', question)
   }
 }
 
