@@ -1,7 +1,6 @@
-table.questions
-  tr
-    td = 'Title'
-  = render @questions
-
-- if can?(:create, Question)
-  = link_to 'Ask question', new_question_path
+.container
+  - if can?(:create, Question)
+    . class='row justify-content-md-center mb-5'
+      = link_to 'ASK QUESTION', new_question_path, class: 'link-ask-question'
+  . class='questions card-columns'
+    = render @questions

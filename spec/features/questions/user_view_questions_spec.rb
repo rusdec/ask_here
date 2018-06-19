@@ -14,6 +14,9 @@ feature 'User view questions', %q{
     visit questions_path
     questions.each do |question|
       expect(page).to have_content(question.title)
+      expect(page).to have_content(question.body.truncate(150))
+      expect(page).to have_content(question.created_at.strftime('%d.%m.%Y'))
+      expect(page).to have_content(question.user.email)
     end
 
     expect(page.all('.question').count).to eq(questions.count)

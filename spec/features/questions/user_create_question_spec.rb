@@ -17,7 +17,7 @@ feature 'User create question', %q{
 
     scenario 'see ask question link' do
       visit questions_path
-      expect(page).to have_content('Ask question')
+      expect(page).to have_content('ASK QUESTION')
     end
 
     scenario 'can create question with valid data' do
@@ -54,6 +54,7 @@ feature 'User create question', %q{
       end
       Capybara.using_session('guest') do
         expect(page).to have_content(question[:title])
+        expect(page).to have_content(question[:body].truncate(150))
       end
     end
   end

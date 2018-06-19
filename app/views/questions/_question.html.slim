@@ -1,3 +1,10 @@
-tr
-  td.question
-    = link_to question.title, question_path(question)
+. class='card question m-2'
+  = content_tag :a, href: question_path(question) do
+    . class='card-body'
+      h5 class='card-title'
+        = question.title
+      p class='card-text small'
+        = question.body.truncate(150)
+    . class='card-body'
+      p class='card-text small text-right'
+        = question_info(question)
