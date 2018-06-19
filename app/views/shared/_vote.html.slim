@@ -1,7 +1,6 @@
 .votes id=vote_container_klass_name(resource) data-type=resource.class.to_s.underscore
   - if can?(:add_vote, resource)
-    - cache [current_user, resource, current_user.vote_for(resource)] do
-      = vote_links(resource: resource, vote: current_user.vote_for(resource))
+    = vote_links(resource: resource, vote: current_user.vote_for(resource))
   - else
     - cache [resource, 'vote'] do
       = vote_rating(resource)
