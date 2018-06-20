@@ -2,15 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .link-ask-question {
-  color: #275362;
+  color: $shoe-strong-1;
   font-size: 2em;
   &:hover {
-    color: #275362;
+    color: $shoe-strong-1;
   }
 }
 .questions {
   .question {
-    background-color: #407a61;
+    border: 1px solid $shoe-medium-1;
+    background-color: $shoe-medium-2;
     width: 18rem;
     a {
       color: white;

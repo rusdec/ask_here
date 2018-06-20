@@ -1,2 +1,8 @@
 .hidden { display: none; }
 .red { color: red; }
+a {
+  color: $shoe-strong-1;
+  &:hover {
+    color: $shoe-strong-1;
+  }
+}

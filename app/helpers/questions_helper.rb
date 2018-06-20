@@ -11,6 +11,6 @@ module QuestionsHelper
   end
 
   def question_info(question)
-    "#{question.user.email} | #{question.created_at.strftime('%d.%m.%Y')}"
+    "#{question.user.email}, #{question.created_at.strftime('%d.%m.%Y')}"
   end
 end
