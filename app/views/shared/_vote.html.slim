@@ -2,4 +2,5 @@
   - if can?(:add_vote, resource)
     = vote_links(resource: resource, vote: current_user.vote_for(resource))
   - else
-    = vote_rating(resource)
+    - cache [resource, 'vote'] do
+      = vote_rating(resource)
