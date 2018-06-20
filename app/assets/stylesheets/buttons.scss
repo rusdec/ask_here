@@ -1,0 +1,8 @@
+.button-access {
+  background-color: $shoe-medium-2;
+  border-style: 1px solid $shoe-medium-1;
+  color: white;
+  &:hover {
+    background-color: $shoe-medium-1;
+  }
+}
