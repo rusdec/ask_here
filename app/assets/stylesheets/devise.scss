@@ -1,4 +1,6 @@
-.form-sign-in {
+.form-sign-in,
+.form-sign-up,
+.form-confirmation-instructions {
   color: $shoe-strong-1;;
   padding: 15px;
   .input-text {
@@ -8,4 +10,13 @@
     border-bottom: 2px solid $shoe-strong-1;
   }
 }
+dl.links {
+  dd { margin: 0 }
+}
 
+#error_explanation {
+  h2 {
+    font-size: 1em;
+  }
+  ul { color: $shoe-alert-1; }
+}
