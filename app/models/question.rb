@@ -13,7 +13,7 @@ class Question < ApplicationRecord
 
   validates :title, { presence: true,
                       length: { minimum: 10,
-                                maximum: 30 } }
+                                maximum: 50 } }
 
   scope :new_for_the_last_day, ->() { where('created_at >= ?', 1.day.ago) }
 
