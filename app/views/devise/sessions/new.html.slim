@@ -1,4 +1,4 @@
-. class='container'
+.container
   . class='row justify-content-center'
     . class='col col-3 form-sign-in'
       = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
@@ -19,6 +19,4 @@
         . class='actions text-center'
           = f.submit 'Sign in', class: 'btn button-access'
 
-  . class='row justify-content-center'
-    . class='col col-3 mt-4 small'
-      = render "devise/shared/links"
+  = render "devise/shared/links"

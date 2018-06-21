@@ -1,0 +1,24 @@
+.container
+  . class='row justify-content-center'
+    . class='col col-3 form-sign-up'
+      = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+        . class='form-group text-center'
+          h2 = 'Sign up'
+
+        = devise_error_messages!
+
+        . class='form-group text-center'
+          = f.email_field :email, autofocus: true, autocomplete: "email", placeholder: 'Email', class: 'form-control input-text'
+
+        . class='form-group text-center'
+          - if @minimum_password_length
+            em.small = "#{@minimum_password_length} characters minimum"
+          = f.password_field :password, autocomplete: "off", placeholder: 'Password', class: 'form-control input-text'
+
+        . class='form-group text-center'
+          = f.password_field :password_confirmation, autocomplete: "off", placeholder: 'Confirm password', class: 'form-control input-text'
+
+        . class='actions text-center'
+          = f.submit "Sign up", class: 'btn button-access'
+
+  = render "devise/shared/links"

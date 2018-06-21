@@ -1,6 +1,8 @@
 .container
-  - if can?(:create, Question)
-    . class='row justify-content-md-center mb-5'
+  . class='row justify-content-md-center mb-5 mt-5'
+    - if can?(:create, Question)
       = link_to 'ASK QUESTION', new_question_path, class: 'link-ask-question'
+    - else
+      span.title QUESTIONS
   . class='questions card-columns'
     = render @questions

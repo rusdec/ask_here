@@ -1,0 +1,16 @@
+.container
+  . class='row justify-content-center'
+    . class='col col-3 form-confirmation-instructions'
+      = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
+        . class='form-group text-center'
+          h2 = 'Email confirmation'
+        
+        = devise_error_messages!
+
+        . class='form-group text-center'
+          = f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), placeholder: 'Email', class: 'form-control input-text'
+
+        . class='actions text-center'
+          = f.submit 'Send confirmation instructions', class: 'btn button-access'
+
+  = render "devise/shared/links"

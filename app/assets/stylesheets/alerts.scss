@@ -1,0 +1,19 @@
+.alert-danger {
+  background-color: $shoe-danger-medium-1;
+  border-color: $shoe-danger-strong-1;
+  color: white;
+}
+
+.alert-info {
+  background-color: $shoe-info-medium-1;
+  border-color: $shoe-info-strong-1;
+  color: white;
+}
+
+.alert { margin-top: 15px; }
+
+.errors, .alerts { color: $shoe-danger-medium-1; }
+
+.alerts {
+  dd { margin: 0px }
+}
