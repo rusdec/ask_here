@@ -5,14 +5,19 @@ header {
     color: white;
     &:hover {
       color: white;
-      text-decoration: underline;
+      text-decoration: underline !important;
     }
-    &:visited {
-      text-decoration: none;
-    }
-    &:active {
+  }
+
+  .header-form-search {
+    .input-text {
+      background-color: $shoe-strong-1;
       color: white;
-      text-decoration: underline;
+      border-bottom: 1px solid white;
+      border-radius: 5px;
+      &::-moz-placeholder { color: white; }
+      &::-webkit-input-placeholder { color: white; }
+      &:-ms-input-placeholder { color: white; }
     }
   }
 }

@@ -1,13 +1,15 @@
 // Place all the styles related to the questions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.link-ask-question {
+.link-ask-question, .title {
   color: $shoe-strong-1;
   font-size: 2em;
   &:hover {
     color: $shoe-strong-1;
   }
 }
+
+.title { cursor: default; }
 
 .questions {
   /**
