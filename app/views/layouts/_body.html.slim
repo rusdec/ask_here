@@ -1,7 +1,4 @@
 .body
-  .notice
-    = notice
-  .alert
-    = alert
+  = render 'layouts/alerts'
   = render 'shared/flash_errors'
   = yield

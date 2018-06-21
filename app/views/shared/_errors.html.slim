@@ -1,6 +1,6 @@
 .alerts
   - if resource.present? && resource.errors.present?
     h4.alert-heading Errors:
-    ul
+    dl.small
       - resource.errors.full_messages.each do |message|
-        li=message
+        dd=message
