@@ -35,5 +35,6 @@
         - if can?(:create, Answer)
           - cache [@question, 'answers', 'form', 'new'] do
             h3= 'New answer'
-            #new-answer
-              = render 'answers/form', resource: @question.answers.new
+            .row id='new-answer'
+              .col
+                = render 'answers/form', resource: @question.answers.new

@@ -1,14 +1,16 @@
 = form_for [resource.question, resource], remote: true, data: { type: :json } do |f|
+  . class='errors small'
 
-  .errors
+  .form-group
+    = f.text_area :body, class: 'form-control input-text', placeholder: 'Your answer text...'
 
-  = f.label :body
-  = f.text_area :body
+  .form-group
+    .attachements
+      = f.fields_for :attachements do |a|
+        = render 'shared/attachement_fields', f: a
+      p
+        = link_to_add_association 'Add file', f, :attachements,
+            partial: 'shared/attachement_fields'
 
-  .attachements
-    = f.fields_for :attachements do |a|
-      = render 'shared/attachement_fields', f: a
-    p
-      = link_to_add_association 'Add file', f, :attachements,
-          partial: 'shared/attachement_fields'
-  = f.submit
+  . class='actions text-right'
+    = f.submit 'Post Your Answer', class: 'btn button-access'
