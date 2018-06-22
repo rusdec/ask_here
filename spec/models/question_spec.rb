@@ -15,7 +15,7 @@ RSpec.describe Question, type: :model do
 
   it do
     should validate_length_of(:title).
-      is_at_least(10).is_at_most(30)
+      is_at_least(10).is_at_most(50)
   end
 
   it do

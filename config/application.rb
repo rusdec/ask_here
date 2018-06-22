@@ -35,5 +35,6 @@ module AskHere
     end
 
     config.active_job.queue_adapter = :sidekiq
+    config.cache_store = :redis_cache_store, { url: ENV['REDIS_SERVER_URL'] }
   end
 end

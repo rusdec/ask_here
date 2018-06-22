@@ -15,7 +15,7 @@ RSpec.describe Vote, type: :model do
 
   it_behaves_like 'userable'
 
-  it { should belong_to(:votable) }
+  it { should belong_to(:votable).touch(:true) }
 
   it { should validate_presence_of(:value) }
   it { should allow_values(1, -1).for(:value) }

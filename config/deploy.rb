@@ -80,7 +80,7 @@ namespace 'deploy' do
   end
 
   after :publishing, 'deploy:restart'
-  after :publishing, 'sphinx:ts_index'
-  after :publishing, 'sphinx:ts_restart'
+  after :publishing, 'deploy:ts_index'
+  after :publishing, 'deploy:ts_restart'
 end
 
