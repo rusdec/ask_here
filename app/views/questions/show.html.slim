@@ -19,6 +19,7 @@
               h2.title = @question.title
               p.body = @question.body
               = render 'shared/attachements', resource: @question.attachements
+
             h4= 'Comments'
             .comments
               - @question.comments.each do |comment|

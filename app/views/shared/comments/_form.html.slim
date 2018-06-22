@@ -1,8 +1,10 @@
 - if can?(:create, Comment)
   - cache [resource, 'comments', 'form', 'new'] do
-    .new-comment
-      = form_for [resource, resource.comments.new], remote: true, data: { type: :json } do |f|
-        .errors
-        = f.label :body
-        = f.text_area :body
-        = f.submit
+    .row
+      . class='new-comment col'
+        = form_for [resource, resource.comments.new], remote: true, data: { type: :json } do |f|
+          . class='errors small'
+          .form-group
+            = f.text_area :body, class: 'form-control', rows: 4, placeholder: 'Your comment text...'
+          . class='actions text-right'
+            = f.submit 'Post Your Comment', class: 'btn button-access'
