@@ -1,11 +1,17 @@
-= render 'form'
+.container
+  . class='row justify-content-center mb-5 mt-5'
+    h2.title = 'SEARCH'
+  .row
+    . class='col col-lg-3'
+      = render 'form'
+    . class='col results'
+      - @resources.each do |resource|
+        . class='result mt-3'
+          .search-title
+            = question_link(resource)
+          .search-body
+            = resource.body.truncate(100)
 
-.results
-  - @resources.each do |resource|
-    .result
-      = question_link(resource)
-      .
-        p = resource.body.truncate(100)
-
-- unless @resources.empty?
-  = will_paginate(@resources)
+  - unless @resources.empty?
+    . class='row justify-content-center mt-5'
+      = will_paginate(@resources)

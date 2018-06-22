@@ -31,6 +31,14 @@
     .card-footer { color: $shoe-strong-3; }
   }
 }
+
 .card-columns {
   column-count: 4;
+}
+
+.new_question {
+  textarea {
+    border: 2px solid $shoe-strong-1;
+    background-color: $shoe-light-1;
+  }
 }

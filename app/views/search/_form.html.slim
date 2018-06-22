@@ -1,12 +1,15 @@
-= form_with url: search_path, method: :get, local: true do |f|
-  .
-    = f.label :query
-    = f.text_field :query, value: @raw_query
-  .
-    = f.label :context
-    = select_searchable_context(f)
-  .
-    = f.label :per_page
-    = select_per_page(f)
-  .
-    = f.submit 'Find'
+= form_with url: search_path, method: :get, local: true, class: 'form-search' do |f|
+  . class='form-group'
+    = f.text_field :query,
+                    value: @raw_query,
+                    placeholder: 'What find...',
+                    class: 'form-control input-text'
+
+    . class='input-group mt-3'
+      = select_searchable_context(f)
+
+    . class='input-group mt-3'
+      = select_per_page(f)
+
+  . class='form-group text-right'
+    = f.submit 'Find', class: 'btn button-access'

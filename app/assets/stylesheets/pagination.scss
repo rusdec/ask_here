@@ -1,0 +1,13 @@
+.pagination {
+  a, em, span { margin: 3px; }
+  a, em, span { color: $shoe-strong-1; }
+  span {
+    opacity: 0.8;
+    cursor: default;
+  }
+  .current {
+    text-decoration: underline;
+    font-weight: bold;
+    font-style: normal;
+  }
+}
