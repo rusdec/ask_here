@@ -6,9 +6,10 @@
 
           . class='question-header text-right small'
             = render 'shared/vote', resource: @question
-            span.delim = '|'
-            - cache [@question, 'subscribes'] do
-              = subscribe_links(@question)
+            - if current_user
+              - cache [@question, 'subscribes'] do
+                span.delim = '|'
+                = subscribe_links(@question)
             - if can?(:update, @question)
               span.delim = '|'
               = question_remote_links(@question)

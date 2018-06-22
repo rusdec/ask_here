@@ -3,10 +3,10 @@
   .errors
 
   . class='form-group'
-    = f.text_field :title, class: 'form-control input-text font-weight-bold'
+    = f.text_field :title, class: 'form-control input-text font-weight-bold', placeholder: 'Question title'
   
   . class='form-group'
-    = f.text_area :body, class: 'form-control', rows: 10
+    = f.text_area :body, class: 'form-control', rows: 10, placeholder: 'Question text'
  
   .question_editable_attachements 
     = f.fields_for :attachements do |a|
@@ -16,5 +16,6 @@
       = link_to_add_association 'Add file', f, :attachements,
           partial: 'shared/attachement_fields'
 
-  = f.submit 'Save', class: 'btn button-access mr-3'
-  = link_to 'Cancel', 'javascript:void(0)', class: 'btn button-decline link-cancel-edit-question'
+  . class='actions text-right'
+    = f.submit 'Save', class: 'btn button-access mr-3'
+    = link_to 'Cancel', 'javascript:void(0)', class: 'btn button-decline link-cancel-edit-question'
