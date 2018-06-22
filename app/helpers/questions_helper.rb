@@ -1,7 +1,7 @@
 module QuestionsHelper
   def question_remote_links(question)
     links = content_tag :div, class: 'container-link question-remote-links' do
-              concat(link_to 'Edit', '#', class: 'link-edit-question')
+              concat(link_to 'Edit', 'javascript:void(0)', class: 'link-edit-question')
               concat(' ')
               concat(link_to 'Delete',
                      question_path(question),

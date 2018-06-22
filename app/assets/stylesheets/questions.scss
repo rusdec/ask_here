@@ -36,7 +36,7 @@
   column-count: 4;
 }
 
-.new_question {
+.new_question, .form-edit-question  {
   textarea {
     border: 2px solid $shoe-strong-1;
     background-color: $shoe-light-1;
@@ -49,7 +49,5 @@
 }
 
 .question-overtitle-container {
-  div {
-    display: inline;
-  }
+  div { display: inline; }
 }
