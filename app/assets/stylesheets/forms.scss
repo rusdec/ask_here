@@ -1,3 +1,4 @@
+.form-search,
 .new_question,
 .form-sign-in,
 .form-sign-up,
@@ -5,12 +6,23 @@
   color: $shoe-strong-1;
   padding: 15px;
   .input-text {
+    background-color: $shoe-light-1;
     border: 0px;
     border-radius: 0px;
-    background-color: $shoe-light-1;
     border-bottom: 2px solid $shoe-strong-1;
   }
+
+  .input-group-text, .custom-select {
+    color: $shoe-strong-1;
+    background-color: $shoe-light-1;
+    border: 0px;
+    border-radius: 0px;
+    border-bottom: 2px solid $shoe-strong-1;
+  }
+
+  .custom-select { text-align: center; }
 }
+
 dl.links {
   dd { margin: 0 }
 }

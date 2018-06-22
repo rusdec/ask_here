@@ -1,8 +1,8 @@
 .container
   . class='row justify-content-center mb-5 mt-5'
     h2.title = 'YOUR QUESTION'
-  . class='row'
-    . class='col'
+  .row
+    .col
       = form_for @question do |f|
         = render 'shared/errors', resource: @question
         . class='form-group'

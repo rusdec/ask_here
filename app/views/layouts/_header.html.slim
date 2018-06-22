@@ -4,7 +4,11 @@ header class='navbar navbar-expand-lg'
     ul class='navbar-nav mr-auto'
       - if current_user
         li class='nav-item active'
-          = link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'nav-link'
+          = link_to 'Search', search_path, class: 'nav-link'
+        li class='nav-item active'
+          = link_to sign_out_text(current_user),
+                    destroy_user_session_path,
+                    method: :delete, class: 'nav-link'
       - else
         li class='nav-item active'
           = link_to 'Sign in', new_user_session_path, class: 'nav-link'
