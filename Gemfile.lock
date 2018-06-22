@@ -138,6 +138,8 @@ GEM
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.23)
+    font-awesome-rails (4.7.0.4)
+      railties (>= 3.2, < 6.0)
     geckodriver-helper (0.20.2)
       archive-zip (~> 0.7)
     globalid (0.4.1)
@@ -414,6 +416,7 @@ DEPENDENCIES
   doorkeeper (= 4.2.6)
   dotenv-rails
   factory_bot_rails
+  font-awesome-rails
   geckodriver-helper
   gon
   jbuilder (~> 2.5)
