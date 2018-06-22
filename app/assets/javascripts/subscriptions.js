@@ -34,7 +34,7 @@ function initSubscribeLink(link) {
 }
 
 function showNewLink(newLink) {
-  let linksContainer = document.querySelector('.subscribes-links')
+  let linksContainer = document.querySelector('.subscribes-links .container-link')
   if (!linksContainer) {
     return false
   }

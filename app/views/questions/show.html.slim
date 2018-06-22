@@ -3,18 +3,21 @@
     .col
       .question-container
         .question data-id=@question.id
-          . class='question-header text-right'
+
+          . class='question-header text-right small'
             = render 'shared/vote', resource: @question
+            span.delim = '|'
+            - cache [@question, 'subscribes'] do
+              = subscribe_links(@question)
+            - if can?(:update, @question)
+              span.delim = '|'
+              = question_remote_links(@question)
+       
           .data
             - cache @question do
               h2.title = @question.title
               p.body = @question.body
               = render 'shared/attachements', resource: @question.attachements
-            - if can?(:update, @question)
-              = question_remote_links(@question)
-            - cache [@question, 'subscribes'] do
-              = subscribe_links(@question)
-       
             h4= 'Comments'
             .comments
               - @question.comments.each do |comment|
