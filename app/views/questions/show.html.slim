@@ -1,31 +1,35 @@
-.question-container
-  .question data-id=@question.id
-    .data
-      - cache @question do
-        h3.title = @question.title
-        p.body = @question.body
-        = render 'shared/attachements', resource: @question.attachements
-      - if can?(:update, @question)
-        = question_remote_links(@question)
-      = render 'shared/vote', resource: @question
-      - cache [@question, 'subscribes'] do
-        = subscribe_links(@question)
- 
-      h4= 'Comments'
-      .comments
-        - @question.comments.each do |comment|
-          = render 'shared/comments/comment', comment: comment
-        = render 'shared/comments/form', resource: @question
+.container
+  . class='row mt-5'
+    .col
+      .question-container
+        .question data-id=@question.id
+          . class='question-header text-right'
+            = render 'shared/vote', resource: @question
+          .data
+            - cache @question do
+              h2.title = @question.title
+              p.body = @question.body
+              = render 'shared/attachements', resource: @question.attachements
+            - if can?(:update, @question)
+              = question_remote_links(@question)
+            - cache [@question, 'subscribes'] do
+              = subscribe_links(@question)
+       
+            h4= 'Comments'
+            .comments
+              - @question.comments.each do |comment|
+                = render 'shared/comments/comment', comment: comment
+              = render 'shared/comments/form', resource: @question
 
-    - if can?(:update, @question)
-      = render 'update_form', resource: @question
+          - if can?(:update, @question)
+            = render 'update_form', resource: @question
 
-  h3= 'Answers'
-  .answers
-    = render partial: 'answers/answer', collection: @question.persisted_answers
+        h3= 'Answers'
+        .answers
+          = render partial: 'answers/answer', collection: @question.persisted_answers
 
-  - if can?(:create, Answer)
-    - cache [@question, 'answers', 'form', 'new'] do
-      h3= 'New answer'
-      #new-answer
-        = render 'answers/form', resource: @question.answers.new
+        - if can?(:create, Answer)
+          - cache [@question, 'answers', 'form', 'new'] do
+            h3= 'New answer'
+            #new-answer
+              = render 'answers/form', resource: @question.answers.new
