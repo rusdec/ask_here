@@ -1,17 +1,23 @@
-= form_for @question do |f|
-  = render 'shared/errors', resource: @question
-  p
-    = f.label :title
-    = f.text_field :title
-  p
-    = f.label :body
-    = f.text_field :body
+.container
+  . class='row justify-content-center mb-5 mt-5'
+    h2.title = 'YOUR QUESTION'
+  . class='row'
+    . class='col'
+      = form_for @question do |f|
+        = render 'shared/errors', resource: @question
+        . class='form-group'
+          = f.text_field :title, placeholder: 'Question title', class: 'form-control input-text'
 
-  .attachements
-    = f.fields_for :attachements do |a|
-      = render 'shared/attachement_fields', f: a
-    p
-      = link_to_add_association 'Add file', f, :attachements,
-          partial: 'shared/attachement_fields'
+        . class='form-group'
+          = f.text_area :body, class: 'form-control', rows: 10
 
-  = f.submit
+        . class='form-group' 
+          .attachements
+            = f.fields_for :attachements do |a|
+              = render 'shared/attachement_fields', f: a
+            p
+              = link_to_add_association 'Add file', f, :attachements, partial: 'shared/attachement_fields'
+
+        . class='actions text-right'
+          = f.submit class: 'btn button-access mr-3'
+          = link_to 'Cancel', questions_path, class: 'btn button-decline'
