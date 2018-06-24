@@ -1,10 +1,15 @@
 - if can?(:create, Comment)
   - cache [resource, 'comments', 'form', 'new'] do
     .row
-      . class='new-comment col'
+      .col
+        = new_comment_link(resource)
+    .row
+      . class='new-comment col hidden'
         = form_for [resource, resource.comments.new], remote: true, data: { type: :json } do |f|
           . class='errors small'
           .form-group
             = f.text_area :body, class: 'form-control', rows: 4, placeholder: 'Your comment text...'
           . class='actions text-right'
-            = f.submit 'Post Your Comment', class: 'btn button-access'
+            = f.submit 'Post Your Comment', class: 'btn button-access mr-3'
+            = cancel_new_comment_link(resource)
+      link_to

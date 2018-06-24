@@ -1,9 +1,12 @@
 module Feature
   module Comment
     def add_comment(params)
-      within "#{params[:context]} .new-comment" do
-        fill_in 'Body', with: params[:body]
-        click_on 'Create Comment'
+      within "#{params[:context]}" do
+        click_on '.link-new-comment'
+        within '.new-comment' do
+          fill_in 'Body', with: params[:body]
+          click_on 'Create Comment'
+        end
       end
     end
 

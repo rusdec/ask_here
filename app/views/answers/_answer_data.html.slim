@@ -1,5 +1,9 @@
-= best_answer_links(answer)
-= render 'shared/vote', resource: answer
+. class='answer-header text-right small'
+  .span = answer.user.email
+  .span = answer.created_at.strftime('%d.%m.%Y')
+  - if can?(:best_answer_actions, answer)
+    = best_answer_links(answer)
+  = render 'shared/vote', resource: answer
 - cache answer do
   p.body = answer.body
   = render 'shared/attachements', resource: answer.attachements

@@ -20,7 +20,6 @@
               p.body = @question.body
               = render 'shared/attachements', resource: @question.attachements
 
-            h4= 'Comments'
             .comments
               - @question.comments.each do |comment|
                 = render 'shared/comments/comment', comment: comment
@@ -29,13 +28,13 @@
           - if can?(:update, @question)
             = render 'update_form', resource: @question
 
-        h3= 'Answers'
+        h4.mt-5 = 'Answers'
         .answers
           = render partial: 'answers/answer', collection: @question.persisted_answers
 
         - if can?(:create, Answer)
           - cache [@question, 'answers', 'form', 'new'] do
-            h3= 'New answer'
+            h3.mt-5 = 'New answer'
             .row id='new-answer'
               .col
                 = render 'answers/form', resource: @question.answers.new

@@ -3,7 +3,7 @@
 //
 .comment data-id=@comment.id
   .inline-edit-data
-    p = @comment.body
+    p.small = @comment.body
 
   //
   // |=> authenticated && author

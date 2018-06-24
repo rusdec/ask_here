@@ -1,2 +1,7 @@
 - cache comment do
-  p = comment.body
+  .row
+    . class='col small'
+      .comment-title
+        = "#{comment.user.email} #{comment.created_at.strftime('%d.%m.%Y')}"
+      .comment-text
+        p = comment.body

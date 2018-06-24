@@ -9,4 +9,20 @@ module CommentsHelper
       concat(link_to 'Edit', '#', class: 'link-edit')
     end
   end
+
+  def new_comment_link(resource)
+    link_to 'Post your comment',
+            'javascript:void(0)',
+            class: 'link-new-comment small',
+            data: { commentable_class: resource.class.to_s.underscore,
+                    commentable_id: resource.id }
+  end
+
+  def cancel_new_comment_link(resource)
+    link_to 'Cancel',
+            'javascript:void(0)',
+            class: 'btn button-decline link-cancel-new-comment',
+            data: { commentable_class: resource.class.to_s.underscore,
+                    commentable_id: resource.id }
+  end
 end

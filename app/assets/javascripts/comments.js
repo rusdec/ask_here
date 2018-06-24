@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
   newComments.forEach(newComment => listenCreateSuccessEvent(newComment))
-
+ 
   App.cable.subscriptions.create('CommentsChannel', {
     connected: function() {
       document.querySelectorAll('.question-container .question, .answer').forEach(commentable => {
@@ -26,8 +26,30 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     }
   })
+
+  let newCommentLinks = document.querySelectorAll('.link-new-comment, .link-cancel-new-comment')
+  if (newCommentLinks) {
+    newCommentLinks.forEach((newCommentLink) => {
+      newCommentLink.addEventListener('click', () => toggleNewCommentVisibility({
+        commentableId: newCommentLink.dataset.commentableId,
+        commentableClass: newCommentLink.dataset.commentableClass
+      }))
+    })
+  }
+
 })
 
 findComment = (id) => document.querySelector(`.comment[data-id="${id}"]`)
 findCommentsContainer = (type) => document.querySelector(`${type} .comments`)
 extractCommentableSelector = (data) => `.${data.commentable_type}[data-id="${data.commentable_id}"]`
+
+function toggleNewCommentVisibility(params) {
+  let container = document.querySelector(`.${params.commentableClass}[data-id="${params.commentableId}"]`)
+  let newCommentForm = container.querySelector('.new-comment')
+  let newCommentLink = container.querySelector('.link-new-comment')
+
+  if (newCommentLink && newCommentForm) {
+    newCommentForm.classList.toggle('hidden')
+    newCommentLink.classList.toggle('hidden')
+  }
+}

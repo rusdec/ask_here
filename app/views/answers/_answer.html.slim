@@ -1,10 +1,9 @@
-.answer data-id=answer.id id=(answer.best? ? 'best_answer' : '') data-errors-selector='edit-answer-errors'
+. class='answer mt-3' data-id=answer.id id=(answer.best? ? 'best_answer' : '') data-errors-selector='edit-answer-errors'
   - if can?(:author_actions, answer)
     = inline_edit_element(resource: answer, data: render('answers/answer_data', answer: answer), params: { delete_link_params: { data: { type: :json } } }, form: render('answers/update_form', resource: answer))
   - else
     = render 'answers/answer_data', answer: answer
 
-  h4= 'Comments'
   .comments
     - answer.comments.each do |comment|
       = render 'shared/comments/comment', comment: comment
