@@ -17,8 +17,11 @@ function listenCreateSuccessEvent(element) {
     let response = parseAjaxResponse(ev)
     if (response.data.errors) {
       showErrors(response.data.errors, findErrorsContainer(element))
+    } else {
+      element.querySelector('form').classList.toggle('hidden')
     }
   })
+
 }
 
 function listenUpdateSuccessEvent(element, callbacks = []) {
