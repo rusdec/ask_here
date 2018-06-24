@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!newComments) {
     return
   }
-  newComments.forEach(newComment => listenCreateSuccessEvent(newComment))
+  newComments.forEach(newComment => listenCreateSuccessEvent(newComment, true))
  
   App.cable.subscriptions.create('CommentsChannel', {
     connected: function() {

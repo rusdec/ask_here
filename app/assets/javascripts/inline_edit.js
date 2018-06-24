@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 listenFor = (elements, callback) => { elements.forEach(element => this[callback](element)) }
 
-function listenCreateSuccessEvent(element) {
+function listenCreateSuccessEvent(element, hideForm = false) {
   element.querySelector('form').addEventListener('ajax:success', (ev) => {
     let response = parseAjaxResponse(ev)
     if (response.data.errors) {
       showErrors(response.data.errors, findErrorsContainer(element))
-    } else {
+    } else if (hideForm) {
       element.querySelector('form').classList.toggle('hidden')
     }
   })
