@@ -6,7 +6,7 @@ module CommentsHelper
                                method: :delete,
                                remote: true,
                                format: :json)
-      concat(link_to 'Edit', '#', class: 'link-edit')
+      concat(link_to 'Edit', 'javascript:void(0)', class: 'link-edit')
     end
   end
 
@@ -24,5 +24,11 @@ module CommentsHelper
             class: 'btn button-decline link-cancel-new-comment',
             data: { commentable_class: resource.class.to_s.underscore,
                     commentable_id: resource.id }
+  end
+
+  def comment_data(comment)
+    content_tag :p do
+      "#{comment.body} - #{comment.user.email}, #{comment.created_at.strftime('%d.%m.%Y')}"
+    end
   end
 end

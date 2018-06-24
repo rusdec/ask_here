@@ -1,7 +1,5 @@
 - cache comment do
   .row
     . class='col small'
-      .comment-title
-        = "#{comment.user.email} #{comment.created_at.strftime('%d.%m.%Y')}"
       .comment-text
-        p = comment.body
+        p = comment_data(comment)

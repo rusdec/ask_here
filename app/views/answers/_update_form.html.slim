@@ -1,14 +1,16 @@
 = form_for resource, remote: true, html: { class: 'form-edit-answer',
                                            data: { answer_id: resource.id, type: :json } } do |f|
-  .errors
+  . class='errors small'
 
-  p
-    = f.label :body
-    = f.text_area :body
-  .answer_editable_attachements
-    = f.fields_for :attachements do |a|
-      = render 'shared/editable_attachement_fields', f: a
-    p
-      = link_to_add_association 'Add file', f, :attachements,
-          partial: 'shared/attachement_fields'
-  = f.submit 'Save'
+  .form-group
+    = f.text_area :body, class: 'form-control input-text', placeholder: 'Your answer text...', rows: 8
+
+  .form-group
+    .answer_editable_attachements
+      = f.fields_for :attachements do |a|
+        = render 'shared/editable_attachement_fields', f: a
+      p
+        = link_to_add_association 'Add file', f, :attachements,
+            partial: 'shared/attachement_fields'
+
+  = f.submit 'Save', class: 'btn button-access'
