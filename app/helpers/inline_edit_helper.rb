@@ -15,7 +15,7 @@ module InlineEditHelper
   def inline_edit_links(args)
     content_tag :div, class: 'links small' do
       concat(args[:additional_links]) if args[:additional_links]
-      concat(link_to 'Edit', '#',
+      concat(link_to 'Edit', 'javascript:void(0)',
                              { class: 'link-edit' }.merge(args[:params][:edit_link_params]))
       concat(' ')
       concat(link_to 'Delete', polymorphic_path(args[:resource]),
@@ -23,7 +23,7 @@ module InlineEditHelper
                                  method: :delete,
                                  remote: true }.merge(args[:params][:delete_link_params]))
       concat(' ')
-      concat(link_to 'Cancel', '#',
+      concat(link_to 'Cancel', 'javascript:void(0)',
                              { class: 'link-cancel hidden' }.merge(args[:params][:cancel_link_params]))
     end
   end
