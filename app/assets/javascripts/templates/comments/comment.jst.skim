@@ -8,22 +8,21 @@
   - if gon.user_id == @comment.user_id
     div class='links small'
       a.link-edit href='javascript:void(0)' Edit
- 
-      a.link-delete format='json' data-remote=true data-method='delete' href="/comments/#{@comment.id}" Delete
       a class='link-cancel hidden' href='javascript:void(0)' Cancel
+      span.delim = '' 
+      a.link-delete format='json' data-remote=true data-method='delete' href="/comments/#{@comment.id}" Delete
 
     div class='inline-edit-mode hidden'
-      .row
-        .col
-          form.edit_comment id="edit_comment_#{@comment.id}" action="/comments/#{@comment.id}.json" accept-charset='UTF-8' data-remote=true method='post'
-            input name='utf-8' value=true type='hidden'
-            input name='_method' value='patch' type='hidden'
-            div class='edit-comment-errors small'
-            .form-group
-              textarea id='comment_body' name='comment[body]' rows=8 placeholder='Your comment text...' class='form-control' #{@comment.body}
-            div class='actions text-right'
-              input name='commit' value='Update Comment' data-disable-with='Update Comment' type='submit' class='btn button-access'
+      form.edit_comment id="edit_comment_#{@comment.id}" action="/comments/#{@comment.id}.json" accept-charset='UTF-8' data-remote=true method='post'
+        input name='utf-8' value=true type='hidden'
+        input name='_method' value='patch' type='hidden'
+        div class='edit-comment-errors small'
+        .form-group
+          textarea id='comment_body' name='comment[body]' rows=8 placeholder='Your comment text...' class='form-control' #{@comment.body}
+        div class='actions text-right'
+          input name='commit' value='Save' data-disable-with='Update Comment' type='submit' class='btn button-access button-update-comment'
 
   .inline-edit-data
-    p.small = @comment.body
+    div class='comment-text small'
+      p = "#{@comment.body} - #{@user_email}, #{@created_at}"
 

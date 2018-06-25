@@ -23,7 +23,7 @@
             .comments
               - @question.comments.each do |comment|
                 = render 'shared/comments/comment', comment: comment
-              = render 'shared/comments/form', resource: @question
+            = render 'shared/comments/form', resource: @question
 
           - if can?(:update, @question)
             = render 'update_form', resource: @question

@@ -17,14 +17,13 @@ module InlineEditHelper
       concat(args[:additional_links]) if args[:additional_links]
       concat(link_to 'Edit', 'javascript:void(0)',
                              { class: 'link-edit' }.merge(args[:params][:edit_link_params]))
-      concat(' ')
+      concat(link_to 'Cancel', 'javascript:void(0)',
+                             { class: 'link-cancel hidden' }.merge(args[:params][:cancel_link_params]))
+      concat(tag.span '', class: 'delim')
       concat(link_to 'Delete', polymorphic_path(args[:resource]),
                                { class: 'link-delete',
                                  method: :delete,
                                  remote: true }.merge(args[:params][:delete_link_params]))
-      concat(' ')
-      concat(link_to 'Cancel', 'javascript:void(0)',
-                             { class: 'link-cancel hidden' }.merge(args[:params][:cancel_link_params]))
     end
   end
 

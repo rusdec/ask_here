@@ -10,25 +10,32 @@ module CommentsHelper
     end
   end
 
+  def post_comment_button(params = { form: '', resource: {} })
+    params[:form].submit 'Post Your Comment',
+                class: 'btn button-access button-new-comment mr-3',
+                data: comment_link_dataset(params[:resource])
+  end
+
   def new_comment_link(resource)
     link_to 'Post your comment',
             'javascript:void(0)',
             class: 'link-new-comment small',
-            data: { commentable_class: resource.class.to_s.underscore,
-                    commentable_id: resource.id }
+            data: comment_link_dataset(resource)
   end
 
   def cancel_new_comment_link(resource)
     link_to 'Cancel',
             'javascript:void(0)',
             class: 'btn button-decline link-cancel-new-comment',
-            data: { commentable_class: resource.class.to_s.underscore,
-                    commentable_id: resource.id }
+            data: comment_link_dataset(resource)
+  end
+
+  def comment_link_dataset(resource)
+    { commentable_class: resource.class.to_s.underscore,
+      commentable_id: resource.id }
   end
 
   def comment_data(comment)
-    content_tag :p do
-      "#{comment.body} - #{comment.user.email}, #{comment.created_at.strftime('%d.%m.%Y')}"
-    end
+    tag.p "#{comment.body} - #{comment.user.email}, #{comment.created_at.strftime('%d.%m.%Y')}"
   end
 end

@@ -10,6 +10,6 @@
           .form-group
             = f.text_area :body, class: 'form-control', rows: 4, placeholder: 'Your comment text...'
           . class='actions text-right'
-            = f.submit 'Post Your Comment', class: 'btn button-access mr-3'
+            = post_comment_button(form: f, resource: resource)
             = cancel_new_comment_link(resource)
       link_to

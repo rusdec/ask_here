@@ -30,7 +30,9 @@ class CommentsController < ApplicationController
     ActionCable.server.broadcast(stream_name, {
       comment: @comment,
       commentable_id: @comment.commentable_id,
-      commentable_type: @comment.commentable_type.underscore
+      commentable_type: @comment.commentable_type.underscore,
+      user_email: @comment.user.email,
+      created_at: @comment.created_at.strftime('%d.%m.%Y')
     })
   end
   

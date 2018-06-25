@@ -1,8 +1,6 @@
-.row
-  .col
-    = form_for comment, remote: true, data: { type: :json } do |f|
-      . class='errors small'
-      .form-group
-        = f.text_area :body, class: 'form-control', rows: 4, placeholder: 'Your comment text...'
-      . class='actions text-right'
-        = f.submit 'Post Your Comment', class: 'btn button-access button-update-comment'
+= form_for comment, remote: true, data: { type: :json } do |f|
+  . class='errors small'
+  .form-group
+    = f.text_area :body, class: 'form-control', rows: 4, placeholder: 'Your comment text...'
+  . class='actions text-right'
+    = f.submit 'Save', class: 'btn button-access button-update-comment'

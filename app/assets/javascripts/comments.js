@@ -15,7 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     },
     received: function(data) {
-      let newComment = JST['templates/comments/comment']({comment: data['comment']})
+      let newComment = JST['templates/comments/comment']({
+        comment: data['comment'],
+        user_email: data['user_email'],
+        created_at: data['created_at']
+      })
       let comment = findComment(data['comment'].id)
       createOrUpdateElement({
         id: data['comment'].id,
@@ -27,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  let newCommentLinks = document.querySelectorAll('.link-new-comment, .link-cancel-new-comment')
+  let newCommentLinks = document.querySelectorAll('.link-new-comment, .link-cancel-new-comment, .button-new-comment')
   if (newCommentLinks) {
     newCommentLinks.forEach((newCommentLink) => {
       newCommentLink.addEventListener('click', () => toggleNewCommentVisibility({
@@ -44,6 +48,7 @@ findCommentsContainer = (type) => document.querySelector(`${type} .comments`)
 extractCommentableSelector = (data) => `.${data.commentable_type}[data-id="${data.commentable_id}"]`
 
 function toggleNewCommentVisibility(params) {
+  console.log(params)
   let container = document.querySelector(`.${params.commentableClass}[data-id="${params.commentableId}"]`)
   let newCommentForm = container.querySelector('.new-comment')
   let newCommentLink = container.querySelector('.link-new-comment')
