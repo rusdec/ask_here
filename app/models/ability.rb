@@ -38,7 +38,7 @@ class Ability
     can(:read, :all)
   end
 
-  def best_answer_abilities
+ def best_answer_abilities
     alias_action :best_answer, :not_best_answer, to: :best_answer_actions
     can :best_answer_actions, Answer do |answer|
       user.author_of?(answer.question)
@@ -46,10 +46,10 @@ class Ability
   end
 
   def vote_abilities
-    can :add_vote, :all do |votable|
+    can :add_vote, Votable do |votable|
       user.not_author_of?(votable)
     end
-    can :cancel_vote, :all do |vote|
+    can :cancel_vote, Vote do |vote|
       vote
     end
   end
